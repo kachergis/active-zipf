@@ -13,11 +13,11 @@ ml R
 
 R --no-save << EOF
 
-# for sherlock:
-registerDoParallel(cores=(Sys.getenv("SLURM_NTASKS_PER_NODE")))
 
 source("corpusXSL_eliminative_active_parallel.R")
 
+# for sherlock:
+registerDoParallel(cores=(Sys.getenv("SLURM_NTASKS_PER_NODE")))
 
 Cs = c(10, 100, 200, 500) #1000  later try a C that is >50% of the M (e.g., 700)
 Ms = c(1000) # 2000
