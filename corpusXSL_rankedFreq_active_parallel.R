@@ -26,6 +26,10 @@ require(doParallel)
 require(tidyverse)
 require(ggplot2)
 
+#setup parallel backend to use many processors
+cores = detectCores()
+cl = makeCluster(cores[1]-1) #not to overload your computer
+registerDoParallel(cl)
 
 C = 4 # context size: meanings per situation
 M = 18 # number of meanings in the world
@@ -37,7 +41,7 @@ M = 18 # number of meanings in the world
 # 2) from high frequency to low frequency
 # 3) 
 
-learn_corpus = function(C, M, uniform=T, active=F, fam_context=F, epsilon=.01, verbose=T) {
+learn_corpus = function(C, M, uniform=T, active=F, fam_context=F, epsilon=.01, verbose=F) {
   if(!uniform) {
     probs = 1 / (1:M + 2.7) # f(r) = 1 / (r+beta)^alpha, alpha=1, beta=2.7 (Mandelbrot, 1953, 1962)
     probs = probs/sum(probs)
@@ -78,8 +82,12 @@ learn_corpus = function(C, M, uniform=T, active=F, fam_context=F, epsilon=.01, v
     }
     cc = c(target, distractors)
     # eliminate any meanings from H(w_t) that are not present in C
-    hyp[cc[1], which(!is.element(1:M, cc))] = 0
-    if(sum(hyp[cc[1], ])==1 & !word_known[cc[1]]) {
+    #hyp[cc[1], which(!is.element(1:M, cc))] = 0
+    hyp[cc[1], cc] = hyp[cc[1], cc] + 1 # count co-occurrences of target with referents
+    
+    # if target word-ref cooc is stronger than all other refs
+    max_cooc = max(hyp[cc[1],])
+    if(length(max_cooc)==1 & hyp[cc[1],cc[1]]==max_cooc & !word_known[cc[1]]) {
       n_learned = n_learned + 1
       word_known[cc[1]] = T
       for(dd in 1:9) {
@@ -130,8 +138,6 @@ run_sim_grid <- function(Cs, Ms, uniform, active, fam_context, reps=100) {
   return(na.omit(d))
 }
 
-#Cs = c(10, 50, 100, 150)
-#Ms = c(200)
-#act_sim = run_sim_grid(Cs, Ms, uniform=T, active=T, fam_context=F, reps=100) 
 
-#accel = diff(diff(as.numeric(act_sim[400,7:16])))
+
+#accel = diff(diff(as.numeric(pass_sim[400,7:16])))

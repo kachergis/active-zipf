@@ -1,0 +1,100 @@
+---
+title: "Simulating active cross-situational learning"
+author: "George Kachergis"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+RUN_MODELS = FALSE # re-run the models? (warning: slow)
+
+Cs = c(10, 50, 100, 200, 500)
+Ms = c(1000)
+```
+
+We will start start by simulating learning of a vocabulary of size M = 1000 words with varying context sizes (i.e., number of referents in each scene: C = {10, 50, 100, 200, 500}). 
+We will consider two different models: an eliminative model, and a ranked frequency model.
+
+## Eliminative model
+
+On each appearance of a word, this model eliminates any referents that are not present in the scene.
+
+```{r run-eliminative, eval=RUN_MODELS}
+source("corpusXSL_eliminative_active_parallel.R")
+REPS = 10
+act_sim = run_sim_grid(Cs, Ms, uniform=T, active=T, fam_context=F, reps=REPS)
+act_famcon_sim = run_sim_grid(Cs, Ms, uniform=T, active=T, fam_context=T, reps=REPS) 
+act_nonunif_sim = run_sim_grid(Cs, Ms, uniform=F, active=T, fam_context=F, reps=REPS) 
+act_nonunif_famcon_sim = run_sim_grid(Cs, Ms, uniform=F, active=T, fam_context=T, reps=REPS) 
+
+pass_sim = run_sim_grid(Cs, Ms, uniform=T, active=F, fam_context=F, reps=REPS) 
+pass_famcon_sim = run_sim_grid(Cs, Ms, uniform=T, active=F, fam_context=T, reps=REPS) 
+pass_nonunif_sim = run_sim_grid(Cs, Ms, uniform=F, active=F, fam_context=F, reps=REPS) 
+pass_nonunif_famcon_sim = run_sim_grid(Cs, Ms, uniform=F, active=F, fam_context=T, reps=REPS) 
+
+agg <- rbind(act_sim, act_famcon_sim, act_nonunif_sim, act_nonunif_famcon_sim,
+             pass_sim, pass_famcon_sim, pass_nonunif_sim, pass_nonunif_famcon_sim)
+aggl <- agg %>% gather("decile", "episodes", 7:16)
+
+pd <- aggl %>% group_by(C, M, active, uniform, fam_context, decile) %>%
+  tidyboot::tidyboot_mean(episodes)
+
+save(aggl, pd, file="passive_active_eliminative_1000.RData")
+```
+
+```{r plot-eliminative, echo=F}
+load("passive_active_eliminative_1000.RData")
+
+dodge = position_dodge(width = 2)
+pd$dec = rep(seq(10, 100, 10), nrow(pd) / 10) # 
+ggplot(pd, aes(x=dec, y=mean, group=C, color=C)) + geom_point(position = dodge) + 
+  geom_line(position = dodge) + # add active ...
+  facet_grid(fam_context ~ uniform ) + theme_bw() + xlab("Percent of Vocabulary Learned") +
+  geom_linerange(aes(ymin = ci_lower, ymax = ci_upper, color=C), position = dodge) + 
+  ylab("Mean Number of Episodes") 
+#ggsave("passive_active_eliminative_1000.pdf", width=6, height=6)
+```
+
+
+## Ranked frequency model
+
+This model tracks co-occurrences, and learns a word-referent mapping as soon as the co-occurrence of that word and referent is greater than any other referent with that word.
+
+```{r run-rankedFreq, eval=RUN_MODELS}
+source("corpusXSL_rankedFreq_active_parallel.R")
+
+#act_sim =  run_sim_grid(Cs, Ms, uniform=T, active=T, fam_context=F, reps=10) # always =M
+#act_nonunif_sim = run_sim_grid(Cs, Ms, uniform=F, active=T, fam_context=F, reps=10) 
+
+pass_sim = run_sim_grid(Cs, Ms, uniform=T, active=F, fam_context=F, reps=REPS) 
+pass_famcon_sim = run_sim_grid(Cs, Ms, uniform=T, active=F, fam_context=T, reps=REPS) 
+pass_nonunif_sim = run_sim_grid(Cs, Ms, uniform=F, active=F, fam_context=F, reps=REPS) 
+pass_nonunif_famcon_sim = run_sim_grid(Cs, Ms, uniform=F, active=F, fam_context=T, reps=REPS) 
+
+agg <- rbind(pass_sim, pass_famcon_sim, pass_nonunif_sim, pass_nonunif_famcon_sim)
+aggl <- agg %>% gather("decile", "episodes", 7:16)
+
+pd <- aggl %>% group_by(C, M, active, uniform, fam_context, decile) %>%
+  tidyboot::tidyboot_mean(episodes)
+
+save(aggl, pd, file="passive_rankedFreq_1000.RData")
+```
+
+
+
+```{r, plot-rankedFreq, echo=F}
+load("passive_rankedFreq_1000.RData")
+
+dodge = position_dodge(width = 2)
+pd$dec = rep(seq(10, 100, 10), nrow(pd) / 10) # 100 should be 99
+ggplot(pd, aes(x=dec, y=mean, group=C, color=C)) + geom_point(position = dodge) + 
+  geom_line(position = dodge) + 
+  facet_grid(fam_context ~ uniform ) + theme_bw() + xlab("Percent of Vocabulary Learned") +
+  geom_linerange(aes(ymin = ci_lower, ymax = ci_upper, color=C), position = dodge) + 
+  ylab("Mean Number of Episodes") 
+#ggsave("passive_rankedFreq_1000.pdf", width=6, height=6)
+```
+
+This model shows no effect of selecting a familiar context.

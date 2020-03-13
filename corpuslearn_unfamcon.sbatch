@@ -5,7 +5,7 @@
 #SBATCH --nodes=1
 #SBATCH --mem-per-cpu=2G
 #SBATCH --ntasks-per-node=16
-#SBATCH --output=elim1k_famcon.log
+#SBATCH --output=elim1k_unfamcon.log
 #SBATCH --time=48:00:00
 
 # load the module
@@ -32,20 +32,20 @@ set.seed(1234)
 
 start_time <- Sys.time()
 
-act_sim_unif_famcon = run_sim_grid(Cs, Ms, uniform=T, active=T, fam_context=T, reps=REPS)
+act_sim = run_sim_grid(Cs, Ms, uniform=T, active=T, fam_context=F, reps=REPS) # warnings..
 
-pass_sim_unif_famcon = run_sim_grid(Cs, Ms, uniform=T, active=F, fam_context=T, reps=REPS) # warnings..
+pass_sim = run_sim_grid(Cs, Ms, uniform=T, active=F, fam_context=F, reps=REPS)
 
-act_sim_nonu_famcon = run_sim_grid(Cs, Ms, uniform=F, active=T, fam_context=T, reps=REPS)
+act_sim_nonu = run_sim_grid(Cs, Ms, uniform=F, active=T, fam_context=F, reps=REPS)
 
-pass_sim_nonu_famcon = run_sim_grid(Cs, Ms, uniform=F, active=F, fam_context=T, reps=REPS)
+pass_sim_nonu = run_sim_grid(Cs, Ms, uniform=F, active=F, fam_context=F, reps=REPS)
 
-sim = rbind(act_sim_unif_famcon, 
-            pass_sim_unif_famcon, 
-            act_sim_nonu_famcon, 
-            pass_sim_nonu_famcon) 
+sim = rbind(act_sim, 
+            pass_sim, 
+            act_sim_nonu,
+            pass_sim_nonu) 
 
-save(sim, file="act_pass_sim_results1000_famcon.RData")
+save(sim, file="act_pass_sim_results1000_unfamcon.RData")
 
 #stop cluster
 stopCluster(cl)
