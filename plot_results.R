@@ -1,10 +1,10 @@
 require("ggplot2")
-
+require("tidyverse")
 #sm = subset(sim, is.element(C, c(4, 10, 50, 100)) & is.element(M, c(1000)))
-
+require("ggpubr")
 require("gganimate")
 
-load("active_passive_sim_results.RData")
+#load("active_passive_sim_results.RData")
 
 1/ sort(act_sim$p99 / pass_sim$p99) 
 # choosing an unknown target 2.2-2.6 times faster for uniform freq
@@ -31,17 +31,53 @@ add_cols <- function(sim) {
 }
 
 
-
-
-anim <- ggplot(sim, aes(x = C, y = p99)) + 
-  geom_point(aes(colour = active), size = 2) + 
-  transition_states(active, transition_length = 2, state_length = 1)
-anim + enter_fade() + exit_shrink()
+#anim <- ggplot(sim, aes(x = C, y = p99)) + 
+#  geom_point(aes(colour = active), size = 2) + 
+#  transition_states(active, transition_length = 2, state_length = 1)
+#anim + enter_fade() + exit_shrink()
 
 sim2 <- add_cols(sim)
 
-sim_ag <- sim2 %>% group_by(C, M, active, uniform, fam_context) %>%
+
+
+###### new
+load("unfam_con_M2000.RData")
+sim2k = sim
+load("unfam_con_M1000.RData")
+sim = rbind(sim, sim2k)
+with(sim, table(C, M, active, uniform, fam_context)) # no familiar context yet
+
+siml <- sim %>% gather("decile", "episodes", 7:16)
+pd <- siml %>% group_by(C, M, active, uniform, fam_context, decile) %>%
+  summarise(mean = mean(episodes))
+  # tidyboot::tidyboot_mean(episodes) # takes ~5 mins
+
+dodge = position_dodge(width = 2)
+pd$dec = rep(seq(10, 100, 10), nrow(pd) / 10) # 100 should be 99
+pd$Mk = ifelse(pd$M==1000, "M=1000", "M=2000")
+p_u <- pd %>% filter(uniform=="Uniform") %>% ggplot(aes(x=dec, y=mean, group=C, color=C)) + geom_point(position = dodge) + 
+  geom_line(position = dodge) + 
+  facet_grid(active ~ Mk ) + theme_bw() + xlab("Percent of Vocabulary Learned") +
+  #geom_linerange(aes(ymin = ci_lower, ymax = ci_upper, color=C), position = dodge) + 
+  ylab("Mean Number of Episodes") + ggtitle("Uniform Distribution")
+
+p_z <- pd %>% filter(uniform=="Zipfian") %>% ggplot(aes(x=dec, y=mean, group=C, color=C)) + geom_point(position = dodge) + 
+  geom_line(position = dodge) + 
+  facet_grid(active ~ Mk ) + theme_bw() + xlab("Percent of Vocabulary Learned") +
+  #geom_linerange(aes(ymin = ci_lower, ymax = ci_upper, color=C), position = dodge) + 
+  ylab("Mean Number of Episodes") + ggtitle("Zipfian Distribution")
+
+ggarrange(p_u, p_z, ncol=2)
+ggsave("M1k-2k_C5-80.pdf", width=11, height=5.5)
+######
+
+
+sim_ag <- sim %>% group_by(C, M, active, uniform) %>% # fam_context
   summarise(d3=mean(dec3), d5=mean(dec5), d7=mean(dec7), eps=mean(p99), sd=sd(p99))
+
+
+
+ggplot(sim_ag, aes)
 
 ggplot(sim_ag, aes(x=C/M, y=log(eps), shape=active, color=C)) + geom_point() + ylim(0, 18) + 
   ylab("Log(Mean # of Episodes to Acquire Lexicon)") + xlab("Ratio (Context Size)/(Lexicon Size)") + 
