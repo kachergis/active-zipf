@@ -1,0 +1,558 @@
+\documentclass[a4paper,natbib,man]{apa6}
+%\documentclass[a4paper,man,natbib,floatsintext]{apa6}
+%The APA6 class: http://ctan.math.utah.edu/ctan/tex-archive/macros/latex/contrib/apa6/apa6.pdf
+
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\def\citeA{\citep}
+
+
+% Words in text: 3309
+% Words in appendices: ~700
+
+%% User-specific lines 
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{soul}
+
+%\newtheorem{thm}{Theorem}
+%\newtheorem{lem}{Lemma}
+%\newtheorem{dfn}{Definition}
+
+\usepackage{amssymb,amsfonts,amsmath,amsthm}
+\usepackage{mathrsfs}
+\usepackage{array}
+\usepackage{lineno}
+\usepackage{color}
+%\usepackage{ulem}
+
+%\linenumbers
+
+%% Macro
+\def\diam{\mathrm{diam}}
+\newcommand{\floor}[1]{\lfloor #1 \rfloor}
+\newcommand{\ceil}[1]{\lceil #1 \rceil}
+\newcommand{\one}[1]{\mathbf{1}_{#1}}
+\newcommand{\vctr}[1]{\mathrm{vec}\left( #1 \right)}
+\newcommand{\diag}[1]{\mathrm{diag}\left( #1 \right)}
+%\newcommand{\Diag}[1]{\mathrm{Diag}\left( #1 \right)}
+\newcommand{\Diag}[1]{\mathrm{Dg}\left( #1 \right)}
+\newcommand{\learninggame}{learning-and-game }
+\def\hsymb#1{\mbox{\strut\rlap{\smash{\Huge$#1$}}\quad}}
+\newcommand{\VecSet}[2]{\mathbb{#1}^{#2}}
+\newcommand{\MatSet}[2]{\mathbb{#1}^{{#2}\times{#2}}}
+\newcommand{\MatSets}[3]{\mathbb{#1}^{{#2}\times{#3}}}
+\newcommand{\Encode}[2]{\mathcal{C}_{#1,#2}}
+\newcommand{\Simplex}[1]{\mathbb{S}^{#1}}
+\newcommand{\SimMat}[1]{\mathbb{S}^{#1 \times #1}}
+\newcommand{\SimMats}[2]{\mathbb{S}^{#1 \times #2}}
+
+\newcommand{\Trans}[2]{#1^{(#2)}}
+\newcommand{\TransBlock}[3]{#1_{#3}^{(#2)}}
+%\newcommand{\TransBlockVec}[4]{#1_{#3, #4}^{(#2)}}
+\newcommand{\TransBlockVec}[4]{#1_{N(#3-1) + #4}^{(#2)}}
+
+\newcommand{\TransBlockNo}[2]{#1_{#2}}
+\newcommand{\TransBlockVecNo}[3]{#1_{#2, #3}}
+\newcommand{\zero}[1]{\mathbf{0}_{#1}}
+\newcommand{\rank}[1]{\text{rank}\left(#1\right)}
+
+%% For the application
+\newcommand{\dd}[0]{\text{d}}
+
+%\newcommand{\argmax}{\mathop{\rm arg~max}\limits}
+%\newcommand{\argmin}{\mathop{\rm arg~min}\limits}
+\DeclareMathOperator*{\argmin}{arg\,min} %argmin
+\DeclareMathOperator*{\argmax}{arg\,max} %argmax
+
+
+%\newtheorem{thm}{Theorem}[section]
+\newtheorem{thm}{Theorem}[]
+%\newtheorem{cor}[thm]{Corollary}
+\newtheorem{prop}{Proposition}
+%\newtheorem{lem}[thm]{Lemma}
+\newtheorem{lem}[]{Lemma}
+%\newtheorem{def}[thm]{Definition}
+\newtheorem{definition}[]{Definition}
+\newtheorem{cor}[]{Corollary}
+
+%\newcommand{\SH}[1]{\textcolor{red}{#1}}
+%\newcommand{\GK}[1]{\textcolor{orange}{#1}}
+\newcommand{\SH}[1]{#1}
+\newcommand{\GK}[1]{#1}
+
+\title{Active learners can learn what simple samplers cannot: A Zipf-distributed vocabulary from limited data} 
+%\title{A theoretical analysis of active cross-situational word learning under Zipfian distributions}
+\shorttitle{Active word learning}
+%\author{Shohei Hidaka$^1$, Takuma Torii$^1$, and George Kachergis$^2$}
+\author{Anonymous author(s)}
+%\affiliation{$^1$Japan Advanced Institute for Science and Technology and $^2$Stanford University}
+\affiliation{}
+
+% Brief articles reporting original empirical findings, major theoretical advances or crucial developments that warrant rapid communication to the scientific community - limit 3000 words including abstract (excluding references)
+% http://app.uio.no/ifi/texcount/online.php  2940 words as of 9/11/18 (+122 in captions)
+
+% abstract is 186 words 9/11/18
+% \abstract{
+% Children learn thousands of words in the first several years of life, inspiring many theoretical and empirical studies seeking to understand the speed of word learning. The present study revisits recent theoretical analyses of simple sampling models with uniformly-distributed word frequency, and considers a more realistic Zipfian (i.e., power-law) distribution of words and referents. 
+% Our new mathematical analysis finds that simple sampling models are unable to account for word learning in feasible time under Zipf-distributed word and referent frequencies. To salvage learning under realistic distributional assumptions, we propose an active learning model which assumes that learners and/or caregivers select (or construct) the contexts from which words are sampled. Using simulations and mathematical analysis, we show that active learners choosing optimal learning situations learn hundreds of times faster than passive learners faced with randomly-sampled situations. Thus, as suggested by past empirical studies, we find theoretical support for the idea that statistical structure in real-world situations--potentially created by the self-directed learner or beneficent teachers--is a potential remedy for the difficulty of learning a Zipf-distributed vocabulary.}
+
+\begin{document}
+\maketitle
+
+\section{Appendix 1: The number of samples to complete collection of words given an arbitrary frequency distribution}
+Here let us derive the number of episodes $T$ that, for $0 \le \epsilon \le 1$, the proportion $(1-\epsilon)$ of children will have learned all of the $W$ words listed.
+Suppose a set of $W$ words in which each word $1, \ldots, W$ is drawn from the distribution $p = (p_{1}, \ldots, p_{W})$.
+The proportion of children who finished learning all the words is $(1 - \epsilon)$ for $0 < \epsilon < 1$ requires the number of episodes $T$, which is the root of 
+\begin{equation}
+\label{eqA-M}
+ \prod_{i=1}^{W}\left( 1 - ( 1 - p_{i} )^{T} \right) = 1 - \epsilon.
+\end{equation}
+The left hand side of (\ref{eqA-M}) is the probability that every word is present at least once in the $T$ episodes.
+
+Write 
+\[
+ f_{W, \epsilon}( x ) := 
+\frac{ 
+  \log\left( 1 - ( 1 - \epsilon )^{1/W} \right) 
+}{ 
+  \log\left( 1 - x \right) 
+}.
+\]
+For the uniform distribution, $p_{i} = 1/W$ for every $i = 1, \ldots, W$, 
+the root of (\ref{eqA-M}) is given by 
+\begin{equation}
+\label{eqA-T}
+ T = f_{W, \epsilon}( 1/W ).
+\end{equation}
+This $T$ is the number of episodes with which the proportion of children finished learning all the words is $(1 - \epsilon)$.
+%Let $W \to \infty$ in (\ref{eq-T}), we obtain the (\ref{eq-M}). %% Wrong
+Setting $\epsilon = 1/2$ in (\ref{eq-T}), we obtain the median of $T$, $f_{W,1/2}(1/W)$, that is comparable with the mean of $T$ in (\ref{eq-fastmap-T}).
+
+Unlike (\ref{eqA-T}) for the uniform distribution, the root $T$ of Equation (\ref{eqA-M}) in general is not closed-form.
+Thus, let us consider the upper and lower bound for the root instead of the rigorous form of it.
+For the general word distribution $p = (p_{1}, \ldots, p_{W})$, 
+the intermediate value theorem states that  
+there exists a unique constant $c$ holding $\min p \le c \le \max p$, with which 
+the root of (\ref{eqA-M})  is expressed as
+\[
+ T = f_{W, \epsilon}( c ).
+\]
+Equivalently, we have inequality
+\begin{equation}
+f_{W, \epsilon}( \max p ) \le T \le f_{W, \epsilon}( \min p ) := T_{+}.
+\label{eqA-Tbound}
+\end{equation}
+As we are interested in the worst possible estimate of $T$, 
+this inequality states that 
+the upper bound $T_{+}$ of $T$ is characterized with 
+the probability to sample the least frequent word $\min p$.
+
+
+\section{Appendix 2: The number of samples as a function of the Zipfian exponent}
+To describe how sensitive the number of samples required to complete the learning to the non-uniformity of the word frequency, we analyze the Zipf distribution with different exponent parameters.
+Denote the Zipf distribution with the exponent parameter $a \ge 0$ 
+by $p = (1^{-a}/H_{W,a}, 2^{-a}/H_{W,a}, \ldots, W^{-a}/ H_{W,a})$
+where $H_{W,a}$ is the generalized harmonic number $H_{W,a} = \sum_{i=1}^{W}i^{-a}$.
+It is reduced to the uniform distribution by $a = 0$.
+The larger the exponent $a$ is, the minimal probability $\min p$ is smaller.
+Thus, here we analyze the upper bound $T_{+}$ as a function of the exponent parameter $a$.
+
+Write $T_{+} = f_{N, \epsilon}( \min p )$, which gives a reasonable estimate of the upper bound of the root $T$ of (\ref{eqA-M}).
+As a function of the exponent $a$, we have 
+\[
+ \frac{\partial \log T_{+} %f_{N, \epsilon}( p_{\min} )
+ }{ \partial a }
+= 
+ \frac{ 
+p_{\min} 
+\left( \frac{ \partial H_{N, a} }{ \partial a}/ H_{N, a} + \log W \right)
+}{ ( 1 - p_{\min} ) \log\left( 1 - p_{\min} \right) } 
+\]
+and further we have
+\[
+ \frac{\partial^2 \log T_{+} %f_{N, \epsilon}( p_{\min} )
+ }{ \partial a^2 }
+\ge 0.
+\]
+This implies the $T_{+}$ is a super-exponential monotone function of the exponent $a$.
+
+\section{Appendix 3: Iterated linear programming}
+For a $N \times M$ matrix $P$, write its $i^{\text{th}}$ row by $P_{i}$.
+Let $I = \{1, 2, \ldots, N\}$ be the set of all indices.
+At the initial step, define 
+%\begin{eqnarray}
+%K_{0} &:=& \emptyset
+%\\
+%C_{0} &:=& \Simplex{M}.
+%\\
+%q_{0} &:=& e_{1}, 
+%\end{eqnarray}
+\[
+K_{0} := \emptyset,\ C_{0} := \Simplex{M},\ q_{0} := e_{1},
+\]
+where $e_{1} := (1, 0, \ldots, 0 )^{T} \in \mathbb{R}^{N}$.
+Then for $0 < n \le N$, 
+define
+\begin{eqnarray}
+\nonumber
+k_{n} &:=& \argmin_{k \in I \setminus K_{n-1}} P_{k} q_{n-1},\ K_{n} := K_{n-1} \cup \{k_n\},
+\\
+\nonumber
+C_{n} &:=& \left\{q \in C_{0} | \bigwedge_{k \in K_{n}}(P_{k_{n}} - P_{k})q\le 0 \right\},
+\\
+\nonumber
+q_{n} &:=& \argmax_{q \in C_{n}} P_{k_n}q,
+\end{eqnarray}
+until $n = m$ such that 
+$\min_{k \in K_{m}} P_{k} q_{m} \le \min_{k \in I } P_{k} q_{m}$.
+The algorithm stops the iterative procedure by outputting $q:= q_{m}$.
+
+\section{Appendix 4: Why is online learning possible in the active learning setting?}
+
+In this appendix, we describe technical details of the {\em online} active learning algorithm, which 
+iteratively and asymptotically estimates the optimal scene probability for a given conditional probability matrix $P \in \SimMats{N}{M}$
+$$ \hat{q} = \argmax_{q \in \Simplex{M}} \min( P q ).$$
+
+As shown in our paper, the optimal active learning is exactly computable by iterated linear programming (ILP). 
+This procedure, however, give us little insight about how we can build its ``online'' version of algorithm due to its discrete nature. 
+Thus, we develop yet another algorithm which also gives near-optimal choice probability $q$ in a quite different way.
+
+This is based on the gradient of the function $f := \min( Pq )$. This is a natural idea at a glance, but the reason why we derived the ILP algorithm rather than the one with the gradient is that the function $f$ has many non-differentiable subset in its support $\Simplex{M}$. Especially, in general, for the subset maximizing the function $f$ is always non-differentiable (with infinitely many tangent plane). Thus, from this theoretical point of view, any algorithm based on the differential may not seem better.
+
+Accordingly, instead of directly working on the function $f$, let us consider the family of functions with the parameter $\lambda$:
+$$ g_{\lambda}(q) := \frac{ \sum_{i} P_{i}q e^{-\lambda P_{i}q} }{ \sum_{i} e^{-\lambda P_{i}q} }$$ where $P_{i}$ is the $i^{\text{th}}$ row of the matrix $P$.
+It is easy to see this function $g$ has the identity to the function $f$: $\lim_{\lambda \to \infty} g_{\lambda}(q) = f(q)$.
+Thus, for some sufficiently large $\lambda$, $g_{\lambda}(q)$ can approximate $f(q)$ arbitrarily well, while $g$ is differentiable everywhere if $\lambda < \infty$.
+
+Let us write $E[ h(i) ] := \frac{ \sum_{i} h(i) e^{-\lambda P_{i}q} }{ \sum_{i} e^{-\lambda P_{i}q} }$ for an arbitrary function $h(i)$.
+The gradient of $g_{\lambda} = E[P_{i}q]$ is
+$$\frac{\partial g_{\lambda}(q)}{ \partial q} = E[(1+\lambda( g_{\lambda}(q) - P_{i}q ))P_{i}^{T}].$$ 
+With this, in the limit, we have $\lim_{\lambda \to\infty}\frac{\partial g_{\lambda}(q)}{ \partial q} = P_{\min}^{T}$, where $P_{\min} := P_{\argmin_{i}P_{i}q}$.
+
+This gradient is already quite suggestive: the gradient of $g$ in the limit is a function of both $q$ and the minimum index $j = \argmin_{i}P_{i}q$. Namely, the gradient reflects the tentative hyper-plane $P_{\min}q = C$. As long as taking some small step toward this gradient (or with the Lagrange multiplier for a constrained $q$) like the gradient descent method, we can find a minimal $f(q)$.
+Specifically, for $q \in \Simplex{M}$, set an initial value $q_{0} \in \Simplex{M}$ and some small learning rate $\alpha > 0$, 
+and for $n \ge 0$ define
+\[
+ q_{n+1} \propto  e^{ \log q_{n} + \alpha \diag{q_{n}} \left( P_{\min}^{T} - P_{\min}q_{n} \right) }. 
+\]
+Then the series of $q_{0}, q_{1}, \ldots$ leads to a near-optimal probability. Unfortunately, for the reason mentioned above, this series approaches the optimal solution only up to the scale depending on the learning rate $\alpha$, but it has no guarantee to converge to the optimal one.
+Even with this obvious theoretical flaw of the gradient-based algorithm, it gives us a clear insight about the online algorithm. 
+Replacing the theoretical matrix $P$ with a sample matrix $\hat{P}$ which is estimated from a sample, this gradient-based algorithm gives a direct way to build the online substitute for it. Although it still needs to care about the missing values (zero-sample items) in the sample matrix $\hat{P}$, it gives a clear picture of why ILP on the sample matrix is informative and possibly gives another online algorithm.
+
+% \section{Appendix 0: Rate of word learning}
+% % we don't currently refer to this Appendix: where should we?
+% Suppose that $(1-p_{T})$ is the probability that the learner has learned all the $N$ words by observing $T$ samples of them. If there exists a quantity in the limit $$R := - \lim_{T \to \infty} \frac{\log p_{T}}{T},$$ we call it the rate of word learning. This definition of the word learning rate is motivated by information theory, in which the rate characterizes the exponential increase of the number of codes per letter for the triplet of the encoder, decoder, and channel.  Any word learning scheme with the rate $R$ implies that the learning error decreases exponentially, $e^{-RT}$, as the function of the number of samples $T$ in a long run. Thus, from the information-theoretic perspective, the class of word learning schemes with the same rate is {\it equivalent} with respect to the learning rate in a long run.
+
+% With this rate $R$ of word learning, we identify any learning expressed in the form
+% $$
+% p_{T} = \lambda e^{ -RT + \Delta_{T} },
+% $$
+% where 
+% where $lambda$ is a certain constant and $\Delta_{T}$ is a residual term holding $\lim_{T \to \infty }\frac{ \Delta_{T} }{ T } = 0$.
+
+% Extending this idea, the error probability of fast-mapping learning is expressed in the form
+% $$
+% p_{T} = \lambda_{1} e^{-R_{1}T - \lambda_{2} e^{-R_2 T + \Delta_{T}} },
+% $$
+% where $\lambda_1$ and $\lambda_{2}$ are some constants, and $\Delta_{T}$ is a residual term holding $\lim_{T \to \infty }\frac{ \Delta_{T} }{ T } = 0$.
+% With this definition, we have the following expressions
+% \begin{eqnarray}
+% \label{eqA-1stOrderRate}
+% R_{1} &=& -\lim_{T \to \infty } \frac{ \log p_{T} }{ T },
+% \\
+% \lambda_{1} &=& \lim_{T \to \infty } \frac{ p_{T} }{ e^{-R_{1} T} },
+% \nonumber
+% \end{eqnarray}
+% and
+% \begin{eqnarray}
+% \label{eqA-2ndOrderRate}
+% R_{2} &=& -\lim_{T \to \infty } \frac{ \log( \log \lambda_{1} - R_{1} T - \log p_{T} ) }{ T },
+% \\
+% \lambda_{2} &=& \lim_{T \to \infty } \frac{ \log \lambda_{1} - R_{1} T - \log p_{T} }{ e^{-R_{2} T} }.
+% \nonumber
+% \end{eqnarray}
+
+% Here let us derive the error probability $p_{T}$ with
+% the number of episodes $T$ that, for $0 \le \epsilon \le 1$, that the $(1-p_{T})$ of children learned all of the $W$ words listed.
+% Consider a set of $W$ words in which each word $1, \ldots, W$ is drawn from the distribution $p = (p_{1}, \ldots, p_{W})$.
+% The proportion of children who finished learning all the words is $(1 - p_{T})$ for $0 \le \epsilon \le 1$ requires the number of episodes $T$ is 
+% \begin{equation}
+% \label{eqA-M}
+% 1 - p_{T} = \prod_{i=1}^{W}\left( 1 - ( 1 - p_{i} )^{T} \right).
+% \end{equation}
+% Using Equation (\ref{eqA-M}), the first- and second-order rate ((\ref{eqA-1stOrderRate}) and (\ref{eqA-2ndOrderRate})) are
+% \[
+% R_{1}=R_{2}=-\log(1-\min p).
+% \]
+% Thus, word learning on the basis of fast-mapping is asymptotically characterized (its speed characterized by the rate $R_{2}$) by this rate $R_{1}$.
+
+% (Figure of the word learning rate discussed above)
+
+
+% \section{Appendix X: Rate of word learning}
+
+% In this study we analyze the {\it word learning error probability} $p_{T}$, which is the probability that a learner who cannot finish learning all the $N$ words by the $T^{\text{th}}$ word sample. This 
+% is expressed by 
+% \[
+% p_{T} := 1 - \prod_{i=1}^{N}\left(
+%  1 - \prod_{t=1}^{T}p_{ti}
+% \right),
+% \]
+% where $p_{ti}$ is the probability that $t^{\text{th}}$ word sample is not the word $i$.
+% In particular, we focus on the class of word learning, in which 
+% for each integer $1 \le i \le N$ there is a series of non-negative numbers $p_{1i}, p_{2i}, \ldots$ with some constant $\lambda_{i}$, which satisfies 
+% \[
+% \prod_{t=1}^{T}p_{ti} = \lambda_{i} e^{ -\gamma_{i}T - \Delta_{Ti} }, 
+% \text{ and }
+% \lim_{T\to\infty}\Delta_{Ti} = 0.
+% \]
+% This means that, for a sufficiently large number of samples $T$, the probability of not sampling word $i$ is $e^{-\gamma_{i}}$ for each word sample. 
+% Given this set of series and the error probability, the word learning is characterized 
+% by 
+% $$p_{T} = Q_{1} e^{-R_{1}T - \Delta_{T}} \text{ and } \lim_{T\to\infty} \Delta_{T} = 0$$
+% with the {\it rate} $R_{1}$ and constant $Q_{1}$ stated by the following proposition.
+
+% \begin{prop}
+% \label{prop1}
+% Suppose for each integer $1 \le i \le N$ there is a series of non-negative numbers $p_{1i}, p_{2i}, \ldots$ with some constant $\lambda_{i}$, which satisfies 
+% \[
+% \prod_{t=1}^{T}p_{ti} = \lambda_{i} e^{ -\gamma_{i}T - \Delta_{Ti} }, 
+% \text{ and }
+% \lim_{T\to\infty}\Delta_{Ti} = 0.
+% \]
+% Given this set of series, define the error probability 
+% \[
+% p_{T} := 1 - \prod_{i=1}^{N}\left(
+%  1 - \prod_{t=1}^{T}p_{ti}
+% \right),
+% \]
+% we have $$R_{1} = - \lim_{T\to\infty}\frac{\log p_{T}}{T} = \min_{i} \gamma_{i},$$
+% and for $\Gamma := \{ \gamma_{1}, \ldots, \gamma_{N} \}$
+% \[
+%  Q_{1} = \lim_{T\to\infty}\frac{p_{T}}{e^{-T\min_{i} \gamma_{i}}} = \left| \{ \gamma \in \Gamma | \gamma = \min_{i} \gamma_{i} \} \right|.
+% \]
+% \end{prop}
+
+
+% \begin{proof}
+% %Write $\overline{x} := 1 - x$.
+% As $\lim_{T\to\infty}\log p_{T} = - \infty$ and $\lim_{T\to\infty} \frac{\partial}{\partial T}p_{T} = 0$, 
+% using l'Hopital's rule we have
+% \[
+%  R_{1} = - \lim_{T\to\infty}\frac{\log p_{T}}{T} = - \lim_{T\to\infty}\frac{\frac{\partial}{\partial T}p_{T}}{p_{T}}
+% = - \lim_{T\to\infty}\frac{\frac{\partial^{2}}{\partial T^{2}}p_{T}}{\frac{\partial}{\partial T}p_{T}}.
+% \]
+% %By the assumption, we can write 
+% %\[
+% %\prod_{t=1}^{T}p_{ti} = \lambda e^{ -\gamma_{i}T + \Delta_{T} }, 
+% %\]
+% %with some constant $\lambda$ and the residual $\lim_{T\to\infty}\Delta_{T} = 0$.
+% Denote $P_{Ti} := \prod_{t=1}^{T}p_{ti}$ and $\overline{x} := 1 - x$. 
+% \[
+%  \frac{\partial p_{T}}{\partial T} = 
+% - \prod_{i=1}^{N}
+% %\left(
+% %1 - \prod_{t=1}^{T}p_{ti}
+% %\right)
+% \overline{P_{Ti}}
+% \sum_{i=1}^{N}\frac{ -\frac{\partial }{\partial T} P_{Ti} }{ \overline{P_{Ti}} }
+% .
+% \]
+
+% \[
+%  \frac{\partial^{2} p_{T}}{\partial T^{2}} = 
+%  \prod_{i=1}^{N}
+% P_{Ti}
+% %\left(
+% %1 - \prod_{t=1}^{T}p_{ti}
+% %\right)
+% \left\{
+% \left(
+% \sum_{i=1}^{N}\frac{ \frac{ \partial P_{Ti} }{ \partial T } }{ \overline{P_{Ti}} }
+% \right)^{2}
+% -
+% \sum_{i=1}^{N}
+% \left(
+% \frac{  \frac{ \partial P_{Ti} }{\partial T} }{ \overline{P_{Ti}} }
+% \right)^{2}
+% + 
+% \sum_{i=1}^{N}\frac{ 
+% \left( \frac{\partial P_{Ti} }{\partial T}  \right)^{2}
+% +
+% \frac{\partial^{2} P_{Ti} }{\partial T^{2}} }{ \overline{P_{Ti}} }
+% \right\}
+% .
+% \]
+
+% \[
+% \frac{ \frac{\partial^{2} p_{T}}{\partial T^{2}} }{  \frac{\partial p_{T}}{\partial T}  }
+% = 
+% \frac{
+% \left(
+% \sum_{i=1}^{N}\frac{ \frac{ \partial P_{Ti} }{ \partial T } }{ \overline{P_{Ti}} }
+% \right)^{2}
+% -
+% \sum_{i=1}^{N}
+% \left(
+% \frac{  \frac{ \partial P_{Ti} }{\partial T} }{ \overline{P_{Ti}} }
+% \right)^{2}
+% + 
+% \sum_{i=1}^{N}\frac{ 
+% \left( \frac{\partial P_{Ti} }{\partial T}  \right)^{2}
+% +
+% \frac{\partial^{2} P_{Ti} }{\partial T^{2}} }{ \overline{P_{Ti}} }
+% }{
+% \sum_{i=1}^{N}\frac{ -\frac{\partial }{\partial T} P_{Ti} }{ \overline{P_{Ti}} }
+% %\sum_{i=1}^{N}\frac{ \frac{\partial }{\partial T} \prod_{t=1}^{T}p_{ti} }{ 1 - \prod_{t=1}^{T}p_{ti}}
+% }
+% .
+% \]
+
+
+% As $\lim_{T\to\infty} \left(
+% \sum_{i=1}^{N}\frac{ \frac{\partial }{\partial T} \prod_{t=1}^{T}p_{ti} }{ 1 - \prod_{t=1}^{T}p_{ti}}
+% \right) = 0$ and XX,
+% \[
+%  R_{1} = -
+% \lim_{T\to\infty}\frac{
+% \sum_{i=1}^{N}
+% \frac{ \frac{\partial^2 P_{Ti}}{\partial T^2}  }{ \overline{P_{Ti}} }
+% }{
+% \sum_{i=1}^{N}
+% \frac{ \frac{\partial P_{Ti}}{\partial T}  }{ \overline{P_{Ti}} }
+% }
+% = 
+% -\lim_{T\to\infty}\frac{
+% \sum_{i=1}^{N}
+% \frac{\partial^2 P_{Ti}}{\partial T^2} 
+% }{
+% \sum_{i=1}^{N}
+%  \frac{\partial P_{Ti} }{\partial T} 
+% }
+% \]
+
+% By the assumption, 
+% \[
+%  R_{1} = 
+% \lim_{T\to\infty}\frac{
+% \sum_{i=1}^{N}
+% e^{-\gamma_{i} T - \Delta_{Ti}}\left\{ - \frac{\partial^2 \Delta_{T}}{\partial T^2} + ( \gamma_{i} - \frac{\partial \Delta_{T}}{\partial T} )^{2} \right\} 
+% }{
+% \sum_{i=1}^{N}
+% e^{-\gamma_{i} T - \Delta_{Ti}}( \gamma_{i} - \frac{\partial \Delta_{T}}{\partial T} )
+% }
+% = \min_{i}\gamma_{i}
+% \]
+% Let us write $\gamma_{0} := \min_{i}\gamma_{i}$. 
+% \[
+%  Q_{1} := \lim_{T\to\infty}\frac{p_{T}}{ e^{ -\gamma_{0} T } } 
+%              = \lim_{T\to\infty}\frac{ 1 - \prod_{i=1}^{N}\overline{P_{Ti}} }{ e^{ -\gamma_{0} T } }.
+% \]
+% According to l'Hopital's rule
+% \begin{eqnarray}
+%  Q_{1} 
+%     &=& \lim_{T\to\infty}\frac{  - \frac{\partial}{\partial T}\prod_{i=1}^{N}\overline{P_{Ti}} }{ -\gamma_{0} e^{ -\gamma_{0} T } }.
+% \nonumber
+% \\
+%     &=& \lim_{T\to\infty}\frac{  \prod_{i=1}^{N}\overline{P_{Ti}} \sum_{i=1}^{N}\frac{ - \frac{\partial P_{Ti} }{\partial T} }{\overline{P_{Ti}}}}{ \gamma_{0} e^{ -\gamma_{0} T } }.
+% \nonumber
+% \\
+%     &=& \lim_{T\to\infty}\frac{  \prod_{i=1}^{N}\overline{P_{Ti}} \sum_{i=1}^{N}\frac{ \left( \gamma_{i} + \frac{\partial\Delta_{T}}{T} \right)e^{ -\gamma_{i}T - \Delta_{T} } }{\overline{P_{Ti}}}}{ \gamma_{0} e^{ -\gamma_{0} T } }.
+% \nonumber
+% \\
+%     &=& \lim_{T\to\infty}\frac{  \sum_{i=1}^{N} \gamma_{i} e^{ -\gamma_{i}T } }{ \gamma_{0} e^{ -\gamma_{0} T } }
+% \nonumber
+% \\
+%     &=& \left| \{ \gamma \in \Gamma | \gamma = \gamma_{0} \} \right|.
+% \nonumber
+% \end{eqnarray}
+% \end{proof}
+% %%%%
+
+% We can further consider the second order rate $R_{2}$ and constant $Q_{2}$ with which the residual term
+% is expressed by 
+% \[
+%  \Delta_{T} = Q_{2} e^{-R_{2}T + \delta_{T}}.
+% \]
+% However, the second-order rate is also characterized by the first-order rate $R_{1}$ and constant $Q_{1}$ as stated by the following proposition.
+
+% \begin{prop}
+% %In Proposition \ref{prop1}, for $i = \argmin \gamma_{i}$ let us further define 
+% %\[
+% % \Delta_{Ti} := \lambda e^{ -\beta T}.
+% %\]
+% With the same notation as Proposition \ref{prop1}, we have $$R_{2} = - \lim_{T \to \infty}\frac{ \log\left( \log Q_{1} - R_{1}T - \log p_{T} \right) }{ T } = R_{1}.$$
+% and $$Q_{2} = \lim_{T \to \infty}\frac{ \log Q_{1} - R_{1}T - \log p_{T} }{ e^{-R_{2}T} } = \frac{Q_{1}-1}{2} .$$
+% \end{prop}
+
+% \begin{proof}
+% %\[
+% % R_{2} := - \lim_{T \to \infty}\frac{ \log\left( \log Q_{1} - R_{1}T - \log p_{T} \right) }{ T }.
+% %\]
+% According to l'Hopital's rule, 
+% \begin{eqnarray}
+%  R_{2} 
+%     &=& - \lim_{T \to \infty}\frac{ -R_{1} - \frac{ \partial \log p_{T} }{ \partial T } }{ \log Q_{1} - R_{1}T - \log p_{T} }
+% \nonumber
+% \\
+%     &=& - \lim_{T \to \infty}\frac{ - \frac{ \partial^{2} \log p_{T} }{ \partial T^{2} } }{ -R_{1} - \frac{ \partial \log p_{T} }{ \partial T } }
+% \nonumber
+% \\
+%     &=& - \lim_{T \to \infty}\frac{ - p_{T}^{-2}\left( \frac{ \partial p_{T} }{ T } \right)^{2} + p_{T}^{-1}\frac{ \partial^{2} p_{T} }{ \partial T^{2} } }{ R_{1} + p_{T}^{-1}\frac{ \partial p_{T} }{ \partial T } }
+% \nonumber
+% \end{eqnarray}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% As $R_{1} = - \lim_{T \to \infty}\frac{\partial^{2} p_{T}}{\partial T^{2}} / \frac{\partial p_{T}}{\partial T} = - \lim_{T \to \infty}\frac{\partial p_{T}}{\partial T} / p_{T}$
+% \begin{eqnarray}
+%  R_{2} 
+%     &=& - \lim_{T \to \infty}\frac{ - R_{1} \left( 
+%  R_{1} + p_{T}^{-1}\frac{ \partial p_{T} }{ \partial T } 
+% \right)
+% }{ R_{1} + p_{T}^{-1}\frac{ \partial p_{T} }{ T } }
+% = R_{1}.
+% \nonumber
+% \end{eqnarray}
+
+
+% According to l'Hopital's rule, 
+% \begin{eqnarray}
+%  Q_{2} 
+%     &=& \lim_{T \to \infty} \frac{ -R_{1}  - p_{T}^{-1}\frac{ \partial p_{T} }{ \partial T } }{ -R_{2} e^{ - R_{2} T } }.
+% \nonumber
+% \\
+%     &=& \lim_{T \to \infty} \frac{ R_{1}p_{T}  + \frac{ \partial p_{T} }{ \partial T } }{ R_{2} p_{T} e^{ - R_{2} T } }.
+% \nonumber
+% \\
+%     &=& \lim_{T \to \infty} \frac{ R_{1}\frac{ \partial p_{T} }{ \partial T }  + \frac{ \partial^{2} p_{T} }{ \partial T^{2} } }{ -2 R_{2}^{2} Q_{1} e^{ - 2 R_{2} T } }.
+% \nonumber
+% \\
+%     &=& \lim_{T \to \infty} \frac{ R_{1}^{2}Q_{1}e^{-R_{1}T}  + \frac{ \partial p_{T} }{ \partial T } \prod_{i=1}^{N}\overline{P_{Ti}} \sum_{i=1}^{N}\frac{ \left( \gamma_{i} + \frac{\partial\Delta_{T}}{T} \right)e^{ -\gamma_{i}T - \Delta_{T} } }{\overline{P_{Ti}}} }{ -2 R_{2}^{2} Q_{1} e^{ - 2 R_{2} T } }.
+% \nonumber
+% \\
+%     &=& \lim_{T \to \infty} \frac{ R_{1}^{2}Q_{1}e^{-R_{1}T} - R_{1}^{2}Q_{1}e^{-R_{1}T} 
+% - R_{1}^{2}Q_{1}(Q_{1}-1)e^{-2R_{1}T} }{ -2 R_{2}^{2} Q_{1} e^{ - 2 R_{2} T } }.
+% \nonumber
+% \\
+% &=& \frac{Q_{1}-1}{2}. 
+% \nonumber
+% \end{eqnarray}
+% Thus, these propositions imply that the first-order rate of word learning $R_{1}$ characterizes the essential efficiency of the type of word learning analyzed in this study. 
+
+% \end{proof}
+
+
+%\bibliography{CogSci_Template}
+
+\clearpage
+
+\end{document}
+
+%
+% Please see the package documentation for more information
+% on the APA6 document class:
+%
+% http://www.ctan.org/pkg/apa6
+%

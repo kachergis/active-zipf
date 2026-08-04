@@ -1,0 +1,392 @@
+﻿-------- Forwarded Message -------- 
+Subject: 
+	Action Letter on Cognitive Science Submission 21-186
+	Date: 
+	27 Aug 2021 09:09:48 -0400
+	From: 
+	Cognitive Science <em@editorialmanager.com>
+	Reply-To: 
+	Cognitive Science <cogseditorial@wiley.com>
+	To: 
+	Shohei Hidaka <shhidaka@jaist.ac.jp>
+	
+
+21-186
+"Active learners can learn what simple samplers cannot: A Zipf-distributed vocabulary from limited data"[a][b]
+Shohei Hidaka; Takuma Torii; George Kachergis
+ 
+Cognitive Science
+ 
+Dear Dr. Hidaka,
+Thank you for submitting your manuscript to Cognitive Science. I have now received comments from three reviewers, who have read your work very carefully and provided detailed and very constructive comments. The reviewers’ comments are appended below.
+Reviewers 2 and 3[c] in particular saw many key strengths in your approach – they liked the attempt to examine what may be possible and impossible as constraints in word learning by children, and appreciated the accessible and simple model that you provide to assess feasibility. However, all three reviewers had substantial reservations about the validity of the assumptions you make about the child’s actual language environment and about exactly what size of vocabulary (and its composition) the child acquire[d]s. As you are rejecting a hypothesis (that passive learning is sufficient)[e] this means you require a large weight of evidence in your favour to persuade the reader that active, directed learning is necessary[f] to acquire a large vocabulary. My reading of your paper aligns with the reviewers that you are not yet in a strong enough position to convincingly demonstrate that passive learning should be rejected.
+Each reviewer had questions about the likely size of the vocabulary that the child acquires, and the distribution of words in the vocabulary (especially at the lower-frequency end of the range where cumulations of many individual corpora might give a misleading impression about how rare particular words actually are). Reviewer 1 also raised the issue of the plausibility of learning all words via some kind of fast mapping mechanism, when most words are likely to be acquired via reading post-literacy. This was a point I made in the original submission of your paper on this topic. You do mention this in the Introduction (as well as in your cover letter), but then you go on to state that you are testing how the 60,000 word assumption of the vocabulary in Blythe et al.’s model might fair with a different distribution of word frequencies in the environment, and so this point is not as yet integrated into your account.
+The reviewers are in accord that that the assumptions your model is making are not yet sufficiently justified, and that addressing them requires a substantial change to your work – both theoretical and in terms of testing model parameters. Theoretically, the issue of words being learned in different ways throughout development remains to be addressed to really make a contribution to the field of vocabulary acquisition. In terms of parameters, testing various sizes and compositions of vocabulary is still needed to determine what is and is not possible from a passive learner.[g] In your cover letter you suggested that you could adjust the size of vocabulary to be learned to involve only the preliteracy stage of learning. But if the key vocabulary learned from interaction with referents in the environment really is closer to 2-3000 words then that is more than an order of magnitude difference to the assumptions about vocabulary size that you are making to reject passive learning as a possibility, and the mystery that you are addressing somewhat disappears.
+As these changes to your paper would be very large, and in my view rather unlikely to sufficiently convince the reviewers of your approach, I am thus rejecting your paper for Cognitive Science.
+I know that this decision will be disappointing given the work that you have put in to reworking your paper since its previous form. I hope you take some heart from the fact that all three reviewers found the questions you asked extremely interesting and engaging. I also think your general conclusion is correct – that children’s curiosity, and parental scaffolding, are vital to children’s language acquisition, and so finding a way to demonstrate that is an important topic for investigation. I am sure that the reviewers’ comments will be useful to you in advancing your research, and give you an indication of the kinds of issues that still remain to be addressed to provide a strong theoretical advance in this topic.
+I would like to take this opportunity to thank you for considering Cognitive Science as a possible outlet for your work, and hope that you will continue to do so in future. We welcome any feedback that you may have about the journal's review process.
+Yours sincerely,
+Padraic Monaghan
+Associate Editor
+ 
+===========================
+Reviewer #1:
+
+A central problem in language acquisition is vocabulary acquisition. Children learn a massive quantity of words (something between 20,000 and 120,000 depending on who you are and how you measure), and they have to do it in something like 20-30 years. How they get there is a pretty cool question.
+
+This is a tough nut to crack. Theories are developed in the laboratory in learning experiences that may last a few minutes; and computational models can be built to show how those mechanisms work. But it’s difficult to know what kind of mechanisms can actually yield this scale of learning.
+
+The present manuscript attempts to bridge that gap. They build a series of fairly simple and general models of word learning, and examine the rate at which word could be learned under various scenarios about how words are sampled from the world. They ultimately conclude that all versions of passive learning are likely to not lead to enough words being learned fast enough. In response they develop a new active learner that has some control over what words are encountered and show that this learner can learn in a reasonable amount of time.
+
+Overall, this approach resonated with me and I really appreciate the broader goal of trying to scale various assumptions of learning up to the real world. The math is well done and sophisticated, and in the context of this literature, the authors have identified a novel insight and usefully advanced the field.
+
+However, at the same time, I think the whole enterprise is not likely to lead to useful insight and may actually derail the field[h][i] (I’d make the same arguments about the prior papers that inspired this work). Essentially, the authors are hoping to show that entire classes of models simply cannot learn fast enough to achieve a realistic lexicon fast enough. However, for several reasons I elaborate on below I think this conclusion cannot be supported. First, the authors reasoning is based on a 60,000 word lexicon, and several broad claims about how much input kids get. The authors use commonly accepted numbers, but these numbers have little empirical support[j][k] (and in other cases there is empirical data but it is ignored). They’re fine for back of the envelope calculations and for throw away lines in the introduction, but this is not sufficient when actual theories are on the line. Second, they seem to assume that word learning (and the word learning environment) is basically the same throughout childhood. That’s wrong – when kids hit school, they have less control over the environment, they get richer language input, much more passive learning,[l] they learn to read (providing even more input), the frequency distributions change, and so forth. School changes the frequency distributions, the amount of input, and it changes children’s ability to control it. Arguably the bulk of the vocabulary is acquired during this period– not from the kinds of biases studied in toddlers– but the entire argument here is based on work in infancy and toddlers. Third, it is unclear in the authors work the degree to which the rate of learning in the model is driving the show, vs. the mere likelihood of encountering a word and the authors do not dissociate them.[m] Consequently, it is unclear how much their assumptions about learning might drive performance (for example, the assumption that each word is learned independently)[n]. Fourth, there several other assumptions of the model that may be wrong and may impact learning rate.[o] Finally, even if you got all this right, and it still turns out that the passive learning model cannot do the job, the active learning alternative model is treated in wholly abstract/ mathematical terms, and it is not clear to me that it is actually developmentally plausible.[p][q]
+
+I don’t see how these issues are fixable, leading me to suggest rejecting this manuscript for publication.
+We thank the reviewer for clearly enumerating the issues that came up for them in reading our manuscript. There are a few misunderstandings that we will clear up both here, and in the manuscript (page numbers noted). 
+
+
+We hope that the reviewer and editor will agree that our revisions sufficiently explain away these issues.
+
+
+<Overall reply SH>
+
+Major Concerns
+1) What are the real numbers?
+
+The authors start from a premise that a 60,000 lexicon is the goal. Where’d that number come from? I’ve cited it myself in numerous places, but I don’t actually know where it comes from. I’ve seen it in Paul Bloom’s book, which is also cited here, but I don’t think he offers any empirical support for this[r]. When I went directly to the literature to look for myself, the only real empirical paper I could find is (Brysbaert, Stevens, Mandera, & Keuleers, 2016), which puts the number a bit lower (~40,000) and they don’t even require people to know the meaning of a word – they merely just need to show familiarity with the sound pattern. So, the number of words for which people have a meaning (any meaning) is likely to be lower. Moreover, this number may include lots of synonyms, or morphologically derived words (the latter of which may in principle be acquire without ever hearing the word!).
+
+This really speaks to the complexities of doing all of this. Given that the central goal of this study is to try to estimate the rate of learning a realistic vocabulary, it would help to take seriously the chore of estimating the number of words that is the target.
+
+But even so, the authors assume that the goal is to learn all 60,000 words of the language. Of course this will be slow –the likelihood of encountering those last few words (particularly in a Zipfian distribution) will be increasingly small. However, that’s the job. There are likely 100,000 000 words in common use (the Oxford English Dictionary lists 171,000 in current use. So the job isn’t to learn ALL 60,000 words. It’s to learn ANY 60,000 words from this larger subset of 100,000.[s][t] This is tremendously easier. Consider the likelihood of rolling two 1’s on a pair of dice – it’s a lot lower than rolling two ones, on 4 dice. Again, considering the actual nature of the problem change things dramatically.
+
+Similarly, it might be useful to consider what the developmental end point is. The authors here assume 18 years of age. But is that really the right age? [u]Prior estimates are for “adults” (and I don’t know who Brysbaert studied). Many adults go to college, the military or start a trade: these are surely time when there are dramatic numbers of new words to be acquired.
+
+Getting these numbers right could have big impacts on the estimates. Even under a simple linear growth model, 60,000 words over 18 years is a rate of 9.1 new words/day. But if we take the estimates as 42,000 words over 24 years we cut that in half to 4.8 new words / day (and Brysbaert et al., 2016, has an interesting discussion of the implications of these assumptiosn for development). It’s unclear to me how this would play out in the various sampling / learning assumptions here, but if the results can be this dramatically different under even linear growth assumptions, it’s got to matter.
+
+And how much time do children have each day in which to do this? At several points, the authors seem to assume 8 hours. That’s perfectly reasonable for a late infant who is napping. But by 3, many kids are not napping, and school age children may be up for 12-14 hours or more.
+
+Finally, how many episodes are reasonable? For example, the authors argue on page 9 that the Zipfian model “…implies 206 independent episodes exposed to a word learner per hour–three episodes every minute–assuming 8 hours of learning everyday of 18 years of life. This number of independent episodes does not seem reasonable with respect to the ordinary life of children in any culture.” Maybe I’m misunderstanding what an episode is, but (Hart & Risley, 1995) estimate a median of 17,000 words per day for pre-school age kids (and there are better estimates from more recent work with LENA) – that’s 2125 / hour (assuming kids are only up for 8 hours). [v]These are probably not independent episodes, but that may be in the end helpful (hearing the same word in a similar context a couple of times could accelerate learning). Similarly, Figure 2 implies under many scenarios, it’s going to take 10^7-10^8 samples to learn a 60,000 word vocabulary, and this is consistent with the Childes estimates. But if we take Hart & Risley and estimate it out for 18 years, we’d get 1.2 * 10*8. Not too shabby. [w]The point is if you are going to make estimates of reasonableness, it would be useful to actually wrestle with the numbers and their sources.
+
+<reply GK>
+
+
+
+2) Word learning changes dramatically[x].
+
+The basic premise of this study is to estimate the rates of vocabulary growth that are output under various assumptions about how words are sampled and how quickly they can be learned, and the estimate how long it would take to learn a full adult sized vocabulary. The payoff here is that by reflecting these models off of the real scale of the problem, we may be able to rule out some classes of models as insufficient.
+
+I think in the end, this may be a fool’s errand. The authors attempt to take constructs and mechanisms from preschool/infancy literature like fast-mapping, statistical learning, and the current zeitgeist that parents are tuned into their children’s language acquisition needs and can structure experiences accordingly. [y]They then assume that they carry forward throughout the lifespan.
+
+However, this can’t be. First, at around age 5 children’s environment change dramatically (they go to school). Critically, this environment now includes a lot of explicit instruction for vocabulary (likely using supervised, not unsupervised learning). Consequently, the assumptions of a cross-situational learning model need not hold [z]– children could in principle be learning words much faster. Equally critically, the child does not get active control of[aa] what words they are supposed to learn – that’s dictated by the school setting. This challenges the utility of the active learner model in these ages. The school age years are a time when children likely undergo some of the most dramatic gains in the speed of vocabulary acquisition. Common estimates (that I have not yet seen supported empirically) are that incoming kindergardeners know about 3000 words. That’s only 5%-10% of the eventual total. Yet, these simple facts about the oral language environment challenge the kind of models used here.
+[ab]
+Second, by around 7-10 most [ac]kids are getting a great deal of their new vocabulary via reading. Consequently, while they may hear only 17,000 words / day, they may be getting a lot more language than that. Moreover, the statistical properties of this distribution are not known. It’s clearly Zipfian – (though maybe with a different coefficient), but words that are low frequency in speech may be higher frequency in text (and vice versa) challenging the sampling assumptions.[ad] Moreover, it’s not clear to me if the active learner assumption holds or makes sense for text driven vocabulary acquisition[ae] – I suppose kids can choose the topics they read, and they can choose to attend more or less to sentences and words that are unknown. However, there’s no evidence that children actually do this, [af]and in my anecdotal[ag] experience many children (including mine) choose topics they know, not things they don’t know, and they tend to skip over paragraphs with too much new vocabulary. Moreover, books are not actively tuned to their learning in the same way that social dyad may be. This challenges the utility of the account during this later stage of life (when the bulk of vocabulary is acquired).
+
+This is not to undermine the achievements of a toddler, but trying to take this argument too far seems quite simplistic. If this were just a rhetorical device, it’d be fine. However, it’s not – the fundamental premise seems to be to model the lifespan and to use the failure of a class of models to achieve a realistic vocabulary in a realistic time as evidence against those models. It’s not clear to me that these sorts of models are really operative at these later stages of language acquisition (which in my view are the bulk of vocabulary acquisition) and therefore, I’m not sure we can make much of the conclusions.
+If one took this seriously, one might revise the whole process. Let’s not model the full age range, but stop at age five when children hit kindergarten and can engage these other mechanisms (beyond cross-situational learning). However, it feels naïve to just carry forward what we know about late infancy and assume that this holds over the whole life (particularly when the vast majority of word learning is NOT during this period).[ah]
+
+3) Learning Rate vs. Sampling Rate.
+
+The authors implement a simple version of cross-situational learning, which is now a standard approach to thinking about how children might learn word/referent pairs without a teaching signal. They then run it in “fast-mapping mode” (single trial learning) to estimate the sort of best case scenario. I like this approach for this question. However, it was not clear what this meant (and I didn’t have the time go back to the Blythe paper to work it out. I could imagine a scenario in which this literally mean that the first time a child heard a word they learned it. However, that would essentially eliminate the learning model entirely, and the entire process is just a function of how soon (or late) all 60,000 words would be reasonably sampled. That’s an interesting question by itself, but I suspect that’s not what is happening here; rather there must be something else that has to happen (something about the contents of the world on that trial) for a word to be learned in one shot?[ai]
+
+Clarifying this is important for two reasons. First, it makes sense to me to try to separate the contributions of sampling to acquisition rate from the contributions of learning. In fact, I think this work would have been markedly improved, if they were presented both ways so we can see the separable contributions.
+
+Second and more importantly, to the extent that it takes more than one encounter to learn a word, the learning model matters, and the assumptions of the model start to become important. These lead to my next points.
+
+4) Is each word learned independently?[aj]
+
+Moreover, to the extent that words require more than one exposure to be learned, the assumptions of the learning model become critical (and here I could be misunderstanding the model). This work models a learner in which words are fully independent from each other. What the child learner knows about “dog” has little bearing on “cat”. This is almost certainly not true.
+
+Computational models—and empirical intervention studies—suggest that word learning biases like the shape and/or material biases are learned from the input (Perry, Samuelson, Malloy, & Schiffer, 2010; Samuelson, 2002).[ak] That is children are forming inferences about how words work across multiple words. And this in turn can accelerate later acquisition. Here, learning about blocks, cups and bottles (some of the earliest nouns that are defined by shape) essentially benefits learning about golf clubs and minivans, kind of a form of “leveraged learning” (Mitchell & McMurray, 2009). The point is that these words are not learned independently.
+
+In fact, this non-independence is a core property of in distributed models (McClelland, 2013). Under these assumptions, Learners do not start each word from scratch.[al] Rather, when a new word is encountered, it must be incorporated into the existing hidden unit space. This can go much faster if this space is well developed and if the new word has overlap.
+
+However, this is not just a property of distributed representations. Even in localist associative models (McMurray, Horst, & Samuelson, 2012) children are not just learning about one word at a time. Learning that the sound pattern ‘dog’ links to the fuzzy animal also results in pruning the connections between that sound pattern and the dog house, the ball or the grass that are also present. Again, when these words are heard for the first time at a later point, they can now learned faster (since some of the erroneous connections are already pruned).
+
+Similarly, we’d be remiss to exclude morphology. Surely many of the words in the 60,000 word lexicon (or whatever) of an adult are morphologically related? That might change the story? I honestly don’t know how the estimates of the adult vocabulary account for that (or not). It’s easy to just say that all the tenses of a verb counts as the same word. But what about somewhat opaque relationships like “drinkable” or “devein” – do those contribute to the counts separately from “drink” and “vein”? Critically, these are words that a child can construct without any exposure – just knowing a verb and -er, they can make a new word without ever having heard it. Again, when we start thinking about families of words, this may bring the total counts way down which can have a dramatic effect on the plausibility of the outcomes. But it may also change the nature of learning.
+
+I’m not sure how or if any of this would change whether a given encounter or situation is more suitable for learning, but focusing on word/object mapping as an independent association matrix that can only be learned cross-situationally seems to ignore much of this.
+
+I think it’s valuable to build models that start from the assumption that words are learned independently – I’ve done so in the past, and it can serve a useful purpose by isolating particular aspects of learning. So, I don’t have any a priori rejection of the approach taken here. However, again the premise seems to be that if a model cannot learn enough words quickly enough, it must be wrong.[am] But this kind of non-independent learning may dramatically change the rate of learning – even under passive sampling models –and that makes it difficult to argue that they may be too slow to solve the problem in a realistic time frame. Rather, all we can really claim is that under a highly unrealistic assumption that words are learned independently, these models are too slow.
+[an]
+5) Other assumptions of the model
+
+The model makes a number of other assumptions that are perfectly reasonable when exploring mechanisms but make no sense if the goal is to establish a realistic scale.
+
+For example, the model assumes that the word-referent mappings are mutually-exclusive “each word corresponds to one (and only one) referent”. However, the adult estimates of 60,000 words (or more likely 42,000 words) likely contain gobs of synonyms![ao] In fact, I’ve heard that something like 40% of words have synonyms. These are likely easier to learn (see my point above about distributed representations), particularly later in life when mutual exclusivity stops constraining word learning. So are there maybe 25,000 words to be learned?
+
+6) The active learner
+
+The authors propose a form of active learner in which the child has control over the situations in which they will learn words. They cite impressive and interesting data from Chen Yu showing that children do kind of guide the situation in a way that benefits learning, and there’s data from Celeste Kidd showing that children deploy attention to areas of maximal uncertainty. I note that both of these demonstrates are with very young children and infants – it is not clear at all if this is relevant to older children. And in fact,[ap] adults when confronted with a learning situation often chose the learning schedule that is uniquely non-optimal for learning (Tauber, Dunlosky, Rawson, Wahlheim, & Jacoby, 2013). I also suspect that this may be a unique phenomena when children are confronted with fundamentally novel stuff (in the lab) – otherwise how do you explain the fact that kids have overwhelming preferences to do and see the same things over and over again (how many times can by daughter watch Frozen????).[aq]
+
+But there are three bigger points about this strategy.
+
+First, the viability of the model depends on the idea that the actual active-learner biases that benefit the model are the same ones shown by children. Yes, children do show biases. And yes, a model which actively biases its sample model does better. But are these the same biases? There didn’t seem to be any analyses of what biases were actually shown by the model (or what principles guide its selection) and no discussion about whether those are plausibly shown by children.
+
+Second, the model seems to work under the idea that the children have full control over the range of situations they can sample from. That’s obviously wrong. Children can’t be paying legos inside, and decide that it would be optimal for them to learn about giraffes at the zoo (spoiled brats). The range of their control is likely extremely restricted (they’re kids). In that case, its not clear to me if the active sample model really will do any better.
+
+Finally, most of children’s days are not spent in that magical one-on-one word learning dialog that Yu and Smith characterize. They have a mix of interactive things, just listening, media, quiet play time and so forth. Some of this is passive and not directed to them (overhearing two adults), some of this is passive and directed to them (e.g., in school or preschool), some is interactive. Some exploration of a mix of sampling schemes seems warranted –how much of the day must be actively sampled to get these benefits?
+
+Substantive Concerns
+(page #’s refer to the number printed on the page)
+
+• Page 3, 1st paragraph: the authors cite standard estimates from the MCDI to estimate the rate of word learning, and these computations almost lead to nonsensical estimates of the rate of learning. However, I think these are likely implausible for several reasons. First, what counts as “knowing a word” in these measures of early infancy is pretty much whenever a parent says that the child does – and parents are probably deploying a pretty liberal criteria. That is, a 15 month old may demonstrate enough competency for the parent to say they know dog, but it may take quite a bit more to fully “know” dog. Consequently, the true rate of learning may be a lot slower.
+
+• Page 3, last paragraph: the authors seems to present an idealized (if not Panglossian) view that the classic word learning biases (e.g., mutual exclusivity, whole object, etc) seem to work together with statistical (cross-situational) learning to acquire a vocabulary. I think this is a bit simplistic for a few reasons. First, Horst and Samuelson – and now many other studies – suggest that at least in the case of mutual-exclusivity, behavior that looks consistent with these constraints does not lead to any measurable learning. That is, these constraints (or what have you) may not have anything to do with learning, but reflect some kind of real-time inference (which may or may not be retained). Second, also in the case of mutual exclusivity, there is considerable evidence that this may derive from a novelty bias that doesn’t necessarily care about the goal of word learning. Together, these two lines of work challenge the idea that these heuristics are aimed toward helping learning. Third, there are few if any studies examining these biases simultaneously with cross-situational learning and the few that I am aware of suggest a pretty complex story (Yurovsky, Yu, & Smith, 2013). And in fact, it is not clear that getting the “right answer” in the moment during cross situational learning (which presumably theses biases do) is necessary or even helpful for learning (Fitneva & Christiansen, 2011). I don’t think the story presented is necessarily wrong, but there are a wide range of interpretations, and it is not clear to me that these real-time and longer-timescale processes are so neatly aligned. It might be more accurate to reflect this uncertainty.
+
+• Page 7: I don’t understand how the fast-mapping model works. If there is a single word and some number of referents, how can a child learn the word in one shot? How do they get to the correct referent? Or is the idea that they accumulate episodes until they can narrow it down to one and then learn in one trial? A little more explanation would help here.
+
+• Page 9: why assume a Zipf coefficient of 1? The last I looked (and I did this informally on Childes), it’s not. In fact, the function words and open-class words seem to each have their own Zipf distribution (one is greater than 1 and one is less). I like that this was varied parametrically in the later simulation, but why not start with the right thing and then explore parametrically to capture the fact that these estimates are uncertain. In fact, I could see a range of coefficients being relevant: child-directed vs. adult-directed speech, and spoken vs. written. All of these are estimable from existing datasets. Given that the goal is to try to use these models to make realistic extrapolations, why not use the right coefficients?
+
+• Figure 2: what are the blue horizontal lines? They’re not mentioned in the caption.
+
+• Figure 3: the bend in the curve is likely due to the function words fitting a different Zipfian distribution. Could be worth a quick look.
+
+• Page 12: I like the idea of an active learner (at least in some situations), but the text here does not explain it an any developmental or real-world context. That is, it never says clearly and explicitly on what basis a child, choses the word they would like to learn.
+
+• Page 12: similarly the rest of this discussion is heavy on the math and light on the explanation. I’m a pretty computationally and mathematically reader, and I found that it took enormous effort and a few sheets of scratch paper for me to understand the core of this model. Cognitive Science is an interdisciplinary journal, and clearly the goal of this manuscript is to influence thinking in developmental psychology and linguistics. In that case, the authors simply have to explain this in a way that people who aren’t following the math that rapidly can still understand what’s going on. In some ways reading this is like an exercise in fast-mapping--the reader has to memorize the links between a whole bunch of arbitrary symbols and some referents, and they only get one exposure to this. We know that fast-mapping is not particularly effective at word learning (Horst & Samuelson, 2008). Given that, why make your reader have to do it dozens of times?
+
+
+References
+
+Brysbaert, M., Stevens, M., Mandera, P., & Keuleers, E. (2016). How Many Words Do We Know? Practical Estimates of Vocabulary Size Dependent on Word Definition, the Degree of Language Input and the Participant’s Age. Frontiers in Psychology, 7(1116). doi:10.3389/fpsyg.2016.01116
+
+Fitneva, S. A., & Christiansen, M. H. (2011). Looking in the Wrong Direction Correlates With More Accurate Word Learning. Cognitive Science, 35(2), 367-380. doi:10.1111/j.1551-6709.2010.01156.x
+
+Hart, B., & Risley, T. (1995). Meaningful differences in the everyday experience of young American children. Baltimore, MD: Paul Brookes Publishing.
+
+Horst, J. S., & Samuelson, L. (2008). Fast mapping but poor retention in 24-month-old infants. Infancy, 13(2), 128-157.
+
+McClelland, J. L. (2013). Incorporating rapid neocortical learning of new schema-consistent information into complementary learning systems theory. Journal of Experimental Psychology: General, 142(4), 1190-1210. doi:10.1037/a0033812
+
+McMurray, B. (2007). Defusing the childhood vocabulary explosion. Science, 317(5838), 631.
+
+McMurray, B., Horst, J. S., & Samuelson, L. (2012). Word learning emerges from the interaction of online referent selection and slow associative learning. Psychological Review, 119(4), 831-877.
+
+Mitchell, C. C., & McMurray, B. (2009). On leveraged learning in lexical acquisition and its relationship to acceleration. Cognitive Science, 33(8), 1503-1523.
+
+Perry, L. K., Samuelson, L. K., Malloy, L. M., & Schiffer, R. N. (2010). Learn Locally, Think Globally: Exemplar Variability Supports Higher-Order Generalization and Word Learning. Psychological Science, 21(12), 1894-1902.
+
+Samuelson, L. K. (2002). Statistical Regularities in Vocabulary Guide Language Acquisition in Connectionist Models and 15-20-Month-Olds. Developmental Psychology, 38, 1016-1037.
+
+Tauber, S. K., Dunlosky, J., Rawson, K. A., Wahlheim, C. N., & Jacoby, L. L. (2013). Self-regulated learning of a natural category: Do people interleave or block exemplars during study? Psychonomic Bulletin & Review, 20(2), 356-363. doi:10.3758/s13423-012-0319-6
+
+Yurovsky, D., Yu, C., & Smith, L. B. (2013). Competitive Processes in Cross-Situational Word Learning. Cognitive Science, 37(5), 891-921. doi:10.1111/cogs.12035
+
+
+Reviewer #2: The author(s) consider a model for word learning, with a focus on the smallest number of "episodes" (instances of word use, including repetitions of one or more words) required to encounter all words in a lexicon at least once. Then, under the assumption that each word's meaning is "fast mapped" (that is, has its target meaning correctly identified on the first encounter), this number corresponds to the shortest time with which the lexicon can in principle be learnt. This number can be usefully compared with estimates of the total number of words encountered by a real-world learner over a specified period: a minimum learning time under the highly idealised conditions of fast mapping that grossly exceeds that available to a learner points towards the necessity for additional mechanisms that can accelerate the learning process.
+
+The first part of this work involves a "passive" learner who is dealing with an externally-imposed word frequency distribution. The author(s) astutely observe that the time to encounter the whole lexicon is largely determined by waiting for the least frequent word to arrive. Although more approximate than the method used in the work by Blythe, Smith and Smith (2010) that is cited throughout the manuscript, this method has two advantages. First, it is very easy to apply - one only needs to know the smallest word frequency across the entire lexicon. Second, the analysis of Blythe et al was limited to the tail of the word-learning distribution (small epsilon, in the notation of the current work) whereas the present work allows one to estimate other percentiles, notably the median. In this part of the work the author(s) present results for Zipfian word frequency distributions for general exponent a (not just a=1, as was previously determined), and also extend to an empirical distribution derived from the CHILDES corpus of child-directed speech. The author(s) use these new results to argue that Zipfian distributions are problematic for a passive fast-mapper.
+
+This leads to the second part of the paper which focusses on an "active" learner who has some ability to manipulate the word-frequency distribution. This is achieved indirectly by exerting control over the "situation" (i.e., a specific combination of potential referents for a word that may yet to be learnt). A particular selection of referents may lead to a greater or lesser chance that a specific word (e.g., those that label the referents) is then presented to the learner (e.g., by an adult). The author(s) show that the resulting bias in the word-frequency that arises from a learner's choice of situations can accelerate the word-learning process. Although this in principle requires a learner to know the probability that a particular word will be produced in any given situation, they demonstrate that estimating this distribution from the situations they are presented with allows the optimal distribution over situation selections to be approached.
+
+Overall I found this to be a thought-provoking piece of work with some merit, particularly the consideration of an active learning process which contributes to the body of knowledge as to what kinds of processes may have a greater or lesser impact on the rate of word learning. However I felt that there were some issues with the presentation that make it more difficult than it needs to be for a reader to judge the efficacy of the active learning model, and that probably some fairly substantial revisions to the manuscript (although less in the way of new work) would be needed to be publishable in Cognitive Science. There are also some questionable claims, and at times potentially a misrepresentation of precursor works, that should be corrected if a revision is invited. I expand on specific criticisms below, which are presented in the order that they first arise in the manuscript, rather than by order of importance.
+
+1. There is some confusion throughout the manuscript around the concept of a referent frequency distribution. This first arises in the second paragraph on p5: "However, that analysis did not consider nonuniform referent distributions". I think this is misleading at best, depending on what one means by a "referent distribution". The main constraint in the analysis that is referred to is that the target meaning is part of each situation at which the corresponding word is presented. Whilst the distribution of the *distractor* meanings is uniform in this study, this is irrelevant within fast mapping.[ar] This is because the distractor meanings are always somehow discarded by the learner when fast mapping, so any distribution of distractors is equivalent to a uniform distribution. If we think of the simplest possible setup that can yield fast mapping, where each word is presented with a single referent (its target) in each situation, then the referent distribution is exactly the same as the word distribution.[as] As the author(s) point out in the final sentence of the previous paragraph "Blythe et al (2010) also considered a Zipf-distributed target word distribution" which, in the setup just described, corresponds to a Zipf-distributed referent distribution. With the addition of distractor meanings one suspects that a very large space of referent distributions (when marginalising over situations) can be generated within the analysis of fast-mapping, so much more precise language is required here.
+
+This confusion continues with the commentary around Vogt (2012). This contribution [at]refers to the more general situation where distractors are present, which is when their distribution does matter. In Vogt (2012) distractors were sampled, without replacement, from a Zipfian meaning distribution. The consequence of this is that one distractor is highly likely to be present alongside the target referent in every episode. Waiting for this distractor to be excluded is what slows down the learning, not the non-uniform word distribution per se. This work is not relevant to the discussions around fast mapping, because as noted, the distractors do not then play any part in the word learning process and - as the author(s) have correctly made use of in their calculations - it is only the word frequency distribution that matters. Thus the statement at the bottom of p7 "Critically, under a Zipfian word and referent frequency distribution. fast mapping... is typically too slow" is confusing. Perhaps they intended to imply that the referent frequency distribution was implied by the word frequency distribution, and hence also Zipfian; or perhaps that Zipfian distractors make things even worse. But they seem to be conflating the slowdown observed by Vogt which stems from the construction of the distractor set and that arising from a nonuniform word distribution already under fast mapping.
+
+I also think the first sentence of the discussion ("This study reinspected the claim by Blythe et al ... that ... fast-mapping ... is efficient enough ... under more realistic assumptions of Zipfian word and referent frequency distributions, previously considered by Vogt.") is potentially misleading. It could be read that Blythe et al did not consider a Zipf word form distribution, when they did (and the author(s) explicitly acknowledge on p5). Perhaps they meant that they didn't look at Zipfian distractor sets, as Vogt did, but as noted, this is irrelevant to the learning time by fast mapping, and something that is not considered by the present author(s) in the first part of the work. [au]Consequently they do not verify Vogt's conjecture "that the learning time for Zipf-distributed words and meanings" because the present author(s) do not consider Zipf-distributed distractors in the sense that Vogt did (except, perhaps, in the final part of the study relating to active learning).
+
+I do not mean to imply that the author(s) have not done anything new in the first part of the manuscript. As noted above, the new things are coming up with an estimate of the fast-mapping time for general percentiles of the learning-time distribution, and the consideration of word frequencies from an appropriate corpus (rather than a mathematical idealisation).
+
+2. Turning to a more technical point, I think it would be helpful if the author(s) could comment on the tightness of the upper bound in Eq (3). They quote a factor of 16.4 slowdown relative to the uniform case on p9 arising from application of the upper bound. I presume that this is the epsilon=0.01 case which was calculated more precisely by Blythe et al (and verified with Monte Carlo simulations) to give a factor of 11.6. This I think indicates that the upper bound does give a good estimate of the learning time [av]- at least, good enough for the order-of-magnitude type comparison with real-world situations. It would be good to know whether this level of accuracy is maintained for different values of epsilon, or for Zipf distributions with different exponents. (It is fairly straightforward to obtain a distribution of learning times from Monte Carlo simulation, for example). As a side note, I think the unnumbered equation between (2) and (3) [NB: it is helpful to number all equations] relies on epsilon being sufficiently small that T from equation (2) exceeds W. Otherwise one has the learner acquiring W words in fewer than W episodes, which would involve mechanisms that aren't under consideration in this work. I don't think this affects any of the results in the manuscript, as I suspect that epsilon has to be quite close to 1 for this to be a problem.
+
+3. On p8 the author(s) seem to imply that a sample of ~700k words is reasonable for a human to attend to before reaching adulthood (~13 per hour), but that one that is about 16x larger (~11M total / ~200 per hour) is not (p9). We are not given much indication of why this is the case. One can find various estimates in the literature of the rate at which children are exposed to words, ranging from around 600 to 2000 per hour (see Fig 1 of Sperry et al 2019, Child Dev 90:1303 for a nice illustration of a range of estimates).[aw] A rate of 200 per hour does not fall into the obviously untenable range, but rather in the range where we have to think more carefully about what these rates might mean. A key question, to which I at least don't know the answer, is how much each individual presentation of a word constitutes a learning opportunity for the child. I agree that 200 per hour is in the range where one starts to feel uncomfortable, as it does demand a high level of attention on the part of the learner, but I think the author(s) are in too much of a rush to reject passive learning as being insufficient to acquire words at a sufficiently high rate.[ax] In reality other processes may be playing a role, but these are two different scientific statements. The second paragraph of the Discussion also needs to be revisited in the light of these comments.
+
+4. I like the application of the model to the the CHILDES corpus, but again I think the author(s) are a little too hasty in using it as a stick to beat passive learning with. There is definitely something rather curious about the word frequency distribution that is presented, and warrants I think more than a one-paragraph discussion.[ay] Unfortunately I've not been able to view the specific collections of words that the author(s) refer to, so it is difficult to get an understanding of what is going on beyond the figures that the author(s) present. Strikingly, the author(s) report that the corpus contains 51,446 (one assumes, distinct) words. This is remarkably close to the lexicon of 60,000 words that is claimed to be characteristic of an adult. The age range of the children concerned is not stated, but a quick look at the CHILDES website suggests that most transcripts relate to children in the 2-5y age range. Estimates suggest that a typical 6-year old knows around 10,000 words [Anglin et al (1993) Vocabulary development: A morphological analysis]. This makes me wonder if the lowest-ranking words in this corpus are idiosyncratic, for example, words that are meaningful only to a specific child (a name of a toy or a pet, say).[az] Thus the frequency of the lowest-rank item across the entire corpus may underestimate[ba] the frequency that it encountered by a single learner, given that it is part of their caregiver's (child-directed) lexicon. This is what would be required to apply the model and assess the plausibility of a child passively learning the words that are presented to them. I think it is quite likely that the sequence of words presented to children are not independent samples from a fixed frequency distribution - and this is something worth knowing from a modelling perspective[bb] - but I am not sure that the analysis presented in the manuscript convincingly demonstrates that this is the case.
+
+5. The model of active learning is an interesting and worthwhile addition to the (ever-growing) collection of word-learning models. However, as a new model I felt that the purely mathematical specification could benefit by being augmented with an informal description of how it works, perhaps including some examples.[bc] My interpretation is that a child can create a situation j, e.g., by gathering together a set of toys or pointing at a picture in a book. Given the situation j there is then some probability p_ij that a caregiver presents word i to the child. [bd]The learning is active in the sense that the child can choose the distribute of situations q_j, thereby potentially boosting the production of otherwise low-frequency words. To apply the model of the first part, I think there are some further assumptions that need to be made explicit. First, that words are still fast mapped, despite the fact that distractors are an explicit component of the model (and therefore it remains sufficient for the word to be produced at least one for it to be learnt). Second, the distribution q_j does not change over time.[be] Finally, given q, the situations are still independently sampled with replacement, rather than more strategically selected by the child (e.g., to minimise the likelihood of eliciting a word that they already know). Similarly, in the section on the SUN database, I would like to see more detail on how the P matrix was constructed (is it basically that the elements are nonzero if object i appears in scene j, and then normalised over the columns?)[bf]
+
+6. To explore the benefit of active learning, the author(s) compare against a passive baseline that they take as a uniform distribution of situations, q. I am not sure that this is the same as the passive learning of the first part of the manuscript.[bg] In order to achieve this I think one would need to set up the P matrix so that the vector obtained by summing the rows corresponds to an externally-imposed word-frequency distribution, like the Zipf distribution with a specific exponent.[bh] I think only then can we meaningfully compare with the results of the first part of the manuscript. I think it would also be worth comparing against the case of a uniform word-frequency distribution, as the analysis of the first part of the paper suggests that this should generally be optimal if an active learner is able to engineer any word-frequency distribution of their choosing. However, the structure of the P matrix constrains the space of accessible word-frequency distributions by varying q, and it would be interesting to see how close to a uniform distribution it is possible to get with this style of active learning.
+
+7. The author(s) wisely don't make any grand claims about the relevance of their specific active learning algorithm to actual word-learning by children, although I agree that it would be an interesting avenue to explore further. However, this suggestion already poses something of a puzzle for the present manuscript if we think back to the CHILDES corpus. Presumably, this corpus records the actual word productions by caregivers in a naturalistic setting.[bi] If active learning is operating, then the corpus should record the word-frequency distribution that arises from it[bj]: that is, it should be the elements of the vector Pq in the notation of the manuscript. If we are to take the distribution of Fig 3 at face value (as the author(s) currently invite us to do), then we should conclude that active learning has failed spectacularly by delivering a distribution containing some extremely low-frequency items. I think this again motivates trying to establish the word frequency distributions that apply to individual children, but this line of thinking has left me unsure as to whether one can establish - just by looking at the word-frequency distribution in child directed speech - that active learning is taking place, or not. This is perhaps a question that is beyond the scope of the present work, but potentially worth pondering nonetheless.[bk]
+
+
+Reviewer #3: This paper presents an analysis of lexicon learning time for a fast-mapping learner (who learns a word the first time they encounter it) under uniform and zipfian distributions of target words. The authors show that learning times for zipfian-distributed target words are very slow, and become worse the more extremely skewed the distribution is. The authors conclude that this shows that there must be some additional mechanism which renders word learning in reasonable times feasible, and show that learning can be massively sped up by active learning where the learner (or their caregiver) computes which is the most useful word to learn next.
+
+I like the approach in this paper and I think this kind of model can provide really useful insights, not least of which is that fast mapping actually isn't that fast (at the level of lexicons) but that active learning provides a massive speedup. There are a bunch of things I think should be fixed in the paper though, in terms of the framing and interpretation. They are:
+
+1. In general I wasn't sure why the focus in the introduction was on cross-situational learning when the models and results in the paper are focussed on a fast-mapping learner - I can see that part of the motivation in looking at lexicon learning time derives from the models of cross-situational learning covered in the intro, but it rather misled me into thinking the models would be about cross-situational learning and they aren't. I think a clearer focus on the question of word learning times for lexicons is a reasonable one, part of that will come from the cross-situational learning literature but I think cross-situational learning is too central at the moment.
+
+2. In the intro (end of page 4, most of page 5) you talk about the kinds of assumptions that are made in the model about the frequency distribution over target words (e.g. how often is each word encountered by a learner?) and referents (including non-target referents, i.e. how often do I entertain the possibility that a given target word might have a particular referent as its intended reference?), and criticises models assuming a non-Zipfian distribution over either of these as somewhat unrealistic. However, I think there's a lot more work that needs to be done here to explain these concepts and to justify this critique. First, I think these differences (between target word frequency, referent frequency, target referent vs distractor referent frequency, etc etc) are not clear in the text on pages 4-5 and someone who is not familiar with the models from e.g. Blythe et al might not follow them. Second, it's not obvious to me that target words or referents *should* be Zipf-distributed in a realistic model. Zipfian distributions apply over word forms, but another of Zipf's observations is that high-frequency words have more senses (i.e. are more ambiguous), consequently I don't actually know what the underlying distribution of words and their target senses is. Since in your model you (quite reasonably) gloss over this one-to-many mapping from words to senses I therefore don't know whether a more realistic unambiguous-form-to-sense frequency distribution would be uniform, sub-Zipfian, Zipfian, super-Zipfian or what. Your results actually cover a range of distributions, so you are actually covered for some of your results regardless, but I think this all needs to be discussed more carefully in the paper set-up. The stuff about non-uniform distributions over referents also seems less relevant to your paper since these distributions play no role in your model that I could see, or only trivially so since they correlate perfectly with target word distributions, so once again I feel like the intro set an expectation that didn't map well onto what you actually did.
+
+3. I am worried about what constitute "reasonable" or "unreasonable" estimates of lexicon learning time. Your result for zipfian word frequency on page 9 (zipfian is 16.4 times slower than uniform) is quite close to the rough estimate from Blythe et al. 2010 (11.58 times slower) - do you consider this difference important? I was also surprised that you conclude that the uniform distribution is reasonable in terms of lexicon learning time, following Blythe et al, but that 16 times slower learning is not reasonable - based on what you say "This implies 206 independent episodes exposed to a word learner per hour-three episodes every minute-assuming 8 hours of learning everyday of 18 years of life". That actually sounds totally reasonable to me, particularly given that spoken language runs at something like 100 words per minute - I therefore might even consider something 10 times higher to be reasonable. Obviously this is very subjective, but the problem is that the interpretation of your results hinges on what is judged "reasonable". How did you decide what was reasonable? And is there any way out of this subjectivity issue?
+
+4. In the empirical dataset section on page 10, I'd be worried that a relatively small corpus might under-estimate the frequency of the low-frequency words through minority under-sampling, which is consistent with the fact that your estimates from CHILDES are an order of magnitude worse than Zipfian (I think); I am also concerned that the learning time estimate depends on the least frequent word, which might be an outlier in one snapshot of a corpus.
+
+5. In the empirical evaluation section on page 12, I need *way* more details on the SUN database - I am not familiar with it, and you want this crucial section of your paper to be interpretable for people based on reading your paper without going off to read the Xiao et al paper.
+
+6. More generally, I found the explanation of your approach to be a bit too terse, and this really started to bite when you get to the active learning model on page 11 and (particularly) the incremental one on page 13. The cog sci community contains lots of people who are comfortable with computational models and a bit of mathematical notation, but it's an interdisciplinary community and not everyone is, and you want your paper to be interpretable to everyone, so I think you need to do more work in providing slightly less concise verbal explanations for what the various steps in the construction of the models are, what these matrices are, what the argmax stuff is about. Figures also help, I suspect the incremental model in particular will be less mysterious with a visual presentation.
+
+7. In the same vein as point 3 above, I was a bit puzzled by the fact that there's such a huge mismatch between the speedup you get from the idealised active learning model on the SUN corpus (whatever it was), with active learning being 235 times faster, and the more modest speed-up you get with the incremental learner (on the same database I think), 2 times faster. This isn't commented on but it's a huge difference, and the 2 times speed-up seems quite modest given that you concluded that the zipfian distribution made learning times clearly unreasonable - does halving the learning time move us from clearly unreasonable to clearly reasonable?
+
+8. It might be worth mentioning a couple of other results that relate to the problems posed by Zipfian distributions - there's the result from Reisenauer, R., Smith, K., & Blythe, R. A. (2013). Statistical mechanics of lexicon learning in an uncertain world. Physical Review Letters, 110, 258701 that mutual exclusivity can massively help here (at least for a non-fast-mapping learner), and there's Hendrickson & Perfors (2019) in Cognition showing (again for cross-situational learners) that Zipfian distributions actually speed up learning. Again I am not sure these actually challenge you, because you are looking at fast mapping, but given the focus on cross-situational learning I was expecting to see them.
+
+That's it. As I said, I like the approach, so I think a paper with more carefully explained methods and some more careful discussion around frequency distributions, what is reasonable/unreasonable etc, would be good for this journal.
+
+
+===========================
+
+
+Executive Editor 
+Rick Dale, University of California, USA
+
+Senior Editors
+Ruth Byrne, Trinity College Dublin, University of Dublin, Ireland
+Ping Li, The Hong Kong Polytechnic University, Hong Kong
+Priti Shah, University of Michigan, USA
+Iris van Rooij, Radboud University/Donders Institute for Brain, Cognition and Behaviour, The Netherlands
+
+Associate Editors
+Monica Castelhano, Queen's University, Canada
+Emma Cohen, University of Oxford, UK
+Ophelia Deroy, Ludwig Maximilians University, Munich, Germany
+Michelle Ellefson, University of Cambridge, UK
+Sam Gershman, Harvard University, USA
+James A. Hampton, City University London, UK 
+Janet H. Hsiao, University of Hong Kong, HK
+Fiona Jordan, University of Bristol, UK
+Yasmina Jraissati, Ronin Institute, USA 
+Sangeet Khemlani, Naval Research Laboratory, USA 
+Pia Knoeferle, Humbolt University of Berlin, Germany 
+Max M. Louwerse, Tilburg University, The Netherlands 
+Nicole M. McNeil, University of Notre Dame, USA 
+Daniel Mirman, The University of Edinburgh, UK
+Padraic Monaghan, Lancaster University, UK 
+Kinga Morsanyi, Loughborough University, UK 
+David C. Noelle, University of California, Merced, USA
+Pamela Perniss, University of Cologne, Germany 
+Veronica Ramenzoni, National Council for Science and Technology of Argentina (CONICET) and the Pontifical Catholic University Santa María de Buenos Aires (UCA), Argentina
+Oron Shagrir, The Hebrew University of Jerusalem, Israel
+L. James Smart Jr., Miami University, USA 
+Michael J. Spivey, University of California, Merced, USA 
+Sashank Varma, University of Minnesota, USA 
+Jiaying Zhao, University of British Columbia, Canada
+
+ 
+Please be aware that if you ask to have your user record removed, we will retain your name in the records concerning manuscripts for which you were an author, reviewer, or editor.
+ 
+
+
+[a]Active learning can boost vocabulary growth even with a Zipf-distributed distribution.
+[b]Active learning overcomes the difficulty of learning a Zipf-distributed vocabulary
+[c]My impression for the reviewers.
+
+
+Reviewer #1 says the theoretical analysis is not realistic is the matter. Experimental people?
+
+
+Reviewer #2 asks to make formal reasoning carefully, not hasty the conclusion. Good at technical.
+
+
+Reviewer #3 asks to explain the formula more in words for all readers. Moderate.
+
+
+Editor says the claim that passive learning is not enough is too strong, as Reviewer #1 says.
+[d]try to address various vocab sizes and compositions?
+[e]Suggesting some people, such as Editor and Reviewer #1, read such a too strong message from this paper.
+[f]make it clear that we argue active learning is sufficient, but perhaps not necessary
+[g]It seems that Editor is very worried about the "status" of the passive learner. We have to clarify or say moderately our claim that active learning is effective (and a form of passive learning only can be ineffective).
+[h]
+[i]I think that gives us too much credit -- and as they point out, we are following on previous CogSciJ papers!
+[j]The number is not important in theory, I think. However, should we add more results for 40K, 50K, 60K to emphasize that the here hypothesized number 60K is not actually important. Only the scale (?) is the matter.
+[k]exactly!
+[l]Of course, we know. In that sense, our model is wrong, but it would be useful to estimate the order of learning speed.
+[m]?
+[n]Of course, it is “wrong”, and we know it.
+[o]What is that?
+[p]? What does this one say?
+[q]I think they're saying 1) that they didn't understand how the active learning algorithm works, and 2) therefore they don't know if/believe that it is an algorithm that children might possibly implement.
+[r]Complain Paul not us.
+[s]I was aware of this point. 
+Perhaps we can correct this.
+
+
+Simply put, the reality is not “ANY 60,000 words”, since we communicate with the learned words.
+It is more likely to have the most frequent 60,000 words than the random subset of 60000 words out of 171K words.
+Then the story does not change any bit essentially.
+[t]yes, not really a problem, since even the most frequent X% of a power-law distribution is still power-law distributed (and that's as easy as it gets!)
+[u]So again complain Paul Bloom!
+[v]The same set of words again and again.
+He mistook tokens as types.
+[w]Well, it is not independent.
+[x]Active learners selecting situations is not dramatic like a real development??
+[y]This is a sort of active learning as well.
+[z]?
+[aa]Evidence? School is not only place they learn.
+[ab]Why?
+[ac]Years old?
+[ad]Evidence?
+[ae]That is NOT our point.
+[af]So what kind of evidence you have to claim here?
+[ag]Come on!
+[ah]Basically, this guy missed the whole point.
+We are NOT claiming that our model is correct.
+We know it is overly simplified. 
+Yet, it gives the rough estimate how active learning may enhance the correspoinding passive learning.
+
+
+The big question is not WHETHER OR NOT they are active.
+But we would like to show “IF ACTIVE, the words learning is THIS MUCH FASTER.”
+[ai]This it not relevant to our study, because we work on the best case scenario, rather than the variety of possible learning models.
+See Hidaka (2013).
+[aj]Again, we know the assumption is overly simple…
+This guy does not know what the modeling research is.
+[ak]We know.
+[al]Even if they are NOT independent, sampling them still needs.
+The fast-mapping assumption already take such dependence into the account.
+Do not be confused with learning rate and sampling rate!
+This critique is poitless.
+[am]Who are you fighting?
+You attack yourself: you say that (1) fast enough even with the simple learning in the above (realistic number of words is small enough to learn with passive learning), (2) but not fast enough and thus the assumption is too simple here.
+
+
+In one place, you say “distinguish learning rate from sampling rate”, but here you mix them up.
+[an]Yes, that is what we claim indeed.
+Why do you additionally assume we said more than that?
+[ao]But synonyms are still needed to be sampled and learned. 
+Why synonyms are learning-free?
+Our fast mapping assumption gives them easy learning as well.
+
+
+Word-meaning is may be not one-to-one, but the item to learn is still independent.
+[ap]What is “in fact”?
+This is an “adult” study.
+You are the one overly speculating.
+[aq]Why this episode matter?
+
+
+In the end, regardless of our analysis, you reject our paper by your speculation, intuition and experience.
+[ar]I don’t know what he says here.
+
+
+But I am sure this reviewer has some confusion as well, and we need to clarify something.
+
+
+In our model, there is no distractor or anything to consider.
+[as]This is what we mean here.
+[at]I need to learn Vogt (2012)
+[au]Need to read Blythe again to remove this confusion.
+[av]Need to check this.
+[aw]Need to read them.
+[ax]We can make our claim milder a bit more.
+[ay]
+[az]True.
+But could not get the rationale follows.
+[ba]Why?
+[bb]INDEPENDENCE:
+Well, even dependent sequence of words can be considered as another independent sample of sequence in a long run.
+A Markov process with a unique stationary distribution, which is not too unreasonable to assume, can be treated as an independent sample from stationary distribution.
+[bc]Sure.
+[bd]Correct.
+[be]No, we can learn q_j online.
+[bf]Yes.
+[bg]Uniform q is justified by its bounding the performance.
+[bh]We do not know it exactly.
+[bi]Well it is not really true, though.
+I understand what you mean here.
+It would be interesting if we can fit the active model to the real word frequency.
+But CHILDES is not that natural.
+[bj]Seems to be an interesting comment, although I don't know how CHILDES is recorded.
+[bk]Yes.
