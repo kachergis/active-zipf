@@ -95,16 +95,18 @@
 % Brief articles reporting original empirical findings, major theoretical advances or crucial developments that warrant rapid communication to the scientific community - limit 3000 words including abstract (excluding references)
 % http://app.uio.no/ifi/texcount/online.php  2940 words as of 9/11/18 (+122 in captions)
 
-\keyword{Keywords: Word learning; Active learning; Zipf’s law; Fast mapping; Linear programming; Word frequency}
+%\keyword{Keywords: Word learning; Active learning; Zipf’s law; Fast mapping; Linear programming; Word frequency} % duplicate of \keywords{} below; apa6 has no \keyword command
 
 \authornote{The authors have no conflict of interest to declare.}
 
 % abstract is 186 words 9/11/18
 \abstract{
-Children learn thousands of words in the first several years of life, inspiring many theoretical and empirical studies seeking to understand the speed of word learning. 
-The present study revisits recent theoretical analyses of simple sampling models, and investigates learning under more realistic Zipfian (i.e., power-law) distribution of both words and referents. 
-Our new mathematical analysis finds that simple sampling models are unable to account for word learning in feasible time under Zipf-distributed word and referent frequencies. 
-To salvage learning under realistic distributional assumptions, we propose an active learning model which assumes that learners and/or caregivers select (or construct) the contexts from which words are sampled. Using simulations and mathematical analysis, we show that active learners choosing optimal learning situations learn hundreds of times faster than passive learners faced with randomly-sampled situations. Thus, as suggested by past empirical studies, we find theoretical support for the idea that statistical structure in real-world situations--potentially created by the self-directed learner or beneficent teachers--is a potential remedy for the difficulty of learning a Zipf-distributed vocabulary.}
+Children learn thousands of words in the first several years of life, inspiring many theoretical and empirical studies of the mechanisms and pace of word learning.
+Past mathematical analyses have asked how long it should take a child to build an adult-sized vocabulary if words are encountered via random sampling, and concluded that this simple process can succeed in a plausible amount of time--but only under the simplifying assumption that every word is equally likely to be encountered.
+We show that this optimistic conclusion depends heavily on that assumption: under the more realistic, highly-skewed (Zipfian) word and referent frequency distributions observed in child-directed speech and in real-world scenes, random sampling requires an implausibly large number of learning episodes.
+We then ask whether a learner (or caregiver) who can influence which words and referents co-occur, rather than simply encountering them at random, can close this gap.
+Using both mathematical analysis and simulation--including a more realistic incremental learner that does not assume words are learned in a single exposure--we show that such active learners acquire Zipfian vocabularies substantially faster than passive learners exposed to the same random samples, with the size of the advantage depending on how idealized the learning scenario is.
+These results suggest that the statistical structure that children (or their caregivers) impose on everyday learning situations, rather than sheer exposure alone, may be an important piece of the explanation for how children learn vocabulary as quickly as they do.}
 
 \keywords{Word learning; Active learning; Zipf’s law; Fast mapping; Linear programming; Word frequency}
 
@@ -133,33 +135,36 @@ Nonetheless, it has proven useful to test the overall strength of simple learnin
 
 \subsubsection{Distributions of words and referents}
 
-Past analyses have generally modeled word learning as a process that randomly samples a single word, a target meaning, and several distractor meanings in each situation.
+Past analyses have generally modeled word learning as a process that randomly samples a single word together with a situation containing a target meaning and, often, several distractor meanings.
 For example, \cite{Blythe:2010,Blythe:2016} analyzed an idealized learning model that learns each word on its first sample (i.e., {\it fast-mapping}, or one-shot learning), in order to estimate the fastest possible learning rate needed to learn a full-sized vocabulary.
-Under the simplifying assumptions that each word is independently learned via fast-mapping, and that word frequency (WF) is uniformly-distributed (Figure~\ref{fig-overview}, top left), their mathematical analysis of the model showed that a cross-situational learner is likely to learn an adult-sized vocabulary (i.e., $\sim60,000$) words after only $\sim940,000$ samples, a number of spoken words that is well within the bounds of human life experience, requiring roughly 142 learning instances per day for 18 years \citep{Blythe:2010}. %
-Blythe \textit{et al}.'s analytical estimate has been treated as a theoretical implication that learning via independent fast-mapping of words is sufficiently powerful to be a model of child word learning. 
-\cite{Blythe:2010} also considered a Zipf-distributed target word distribution, finding that it should be slower by a factor that depends on the size of the to-be-learned vocabulary (11.58 for 60,000 words, so 10.9 million). % 940000*11.58 = 10,885,200;  -- Blythe et al. 2010's upper bound based on Hart and Risley (2003): 2,100 words per hour, 14 h of exposure per day for 18 years = 2100 * 14 * 365 * 18 = 193,158,000
+Because fast-mapping succeeds the instant the target word and its referent co-occur, distractor meanings play no role in this model: the learner simply needs the correct word-referent pair to appear, so the relevant distribution is the frequency with which each word (equivalently, its unique referent, under a mutually-exclusive word-referent mapping) is sampled.
+Under the simplifying assumption that this word frequency (WF) is uniformly-distributed (Figure~\ref{fig-overview}, top left), \cite{Blythe:2010}'s mathematical analysis of the model showed that a cross-situational learner is likely to learn an adult-sized vocabulary (i.e., $\sim60,000$) words after only $\sim940,000$ samples, a number of spoken words that is well within the bounds of human life experience, requiring roughly 142 learning instances per day for 18 years. %
+Blythe \textit{et al}.'s analytical estimate has been treated as a theoretical implication that learning via independent fast-mapping of words is sufficiently powerful to be a model of child word learning.
+\cite{Blythe:2010} also considered a Zipf-distributed word distribution, finding that it should be slower by a factor that depends on the size of the to-be-learned vocabulary (11.58 for 60,000 words, so 10.9 million). % 940000*11.58 = 10,885,200;  -- Blythe et al. 2010's upper bound based on Hart and Risley (2003): 2,100 words per hour, 14 h of exposure per day for 18 years = 2100 * 14 * 365 * 18 = 193,158,000
 % realistic bound: 1000 * 14 * 365 * 18 = 91,980,000
 
-However, that analysis did not consider nonuniform referent distributions, which might be expected if meaning distribution is usage-based. 
-Indeed, analysis of egocentric views from head-mounted cameras on 8- to 10-month-old infants shows a right-skewed frequency distribution of referents \citep{Clerkin:2017}, suggesting a Zipfian distribution of referents in naturalistic developmental learning environments. 
-\cite{Vogt:2012} explored the effects of Zipf-distributed words and incidental meanings via Monte Carlo simulation using a model framework similar to that of \cite{Blythe:2010}, and found that learning times increase super-exponentially as a function of the ratio of the context size ($C$) to the number of incidental meanings ($M$). 
-Learning on human-scale timelines were only possible for ratios of $C/M \leq .1$, meaning that in any given learning situation less than a tenth of the possible meanings should be plausible. 
+A separate question is what happens when situations contain multiple candidate meanings whose \textit{identities}, not just the target word's frequency, matter to the learner--for instance, a learner who must eliminate distractors across several exposures rather than fast-mapping in one shot.
+Analysis of egocentric views from head-mounted cameras on 8- to 10-month-old infants shows a right-skewed frequency distribution of the objects children actually attend to \citep{Clerkin:2017}, suggesting that the meanings available in naturalistic learning situations are themselves Zipfian, independent of how often any given word is spoken.
+\cite{Vogt:2012} modeled exactly this scenario: words and their possible (distractor) meanings were both drawn from Zipfian distributions, and because his learner narrows down a word's referent by eliminating distractors across episodes (rather than fast-mapping), a highly-frequent distractor meaning tends to co-occur with the target on every exposure, slowing learning even further. Using Monte Carlo simulation, \cite{Vogt:2012} found that learning times increase super-exponentially as a function of the ratio of the context size ($C$) to the number of incidental meanings ($M$), with human-scale learning only plausible for ratios of $C/M \leq .1$--i.e., situations in which fewer than a tenth of all possible meanings are plausible candidates.
+This distractor-elimination slowdown is conceptually distinct from the slowdown we analyze in the next section: ours arises purely from a nonuniform \textit{word} frequency distribution under fast-mapping, where distractor identities are irrelevant by assumption, whereas Vogt's arises from the composition of the distractor set under a different (elimination-based) learning mechanism. We return to the role of situation composition--which becomes central rather than incidental--when we consider active learners in Section~\ref{sec-active} below.
 
 
 \subsubsection{Active learning}
 
-In stark contrast to these sampling models of word learning,
-\citep{gottlieb2018towards}
+In stark contrast to these sampling models of word learning, which treat the learner as a passive recipient of externally-determined input, a growing body of work in neuroscience and cognitive science emphasizes that learners actively shape what they attend to and experience, driven by curiosity and the pursuit of informative input \citep{gottlieb2018towards}.
+Infants and young children direct their gaze, reach, and requests toward informative objects and events, and structure joint-attention episodes with caregivers in ways that concentrate a single object in view at a time \citep{Yu:2009active}, with young children also showing measurable benefits from being given active control over their own learning \citep{Partridge:2015}.
+Analogous benefits of self-directed sampling have been demonstrated in adult word learners given explicit control over which items to study \citep{Kachergis:2013,zettersten2021sampling}.
+These findings raise the possibility that active selection of learning situations--rather than passively-sampled input alone--may be part of how children (or their caregivers) overcome the slow learning implied by the analysis above.
 
 
 \subsection{The present study}
 
-The present study reinspects independent fast-mapping under a more realistic power-law word frequency distribution (WFD) that is characteristic of natural language \citep{Zipf:1949}. 
-Our new mathematical analysis implies that the learning rate of independent fast mapping is quite sensitive to nonuniform distributions of words and referents. 
-Critically, under a Zipfian word and referent frequency distribution, even fast-mapping--the most efficient learning--is typically too slow to learn 60,000 words in 18 years. 
+The present study reinspects independent fast-mapping under a more realistic power-law word frequency distribution (WFD) that is characteristic of natural language \citep{Zipf:1949}.
+Our new mathematical analysis implies that the learning rate of independent fast mapping is quite sensitive to nonuniform distributions of words and referents.
+Critically, under a Zipfian word frequency distribution, even fast-mapping--the most generous passive learning scheme, since it requires only a single co-occurrence to learn a word--implies an implausibly large number of learning episodes to acquire 60,000 words within 18 years.
 Intuitively, the difficulty with quickly learning a long-tailed distribution under random sampling is that a learner must wait a very long time to hear the large proportion of low-frequency words.
-We show that independent fast-mapping cannot account for children's rate of word learning in any distribution where a significant portion of words are infrequently sampled. 
-We confirm that simulated learning from the Zipfian WFD in the CHILDES database \citep{MacWhinney1990}, a corpus of child-directed speech, is quite slow.
+This is a useful diagnostic precisely because fast-mapping is the best case for passive, independent word learning: if even this idealized scheme implies an implausible number of samples, it suggests that random sampling alone is an incomplete account of how children learn a Zipfian vocabulary, whatever the details of how any individual word is learned.
+We confirm that simulated learning from the Zipfian WFD in the CHILDES database \citep{MacWhinney1990}, a corpus of child-directed speech, is similarly slow, and--going beyond fast-mapping--show with simulation that a more realistic incremental learner, which accumulates evidence for a word-referent mapping across multiple exposures rather than guessing correctly on the first one, shows the same qualitative pattern (Section~\ref{sec-incremental-sim}).
 
 % Vogt:2012 / Blythe:2010 model assumptions (as Vogt wrote): (a) a word is always exposed in a situation where its meaning is present, (b) each word and situation are perceived without errors, (c) all situations have the same number of distinct incidental meanings, (d) all meanings are given, so there is no need for categorization, and (e) the lexicon is unambiguous.
 
@@ -167,25 +172,37 @@ We confirm that simulated learning from the Zipfian WFD in the CHILDES database 
 \begin{center}
 \includegraphics[width=\linewidth]{fig1-distros_vs_active_v2}
 \caption{\label{fig-overview} 
-  Previous research considered passive learning from independent random samples from uniform (top left) or Zipfian (top right) word and referent (i.e., meanings $M$) frequency distributions. The present work shows passive learning given a Zipfian word and referent distribution is too slow, and finds a solution in an analysis of a general form of active learning by which the infant (or caregiver) chooses the situation (i.e., context $C$) from which they will learn (bottom). }
+  Previous research considered passive learning from independent random samples from uniform (top left) or Zipfian (top right) word and referent (i.e., meanings $M$) frequency distributions. The present work shows that passive learning from a Zipfian word and referent distribution requires an implausibly large number of samples, and explores active learning--a general scheme by which the infant (or caregiver) chooses the situation (i.e., context $C$) from which they will learn (bottom)--as a candidate source of the additional speed children's learning requires. }
 \end{center}
 \end{figure}
 
-Given the difficulty of learning naturally-occurring Zipfian WFDs even with the power of fast-mapping, we explore an extension of the word learning mechanism by additionally assuming that early word learning is more {\it actively} directed by the learner than is typically assumed. 
-In past analyses \citep[e.g.,][]{Blythe:2010,Vogt:2012,Blythe:2016}, the learner is passively observing randomly-selected words and referents from a given distribution. 
-Motivated by diverse research on curiosity-driven learning \citep[cf.][]{Oudeyer:2016,Smith:2018}, we suggest that children are {\it active learners}, choosing to some extent what situation they would like to learn from at each moment (see Figure~\ref{fig-overview}).
-Various forms of active learning have been studied in machine learning for online, incremental learning scenarios \citep[cf.][]{Settles:2012}, where it can generally outperform random sampling methods in classification tasks. 
-Several behavioral studies of adults have found similar advantages for human active learners in tasks ranging from category learning \citep{Markant:2016} to word learning \citep{Kachergis:2013}, with children also showing benefits for active control \citep{Partridge:2015}.
+Given the difficulty of learning naturally-occurring Zipfian WFDs even with the power of fast-mapping, and motivated by the active and curiosity-driven learning literature reviewed above, we explore an extension of the word learning problem in which the learner is not simply a passive recipient of randomly-selected words and referents \citep[as in][]{Blythe:2010,Vogt:2012,Blythe:2016}, but instead has some ability to structure the situations from which they will learn: choosing which referents to bring into a situation, from which a caregiver then selects a target referent to name (see Figure~\ref{fig-overview}).
 % mention active learning in education (e.g., Montessori; Nolan, A., Kilderry, A., and O'Grady, R. (2006). Young children as active learners, Early Childhood Australia, Watson, A.C.T.)
-Thus, we additionally analyze the impact of the learner actively structuring their word learning situations: choosing the referents from which a caregiver will select a target referent to name. 
-Our analysis shows that this form of active learning enables sufficiently fast word learning for real-world timescales, even under a long-tailed Zipfian WFD. % and referent distribution
+Our analysis shows that this form of active learning yields substantial speedups over passive random sampling--in some cases bringing learning times within a plausible range for real-world timescales--even under a long-tailed Zipfian WFD, though the size of the speedup depends on how much of the learning process is idealized (Sections~\ref{sec-active}--\ref{sec-incremental-sim}).
 
 % Vogt:2012 - Fig. 4 shows that when C/M=0.1, the learning time t~=10^8, which in 18 years would amount to 15,221 words per day. When C/M 1⁄4 0.2, however, the learning time t~=2.9x10^9, which comes to about 441,400 words per day in 18 years. Assuming the upper bound of the number of words that parents are estimated to speak to their children (Hart & Risley, 2003), when hearing 2,100 words for 7.2 h per day, learning 60,000 words in 18 years is feasible with XSL, if C/M 1⁄4 0.1. However, children would require 210 h of input per day if C/M=0.2. Clearly, the former situation is plausible, and the latter is not.
 
 \section{Methods}
-abstract defining the ingredients
+
+The sections that follow analyze several related models, which can be hard to keep straight without a shared vocabulary and a concrete example to anchor the notation. This section lays out both, and previews how the pieces fit together.
+
+\subsection{Shared ingredients}
+Every model in this paper shares the same basic scenario. There are $W$ words to be learned, and--for simplicity, following \cite{Blythe:2010}--exactly $W$ referents (meanings), with each word paired with one and only one referent (a {\it mutually-exclusive} lexicon; we return to this simplifying assumption, including the role of synonymy, in the Discussion). The learner experiences a sequence of {\it episodes}. In each episode, they encounter a {\it situation}: a spoken word, together with a set of candidate referents present in the scene, one of which (the {\it target}) is the word's true referent and the rest of which (if any) are {\it distractors}.
+
+Two things can vary independently across the models we analyze:
+\begin{itemize}
+\item {\bf How situations arise.} A {\it passive} learner simply encounters situations sampled at random according to some external word (and referent) frequency distribution--uniform, in the simplest case, or Zipfian, as in natural language \citep{Zipf:1949}. An {\it active} learner (or their caregiver) instead has some influence over which referents are brought into a situation--for instance, choosing to play with a toy whose name is not yet known--which in turn changes which words a caregiver is likely to say (Section~\ref{sec-active}).
+\item {\bf How a situation updates the learner's knowledge.} A {\it fast-mapping} learner adopts the word-referent pairing suggested by a single episode immediately and permanently--the most generous possible learning rule, since it requires only one co-occurrence. An {\it incremental} learner instead accumulates evidence for candidate word-referent pairings across multiple episodes, and only commits to a mapping once the evidence reliably favors it (Section~\ref{sec-incremental-sim}).
+\end{itemize}
+
+\subsection{A running example}
+Concretely, imagine a toddler learning the names of five toys scattered around a room: a ball, a cup, a dog, a car, and a hat. In one episode, a caregiver says ``ball'' while the child's attention includes the ball itself (the target) along with the cup and the dog (two distractors), but not the car or the hat. A fast-mapping learner would immediately conclude ``ball'' refers to whichever of the three visible toys is correct (see Section~\ref{sec-active} for how this is resolved when more than one referent is present); an incremental learner would instead note that ``ball'' co-occurred with the ball, cup, and dog this time, and would need further episodes--in which ``ball'' co-occurs with the ball but not consistently with the cup or dog--before confidently learning the mapping. Whether the child hears ``ball'' at all in a given episode, and which other toys happen to be nearby when they do, depends on whether toys are selected passively (e.g., whatever happens to be within reach) or actively (e.g., the child gravitates toward toys whose names they do not yet know).
+
+\subsection{Roadmap}
+Section~\ref{sec-fastmap} analyzes fast-mapping under passive sampling, first for a uniform word frequency distribution (recovering \cite{Blythe:2010}'s original analysis), then for Zipfian and other skewed distributions, and finally for the empirical word frequency distribution of the CHILDES corpus of child-directed speech \citep{MacWhinney1990}. Section~\ref{sec-active} then introduces active learning, first analyzing the idealized case in which the learner has full knowledge of how referents and situations relate, then a more realistic online learner that must estimate this relationship from experience. Finally, Section~\ref{sec-incremental-sim} reports simulations of the incremental (non-fast-mapping) learner introduced above, crossed with passive and active sampling, to test whether the qualitative pattern of results survives when the most idealized assumptions of the earlier sections are relaxed.
 
 \section{Independent fast-mapping learning}
+\label{sec-fastmap}
 
 \subsection{Uniformly-distributed word frequency}
 \cite{Blythe:2010} proposed a mathematical model of cross-situational word learning which has a closed-form expression under a certain simplification.
@@ -246,7 +263,7 @@ where
   \log\left( 1 - x \right) 
 }.
 \]
-Setting $\epsilon = 1/2$ in (\ref{eq-T}), we obtain the median of $T$, $f_{W,1/2}(1/W)$, that is comparable with the mean of $T$ in (\ref{eq-fastmap-T}).
+Intuitively, $f_{W,\epsilon}(x)$ is just the coupon-collector calculation behind Equation~\ref{eq-fastmap-T}, generalized to ask: how many samples are needed before a word with sampling probability $x$ has appeared at least once, for all but a proportion $\epsilon$ of learners? Setting $\epsilon = 1/2$ in (\ref{eq-T}), we obtain the median of $T$, $f_{W,1/2}(1/W)$, that is comparable with the mean of $T$ in (\ref{eq-fastmap-T}).
 
 Unlike (\ref{eq-T}) for the uniform distribution, the number of samples $T$ for an arbitrary WFD in general does not have a closed-form solution.
 Thus, instead of the exact expression of $T$, we consider the upper and lower bound for $T$ (see Appendix 1 for the derivation).
@@ -257,9 +274,10 @@ f_{W, \epsilon}( \max p ) \le T \le f_{W, \epsilon}( \min p ) := T_{+}.
 \label{eq-Tbound}
 \end{equation}
 
-As we are interested in the worst possible estimate of $T$, this inequality states that 
-the upper bound $T_{+}$ of $T$ is characterized with 
+As we are interested in the worst possible estimate of $T$, this inequality states that
+the upper bound $T_{+}$ of $T$ is characterized with
 the probability to sample the least frequent word $\min p$.
+In words: among all $W$ words, it is the single rarest one--with probability $\min p$--that determines how long a learner must wait to complete the vocabulary, since every more-frequent word will typically already have been sampled well before it. This is why nonuniform word frequency distributions are so much harder to learn from than uniform ones: a Zipfian distribution concentrates most of its probability mass on a handful of frequent words, leaving very little for the long tail of rare ones, so its $\min p$ is far smaller than the $1/W$ every word gets under a uniform distribution--and, by Equation~(\ref{eq-Tbound}), a smaller $\min p$ directly translates into a much larger $T_{+}$.
 
 \subsection{Impact of non-uniform word frequency}
 This extended mathematical analysis implies that the uniform distribution $q = (1/W, \ldots, 1/W)$ of words gives the minimal possible upper bound $T_{+}$ among any WFD of $W$ words, 
@@ -314,6 +332,12 @@ Given these theoretical implications, we analyze an empirical WF distribution of
 Figure~\ref{fig-freq} shows a representative word distribution of 51,446 words aggregated over 4,163 transcripts from CHILDES (retrieved December 2007).
 The minimal word probability was $1.089 \times 10^{-7}$, which gives the upper bound $T_{+} = f_{51446, 0.01}(1.089 \times 10^{-7}) = 1.420 \times 10^{8}$
 or the median estimate $T_{+} = f_{51446, 0.5}(1.089 \times 10^{-7}) = 1.030 \times 10^{8}$. These estimates of required samples, being an order of magnitude larger than the optimistic theoretical estimate, suggest that this empirical Zipfian WF distribution would be difficult to learn.
+
+A caveat about this estimate is worth making explicit, since Equation~(\ref{eq-Tbound})'s bound $T_{+}$ is driven entirely by the single least-frequent word in the corpus.
+This frequency distribution is aggregated across 4,163 separate transcripts, each contributed by a different family; the very lowest-frequency words in Figure~\ref{fig-freq} may therefore include words idiosyncratic to a single household (e.g., a pet's or sibling's name) rather than words that are genuinely rare in any individual child's actual input.
+If so, the corpus-wide minimum overstates how rare the rarest word in an individual child's own environment really is, and our $T_{+}$ estimate would overstate that child's learning time.
+Working in the opposite direction, a corpus of this size may also under-sample genuinely rare but widely-shared words, pulling the estimated minimum probability--and hence $T_{+}$--the other way.
+Because we cannot fully adjudicate between these two sources of bias without frequency counts drawn from individual children's longitudinal input rather than pooled across families, we treat the CHILDES-based estimate reported here as illustrating the same order-of-magnitude difficulty implied by our idealized Zipfian analysis above, rather than as a precise quantitative bound in its own right.
 %% See also test_fastmap.m in the XSL folder for more detail.
 
 \begin{figure}[h]
@@ -326,34 +350,38 @@ or the median estimate $T_{+} = f_{51446, 0.5}(1.089 \times 10^{-7}) = 1.030 \ti
 
 %% Shohei added this section on Nov 9th, 2016.
 \section{Active learning: Choosing situations}
+\label{sec-active}
 \subsection{Formulation}
 The mathematical analysis above suggests that even the power of fast-mapping may not be efficient enough to learn Zipfian WFDs, raising the question of what mechanisms enable children to learn the nonuniform distributions they experience.
 We explore one way to reconcile this discrepancy by adjusting the assumption about how about meanings are sampled in each situation.
 In the analysis so far, the learner is assumed to be {\it passive}, having no choice but to observe and learn from a given situation: a randomly-sampled set of of objects, of which a (random) subset are labeled with words. 
 The simplifying assumption of a passive learner likely underestimates real learners (and caregivers), who have some control over which situations are experienced.
-Here, we consider a type of active learner who is able to {\it actively} choose the situations from which she learns words. 
+Here, we consider a type of active learner who is able to {\it actively} choose the situations from which she learns words.
+Returning to the toy example from the Methods section: rather than being handed a random toy, an active learner (or their caregiver) can choose to set up a particular scene--say, gathering the ball, the car, and the hat, rather than the ball, the cup, and the dog--and different scenes make different words more or less likely to be spoken by a caregiver.
 
-Suppose that there are $N$ word-referent pairs and $M$ situations, and that the conditional probability to observe the $i^{\text{th}}$ word-referent pair is $p_{ij}$ given the $j^{\text{th}}$ situation. 
-Assume the active learner can choose the next learning situation from the given $M$ situations. %from which she learns the word-referent pairs. 
+Suppose that there are $N$ word-referent pairs and $M$ possible situations (e.g., scenes the learner could construct), and that the conditional probability to observe the $i^{\text{th}}$ word-referent pair is $p_{ij}$ given the $j^{\text{th}}$ situation.
+Assume the active learner can choose the next learning situation from the given $M$ situations. %from which she learns the word-referent pairs.
 Suppose that the active learner chooses the $j^{\text{th}}$ situation with probability $q_{j}$.
 Denote the $N \times M$ matrix of conditional probabilities by $P = \{ p_{ij} \}_{ij}$ and the $N \times 1$ vector of the situation choice probabilities by $q = (q_{1}, q_{2}, \ldots, q_{M})^{T}$.
 Thus, the marginal probability of word-referent pairs is given by the vector $Pq \in \mathbb{R}^{N}$.
+Concretely, if the learner always constructed the same scene $j$, the words they would hear would simply follow that scene's column of $P$; by mixing across scenes according to $q$, the learner reshapes the overall word frequency distribution they experience, $Pq$, relative to whatever distribution a passive observer of randomly-constructed scenes would encounter.
 According to the analysis in the previous section, the minimal probability of referents (or words) determines the number of samples required to complete the word learning, meaning
-the best choice for the active learner is given by the choice probability \footnote{In the context of game theory, this optimal $\hat{q}$ corresponds to the max-min strategy (or Nash equilibrium) for the two-player zero-sum game defined by the payoff matrix $P$ (see for instance \cite{Maschler:2013}). } 
+the best choice for the active learner is given by the choice probability \footnote{In the context of game theory, this optimal $\hat{q}$ corresponds to the max-min strategy (or Nash equilibrium) for the two-player zero-sum game defined by the payoff matrix $P$ (see for instance \cite{Maschler:2013}). }
 \[
  \hat{q} = {\arg\max}_{q} \min(Pq).
 \]
+In words, $\hat q$ is whatever mixture of situations makes the \textit{least}-likely word-referent pair as likely as possible--maximizing the minimum entry of $Pq$--because it is exactly this minimum probability that, per Section~\ref{sec-fastmap}, determines how long the learner must wait to complete the vocabulary. Framed this way, active learning as formalized here does not change how quickly any individual word is learned once encountered; rather, it reshapes which words the learner is likely to encounter in the first place, spreading exposure more evenly across the vocabulary than random sampling of situations would.
 This minimal probability, $\min(P\hat{q})$, gives the theoretical upper bound for the minimal number of samples $$T_{+}=f_{W,\epsilon}( \min(P \hat{q}) ).$$
 This is an upper bound with the known $P$, because the probability matrix
 $P$ is not known before empirical learning, and the active leaner also needs to estimate $P$ from the sample.
 
 For a given matrix $P$, the optimal $\hat{q}$ can be computed by the iterated linear programming algorithm (see Appendix 3 for details). % algorithmic complexity of this? Iris van Rooij and Johan Kwisthout would care
 
-As a baseline for the passive learner, we consider the average $\min( Pq )$ with the uniform distribution over the vector $q$, whose lower bound is given by Jensen's inequality $$\int_{q\in \Simplex{N}}\min( Pq ) (N-1)!\dd q \ge \min( P \one{N}/N ),$$
+As a baseline for the passive learner, we consider the average $\min( Pq )$ with the uniform distribution over the vector $q$--i.e., a learner (or caregiver) who constructs scenes without regard to which words the learner has already mapped to a referent, the counterpart of the randomly-sampled situations analyzed in the previous section, now expressed in terms of situations rather than words directly. This baseline's lower bound is given by Jensen's inequality $$\int_{q\in \Simplex{N}}\min( Pq ) (N-1)!\dd q \ge \min( P \one{N}/N ),$$
 where the integral is taken over the $N-1$ dimensional unit simplex $q\in \Simplex{N}$.
 For a sufficiently small $x \ll 1$ and $y \ll 1$, $f_{W,\epsilon}(x)/ f_{W,\epsilon}(y) \approx y/ x$.
 Thus, the rate $$R = \min(P \hat{q})/ \min(P \one{N}/N)$$ gives a good estimate for the rate of efficiency, by which
-active learning with the optimal probability $\hat{q}$ is $R$ times faster on average 
+active learning with the optimal probability $\hat{q}$ is $R$ times faster on average
 than passive learning with a uniformly-randomly chosen probability vector $q$. % transition sentence explaining what we do
 
 \subsection{Empirical evaluation}
@@ -361,10 +389,12 @@ than passive learning with a uniformly-randomly chosen probability vector $q$. %
 To evaluate the potential impact of active leaning, we study the SUN database \cite{SUN2010} as an empirical estimate of object distributions in a collection of real-life scenes. 
 The SUN database (retrieved September 25, 2016) has $N = 3,458$ objects and $M = 1,111$ representative indoor and outdoor scenes in 131,067 images. 
 This data gives an estimate of the $N \times M$ matrix $P$ in which each column is the conditional probability of the objects given each scene. 
-With uniform scene choice probability $q = \one{N}/N$, the $\min(Pq)$ is $8.30\times 10^{-9}$. 
-Meanwhile, with the optimal $\hat{q}$, the $\min(P\hat{q})$ is $1.95\times 10^{-6}$, indicating active learning is approximately $R = 235.3$ times faster than the baseline passive learning. 
-The marginal probability distributions of objects for the baseline and optimal $q$ are shown in Figure \ref{fig-optimalQ}. 
+With uniform scene choice probability $q = \one{M}/M$, the $\min(Pq)$ is $8.30\times 10^{-9}$.
+Meanwhile, with the optimal $\hat{q}$, the $\min(P\hat{q})$ is $1.95\times 10^{-6}$, indicating active learning is approximately $R = 235.3$ times faster than the baseline passive learning.
+The marginal probability distributions of objects for the baseline and optimal $q$ are shown in Figure \ref{fig-optimalQ}.
 The difference between the two marginal distributions is visible at their tails: the tail of the uniform $q$ decreases like an exponential function, but that of the optimal $\hat{q}$ decreases as a power function (linear in the log-log plot).
+
+This tail comparison also clarifies an important limitation of the comparison: the word-referent distribution realized under uniform scene selection in this dataset is not itself Zipfian, and its exponential tail is in fact \textit{less} heavy--and thus easier to learn from--than the Zipfian distribution assumed as the passive baseline in Section~\ref{sec-fastmap}. The baseline passive learner analyzed here is therefore the passive learner implied by this particular scene database under uniform scene selection, not a learner facing the specific Zipfian word frequency distribution analyzed in Part 1 of this paper; the two are related but not identical comparisons. If anything, this suggests the $235\times$ estimate is conservative relative to a passive learner constrained to face a genuinely Zipfian marginal distribution matched to Section~\ref{sec-fastmap}'s assumptions, since the exponential-tailed baseline realized here should already be somewhat easier to learn from than a Zipfian one. Constructing $P$ so that its uniform-$q$ marginal is constrained to exactly reproduce a specified Zipfian distribution--allowing a matched, apples-to-apples comparison with Part 1--is a natural target for future work with richer scene databases.
 This empirical evaluation suggests that this form of active learning can make fast-mapping orders of magnitude more efficient.
 
 \begin{figure}[h]
@@ -401,27 +431,71 @@ Beyond the case study reported above, we also provide a theoretical analysis of 
 \end{center}
 \end{figure}
 
+\section{Incremental active learning}
+\label{sec-incremental-sim}
+
+The analyses above--both the fast-mapping bound of Section~\ref{sec-fastmap} and the idealized and online active learners of Section~\ref{sec-active}--all assume that a word is learned the moment it co-occurs with its target referent. This lets us derive clean analytical results, but it sidesteps a concern raised about this modeling tradition more broadly: that conclusions about learning speed may reflect the {\it sampling} process (how often the right word-referent pair happens to co-occur) rather than anything about {\it learning} itself, and that treating each word as learned independently and instantaneously is a strong idealization. To test whether our qualitative conclusions--that passive sampling from a Zipfian distribution is implausibly slow, and that active learners can close much of this gap--survive when both of these idealizations are relaxed, we simulated a learner who accumulates evidence across multiple exposures rather than fast-mapping.
+
+\subsection{An incremental, mutual-exclusivity learner}
+Following \cite{Vogt:2012} and \cite{Siskind:1996}, we implemented a learner who tracks, for each word, the set of referents it remains consistent with across all past exposures. In each episode, the learner observes a target word alongside $C-1$ distractor referents (as in Section~\ref{sec-active}); rather than immediately committing to a mapping, the learner eliminates from the word's candidate set any referent that was absent from the current situation. A word is considered learned once its candidate set has been narrowed to a single referent--i.e., once enough situations have ruled out every other possibility. This is a strictly harder learning problem than fast-mapping: a single co-occurrence is no longer sufficient, and how quickly a word is learned now depends on {\it which} distractors happen to accompany it, not only on how often it is sampled.
+
+We crossed this incremental learner with the same two dimensions of active control introduced above, but now made concrete for both the target word and the distractors that accompany it, following the toy example from the Methods section:
+\begin{itemize}
+\item {\bf Target selection}: a \textit{passive} learner encounters a target word/referent sampled according to the (uniform or Zipfian) word frequency distribution; an \textit{active} learner instead preferentially selects situations built around a referent whose word is not yet known (e.g., choosing to play with the car rather than the already-learned ball).
+\item {\bf Distractor (context) selection}: under \textit{random} context selection, the $C-1$ distractors accompanying the target are drawn according to the word frequency distribution, as in Section~\ref{sec-fastmap}; under \textit{familiar} context selection, distractors are drawn preferentially from referents whose candidate sets have already been narrowed down (i.e., toys the learner already knows a great deal about), which should make it easier to eliminate them as competitors for the target's word.
+\end{itemize}
+This $2\times2$ design (active/passive target selection $\times$ random/familiar context selection), crossed with uniform and Zipfian word frequency distributions, lets us ask which forms of active control matter, and whether their benefits depend on the frequency distribution being learned--all without assuming fast-mapping.
+
+\subsection{Simulation design}
+We simulated vocabularies of $M = 1000$ and $M = 2000$ referents, with Zipfian word frequencies following the Zipf-Mandelbrot form $p_r \propto (r + 2.7)^{-1}$ over frequency rank $r$ \citep{Mandelbrot:1953}. Context sizes $C$ ranged from 5 to 200, always satisfying $C \le 0.1M$ per \cite{Vogt:2012}'s finding that learning becomes intractable outside this range. For each combination of $M$, $C$, target selection (active/passive), context selection (random/familiar), and word frequency distribution (uniform/Zipfian), we ran 15--100 replications and recorded the number of episodes needed to learn 99\% of the vocabulary.\footnote{Simulation code and raw results are available in the project repository (\texttt{corpusXSL\_eliminative\_active\_parallel.R}, \texttt{activeXSL\_simulations.Rmd}).}
+
+\subsection{Results}
+Figure~\ref{fig-incremental-sim} shows the mean number of episodes needed to learn 99\% of a $M=1000$-word vocabulary, for the subset of context sizes ($C=10, 100$) simulated under all four combinations of target and context selection. Under a uniform WFD, active target selection alone yields a modest speedup over passive sampling (2,894 vs.\ 8,340 episodes, a 2.9x reduction), and familiar-context selection adds essentially nothing further--unsurprising, since eliminating distractors is not especially hard when every referent is equally frequent to begin with.
+
+Under a Zipfian WFD, the pattern is very different, and directly addresses the concern that our earlier fast-mapping results might not generalize to a learner that must accumulate evidence over time. Fully passive learning (random target and context selection) requires an average of 5,893,267 episodes--consistent with the implausibly slow learning implied by the fast-mapping analysis of Section~\ref{sec-fastmap}, now obtained from a learner that never fast-maps at all. Active target selection alone cuts this to 357,958 episodes, a 16.5x speedup, comparable in order of magnitude to the online active learner of Section~\ref{sec-active}. Familiar-context selection alone (with passive target selection) is even more effective, reducing learning time to 56,232 episodes (a 104.8x speedup)--because once a few referents have been narrowed down, using them as distractors makes every subsequent elimination nearly free. Combining active target selection with familiar-context selection reduces learning time to 5,809 episodes on average, barely above the $M=1000$ lower bound of one episode per word, and over 1,000 times faster than fully passive learning. In other words, once the learner is allowed to shape not only {\it which} word they hear next, but also {\it what else is in the scene} when they hear it, an otherwise implausibly slow Zipfian learning problem becomes nearly as fast as the uniform case.
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=\linewidth]{incremental_sim_summary.pdf}
+\caption{\label{fig-incremental-sim}
+Mean episodes (log scale, $\pm$ 1 SE) required for an incremental, elimination-based learner to acquire 99\% of a 1000-word vocabulary, as a function of whether the target word is sampled passively or actively selected to be unknown (bar fill), and whether distractors are drawn randomly or preferentially from familiar (already partly-known) referents (x-axis), separately for uniform and Zipfian word frequency distributions. Results are averaged over context sizes $C=10$ and $C=100$.}
+\end{center}
+\end{figure}
+
+These results reinforce the paper's central conclusions using a learner that makes neither of the two idealizations most often raised against fast-mapping models: words are not learned on a single exposure, and the number of samples required is not simply a proxy for how often a word is spoken. They also reveal that the two forms of active control we distinguish--choosing what to talk about, and choosing what else is nearby when talking about it--are not interchangeable: under a Zipfian distribution, controlling the distractor context turns out to matter at least as much as controlling the target word itself, a distinction that the idealized analysis of Section~\ref{sec-active} does not draw out, since it collapses both into a single choice of situation $j$.
+
 \section{Discussion}
 
 %This study offered a mathematical analysis of word learning, providing general constraints that any theoretical account of children's word learning should satisfy. 
-This study reinspected the claim by \cite{Blythe:2010} that independently fast-mapping word meanings is efficient enough to learn a full adult lexicon in 18 years, under more realistic assumptions of Zipfian (i.e. power-law) word and referent frequency distributions, previously considered by \cite{Vogt:2012}. 
-We offer a first analytical estimate for the learning time of an entire lexicon assuming nonuniform distributions of meanings and words, verifying \cite{Vogt:2012}'s conjecture that learning time for Zipf-distributed words and meanings depends on the number of meanings and the probability to sample the least frequent word or referent. % Vogt also suggested C - context size; incidental meanings - matters
-Our new analysis showed that even learning via fast-mapping is not efficient enough to learn words whose distribution has rarely sampled words--including the Zipf distribution. % In essence, learners end up waiting a long time for the long tail of the distribution: low-frequency words are simply too rare.
+This study reinspected the claim by \cite{Blythe:2010} that independently fast-mapping word meanings is efficient enough to learn a full adult lexicon in 18 years, extending the analysis to arbitrary (not only uniform or Zipfian) word frequency distributions, and complementing \cite{Vogt:2012}'s related but distinct analysis of Zipfian distractor sets under a different, elimination-based learning mechanism (see Section~\ref{sec-active}). % Vogt also suggested C - context size; incidental meanings - matters
+We offer a first closed-form analytical bound on the learning time of an entire lexicon for an arbitrary word frequency distribution, consistent with the general intuition behind \cite{Vogt:2012}'s simulation results that learning time is governed by the probability of sampling the single least-frequent word.
+Our new analysis showed that even fast-mapping--the most generous passive, independent learning scheme--implies an implausibly large number of samples for word distributions with a long tail of rarely-sampled words, including the Zipf distribution, and simulations of a more realistic incremental learner showed the same qualitative pattern (Section~\ref{sec-incremental-sim}). % In essence, learners end up waiting a long time for the long tail of the distribution: low-frequency words are simply too rare.
 
 % discuss relation to Hidaka2013 and MollicaPiantadosi2017 effective learning instances -- we define how ELIs might be constructed (for one-shot learners), while they estimate how -- constant factor (still reasonable amount of input?)
 Given that our analysis implied learning would be too slow under realistic distributions, we considered a more efficient learning scheme, in which the learner can choose preferred learning situations by composing the contexts from which words are drawn. 
 This type of active control over situations seems natural with respect to general observations of children's behavior \citep{Yu:2009active}, and has been shown to benefit adult word learners \citep{Kachergis:2013}, but has not to our knowledge previously been subjected to theoretical analysis. 
 We quantify and evaluate the effect of this type of self-directed learning in word learning using a modeling framework with few assumptions \citep{Blythe:2010,Vogt:2012,Blythe:2016}. 
 As the least probable word in the distribution determines learning efficiency, we analyzed the effect of active choice on the situations maximizing this key parameter. 
-Analyzing an empirical dataset of labeled referents in a set of natural scenes, we found that the expected learning time of an active learner is over two hundred times more efficient than a passive learner. 
-This result suggests that active choice in word learning is one possible resolution to the issue that passive learners cannot learn sufficiently quickly from naturalistic Zipfian distributions.
-% We propose and analyze the learning time for a general active learning algorithm--including an online version. 
+Analyzing an empirical dataset of labeled referents in a set of natural scenes, we found that the expected learning time of an idealized active learner--one with full advance knowledge of how referents co-occur with scenes, who still fast-maps each word--is over two hundred times (235x) more efficient than a passive learner sampling scenes uniformly at random.
+Two further analyses show that this large speedup is best treated as an upper bound rather than a representative estimate, for two largely independent reasons.
+First, an active learner who must instead estimate this co-occurrence structure online from experience, rather than know it in advance, but who still fast-maps, requires only about half as many samples as its passive counterpart in our simulated setting (Section~\ref{sec-active})--a much smaller advantage than the idealized case, since the learner spends part of its budget discovering $P$ rather than exploiting it.
+Second, and separately, a learner who cannot fast-map at all, but must instead accumulate evidence for word-referent mappings across multiple exposures, shows a roughly 16-fold advantage for active target selection alone under a Zipfian distribution (Section~\ref{sec-incremental-sim})--and a more than 1,000-fold advantage once the learner can also shape which distractors accompany the target word, rather than only which word is targeted.
+Taken together, these estimates span roughly two orders of magnitude, from about 2x to over 1,000x, depending on which idealizations are relaxed: how much the learner already knows about its environment (a known vs.\ estimated $P$), whether learning requires one exposure or several, and whether active control extends only to the target word or also to its surrounding context.
+What remains stable across this range is the direction and rough scale of the effect, not its exact size: some form of active control over learning situations meaningfully speeds up vocabulary acquisition under Zipfian word and referent distributions, and does so far more than under a uniform distribution, where active selection helps only modestly (Section~\ref{sec-incremental-sim}).
+Together, these results suggest that active choice in word learning is one plausible contributor to how children learn Zipfian vocabularies within realistic timeframes--not that passive learning plays no role, but that it is unlikely to be the whole story.
+% We propose and analyze the learning time for a general active learning algorithm--including an online version.
 
-This paper analyzed fast-mapping--a simple yet powerful learning scheme--in order to highlight the effects of nonuniform word frequency distributions, with and without active learning. 
+This paper analyzed both an idealized fast-mapping learner and a more realistic incremental learner in order to characterize the effects of nonuniform word frequency distributions, with and without active learning.
 \GK{We expect that other word learning mechanisms suffer to the same extent from nonuniform distributions in the environment, and future work can use the same analytic techniques presented here to confirm that.
 Moreover, we expect that the active learning mechanisms presented are generalizable to other models, and will similarly alleviate the difficulty of learning from naturalistic nonuniform distributions.
 Although the optimal active learning algorithm we have considered may not be cognitively plausible (and thus may predict faster learning than young children show), in conjunction with the fast-mapping mechanism it offers an upper-bound on the speed of active word learning, and future work should consider suboptimal active learning mechanisms that are more cognitively plausible.}
-Note that the general scene-selection algorithm analyzed here could be implemented by the child, the caregiver, or both as they jointly choose (or reject) referents and locales. 
+Our analysis also rests on simplifying assumptions common to this modeling tradition \citep{Blythe:2010,Vogt:2012,Blythe:2016} that are worth making explicit.
+First, we assumed a mutually-exclusive lexicon in which each word maps to exactly one referent; in reality many words have synonyms, which may ease learning somewhat (evidence for one member of a synonym set can be informative about related words), but does not change our basic conclusion, since each synonym must still be individually sampled and learned under both the fast-mapping and incremental models we analyze.
+Second, following \cite{Bloom:2000} we targeted a vocabulary of roughly 60,000 words, whereas more recent estimates place adult vocabulary size somewhat lower, around 40,000 word families \citep{Brysbaert:2016}.
+More importantly than the exact target size is whether the child must learn a specific, enumerated set of $W$ words (a harder problem, since the rarest words in any sample from a Zipfian distribution are, by construction, very rare) or merely {\it some} sufficiently large subset of the words available in the environment (an easier problem, since the most frequent fraction of a Zipfian distribution is itself Zipfian, and thus reachable in substantially fewer samples than the full tail).
+Our qualitative conclusions--that passive fast-mapping is implausibly slow under Zipfian sampling, and that actively structuring learning situations substantially narrows this gap--do not depend on which of these framings, or which exact target vocabulary size, is assumed; only the specific numerical estimates (e.g., Equation~\ref{eq-fastmap-T} and Figure~\ref{fig-estimate}) do.
+
+Note that the general scene-selection algorithm analyzed here could be implemented by the child, the caregiver, or both as they jointly choose (or reject) referents and locales.
 \GK{Indeed, observations of parent-child free-play sessions have found that both parents and children often construct scenes with a single object dominating the child's visual field \citep{Yu:2009active}, with manual manipulations of both the parent and the child contributing to the visual clarity of the objects \citep{Suanda:2018}. 
 Data such as these could be used to test the efficacy of various active learning mechanisms against real-world data, providing additional insights into how restructuring a child's environment might improve word learning.
 Applying mechanisms of active learning to the rich and changing input will allow us to test the idea that infants create a curriculum for statistical learning \citep{Smith:2018}.
@@ -522,6 +596,8 @@ and further we have
 This implies the $T_{+}$ is a super-exponential monotone function of the exponent $a$.
 
 \section{Iterated linear programming}
+Before stating the algorithm formally, the intuition behind it is as follows. Start from an arbitrary situation-choice distribution $q_{0}$ and identify $k_{1}$, the word-referent pair least likely to be observed under $q_{0}$--the current ``weakest link.'' Restrict attention to choices of $q$ that do not make pair $k_1$ any less likely than it already is, and, among those, pick the $q$ that maximizes pair $k_1$'s probability; call this $q_1$. Now identify the next-weakest pair $k_2$ under $q_1$, add the analogous restriction (do not make $k_1$ or $k_2$ any worse), and re-optimize to get $q_2$; repeat. Each iteration locks in a guarantee for one more word-referent pair without loosening the guarantees already made for previously-fixed pairs, so after at most $N$ iterations, the resulting $q$ cannot be changed to improve any pair's probability without decreasing some other pair's probability that is already at least as small--which is exactly the max-min condition that defines $\hat{q}$.
+
 For a $N \times M$ matrix $P$, write its $i^{\text{th}}$ row by $P_{i}$.
 Let $I = \{1, 2, \ldots, N\}$ be the set of all indices.
 At the initial step, define 
