@@ -1,0 +1,23 @@
+% code of human performance analysis
+
+% to compute the statistics in Section 3 of the following paper
+% J. Xiao, J. Hays, K. A. Ehinger, A. Oliva, and A. Torralba
+% SUN Database: Large-scale Scene Recognition from Abbey to Zoo
+% Proceedings of 23rd IEEE Conference on Computer Vision and Pattern Recognition (CVPR2010)
+
+
+Human confusion matrix of all workers:
+	all_workers_confusion.mat
+
+Human confusion matrix of the 13 good workers:
+	good_workers_confusion.mat
+
+Raw result of the mturk experiement:
+	TurkResult.mat
+
+Category of labels:
+	labelMat.mat
+
+Code to generate the confusion matrix:
+	human_analysis.m
+	confusionMatrix.m
