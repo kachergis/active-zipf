@@ -1,0 +1,12 @@
+Previous analyses (e.g., Smith et al. 2011, 2016) have assumed independent sampling of referents (forming a context C) and of words, given that context. Now that we have shown nonuniform frequency distributions under these assumptions results in vastly slower learning than earlier supposed, we are motivated to see whether closer to real-world assumptions might accelerate learning. We depart from previous assumptions in two ways: 1) we separately model different classes of words (e.g., nouns, verbs, and function words) that have somewhat unique frequency distributions in natural language, and 2) we introduce a nested method of sampling situations, meanings, and words (referential and non-referential) that more closely approximates the real-world language environment. After analyzing the effects of these sampling procedures on learning different types of words via the eliminative method discussed earlier, we also consider some alternative models and measures of word learning.
+
+Distinct Distributions of Word Classes
+
+Function words are the highest-frequency, and also learned somewhat later (at least for correct usage, even if the pronunciation is already known). However, function words are non-referential. Nouns generally refer to whole, permanent objects (which children are biased to attach labels to), while verbs refer to actions that are fleeting.
+[I’m hoping even the varying frequency distributions will help us a bit; I don’t want to get into modeling object features vs. entire objects..yet.]
+
+Sampling in the Real World
+
+The real world has a lot of autocorrelation: in the course of a day, a child may spend some time moving around in the house (bedroom, living room, kitchen, etc.), and then take a trip outside (the yard, park, doctor, and back again)
+
+

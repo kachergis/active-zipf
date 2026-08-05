@@ -1,0 +1,146 @@
+"video","utt.num","utt","objects.present","objects.referred","mom.eyes","mom.hands","mom.point","kid.eyes","kid.hands"
+"A2",1,"you see the doggy","dog pig","dog","dog",,,"pig",
+"A2",2,"theres the doggy","dog pig","dog","dog",,,"dog","pig"
+"A2",3,"thats a pig","dog pig","pig","child",,,"pig","pig"
+"A2",4,"pig","dog pig","pig","child",,,"pig","pig"
+"A2",5,"is that soft","dog pig","pig","pig","pig",,"pig","pig"
+"A2",6,"is that a puppet pig soft","dog pig","pig","child","pig",,"pig","pig"
+"A2",7,"love the pig","dog pig","pig","pig","pig",,"dog",
+"A2",8,"love the pig","dog pig","pig","child",,,"pig","pig"
+"A2",9,"pigs say oink oink oink","dog pig","pig","pig","pig",,"pig","pig"
+"A2",10,"squeak  oink oink oink oink oink","dog pig","pig","pig","pig",,"pig","dog"
+"A2",11,"oink oink oink oink oink oink oink","dog pig","pig","child","pig",,"pig","dog"
+"A2",12,"thats cute","dog pig","pig","pig","pig",,"pig","dog"
+"A2",13,"oink oink oink oink oink oink","dog pig","pig","child","pig",,"pig","dog"
+"A2",14,"hes a pig","dog pig","pig","pig","pig",,"pig","pig"
+"A2",15,"its a big fat pig","dog pig","pig","pig",,,"pig","pig"
+"A2",16,"thats the pigs tail","dog pig","pig","child",,,,"pig"
+"A2",17,"hes so soft","dog pig","pig","child",,,"pig","pig"
+"A2",18,"theres his nose","dog pig","pig","pig","pig",,"pig",
+"A2",19,"the pigs nose and ears","dog pig","pig","pig","pig",,"pig","pig"
+"A2",20,"nose","dog pig","pig","pig","pig",,"pig","pig"
+"A2",21,"yeah love that pig","pig","pig","pig","pig",,"pig","pig"
+"A2",22,"love that piggy","dog pig","pig",,,,,"pig"
+"A2",23,"is that the doggy","dog pig","dog","child","child",,"dog",
+"A2",24,"whats the doggy say","dog pig","dog","child","child",,"dog",
+"A2",25,"whats the doggy say","dog pig","dog","child",,,,"dog"
+"A2",26,"yeah doggy","dog pig","dog","child",,,,"dog"
+"A2",27,"he says woof","dog pig","dog","child",,,,"dog pig"
+"A2",28,"doggy says woof woof woof woof","dog pig","dog","child",,,"mom","dog pig"
+"A2",29,"woof woof woof","dog pig","dog","child",,,,"dog pig"
+"A2",30,"oh  wheres the doggy","pig","dog","child",,,"mom","pig"
+"A2",31,"wheres the doggy","pig","dog","child",,,"mom","pig"
+"A2",32,"wheres the doggy","pig dog","dog","child",,,"mom","pig"
+"A2",33,"there he is","pig dog","dog","dog",,,"dog","pig"
+"A2",34,"theres the doggy",,"dog","child",,,"mom",
+"A2",35,"wheres the doggys tail",,"dog","child",,,,
+"A2",36,"oh",,,"child",,,"mom",
+"A2",37,"wheres the doggy","pig","dog","child",,,"mom",
+"A2",38,"wheres the doggy","pig","dog","child",,,"mom",
+"A2",39,"is that the pig","pig","pig","pig","pig",,"pig",
+"A2",40,"goes oink oink oink","pig","pig","child","pig",,"pig",
+"A2",41,"ah choo  ah choo","pig dog",,"child","child",,,
+"A2",42,"the piggy","pig dog","pig","pig","child",,"pig","pig"
+"A2",43,"the pig","pig dog","pig","child","child",,"pig",
+"A2",44,"jonathan look at the car","truck car","car","car",,"car",,
+"A2",45,"ha look at the car","truck car","car","child","car",,"car",
+"A2",46,"vroom vroom","truck car","car","car","car",,"car",
+"A2",47,"vroom","truck car","car","car","car",,"car",
+"A2",48,"see that red car","truck car","car","child",,,,"car"
+"A2",49,"thats hard","truck car","car","car","car",,,
+"A2",50,"and the truck","truck car","truck","truck",,,"truck",
+"A2",51,"the truck","truck car","truck","truck",,"truck","truck","truck"
+"A2",52,"see the wheel","truck car","truck","car",,"car","car","car"
+"A2",53,"it goes round and around","truck car","truck","car",,,"car","car"
+"A2",54,"round and around","truck car","truck","car",,,"car","car"
+"A2",55,"can you make the car go vroom vroom","truck car","car","child",,,"truck","car"
+"A2",56,"can i have the car please","truck car","car","child",,,"car","car"
+"A2",57,"can i have the car","truck car","car","child",,,"mom","car"
+"A2",58,"thank you","truck car",,"child","car",,"car","car"
+"A2",59,"thank you","truck car",,"child","car",,"car","car"
+"A2",60,"thank you","truck car",,"child","car",,"car","car"
+"A2",61,"hard to let it go","truck car","car",,,,"car","car"
+"A2",62,"whats the truck do","truck car","truck","truck","truck",,"truck","car"
+"A2",63,"can you make the truck go","truck car","truck","truck","truck",,"truck","car"
+"A2",64,"see the wheel","truck car","car","child","car",,"car","car"
+"A2",65,"it goes round and around","truck car","car","child","car",,"car","car"
+"A2",66,"does that taste good","truck car","car","child",,,"mom","car"
+"A2",67,"yuck yuck","truck car","car","child",,,"mom","car"
+"A2",68,"is that a red car","truck car","car","child",,,"car","car"
+"A2",69,"is that the truck","truck car","truck","child",,"truck","truck","car truck"
+"A2",70,"truck","truck car","truck","child",,,"truck","car truck"
+"A2",71,"you see the car go vroom vroom vroom vroom vroom","truck car","car","car","car",,"car","truck"
+"A2",72,"no not with trucks thats new","truck car","truck",,,,"car","car"
+"A2",73,"i mean he hears them outside and we go out and look and stuff but not not the",,"truck",,,,"mom","car"
+"A2",74,"in fact that little truck that carries those shaky things thats kind of his first truck",,"truck",,,,,
+"A2",75,"but he doesnt have any of these kinds of things yet",,"truck car","child","truck",,,"mom"
+"A2",76,"yeah we dont want to touch that one","truck","microphone","child","child",,,"mom"
+"A2",77,"see the truck","truck car","truck","truck","truck",,,"mom"
+"A2",78,"weeee it goes","truck car","truck","truck","truck",,,
+"A2",79,"and the cookie","truck car","cookie","truck",,"truck",,
+"A2",80,"wheres the car","truck car","car","child","child",,,"mom"
+"A2",81,"jonathan wheres the car","truck car","car","child","child",,,"mom"
+"A2",82,"ha there it is","car truck","car","child","child",,"car",
+"A2",83,"good boy","car truck",,"child","child",,,
+"A2",84,"can you get it","car truck","car","child","child",,,
+"A2",85,"likes that car","car truck","car","child",,,,"car"
+"A2",86,"when he hears cars outside he calls them kind of vraaa","car truck","car","child","child",,"mom","car"
+"A2",87,"may i have the car please","car truck box brush","car","child","child",,"box brush","car"
+"A2",88,"likes the box","box brush truck","box","child","child",,"box",
+"A2",89,"is that a brush","box brush","brush","child",,,,"box brush"
+"A2",90,"wheres the brush","box brush","brush","child",,,"box","box brush"
+"A2",91,"open","box brush","box","child",,,"box","box"
+"A2",92,"open the box","box brush","box","child",,,"box","box"
+"A2",93,"close the box","box brush","box","box",,,"box","box"
+"A2",94,"open","box brush","box","box",,,"box","box"
+"A2",95,"jonathan wheres the brush","box","brush","child",,,"box",
+"A2",96,"wheres the brush","box brush","brush","child",,,,"box"
+"A2",97,"there it is","box brush","brush","child",,,"brush","box"
+"A2",98,"brush","box brush","brush","child",,,"brush","box brush"
+"A2",99,"will you brush your hair","box brush","brush","brush",,,"brush","box brush"
+"A2",100,"here going to brush your hair","box brush","brush","brush","brush",,"box","box"
+"A2",101,"brush brush brush","box","brush","brush","brush",,"box","box"
+"A2",102,"heres the brush","box brush","brush","brush","brush",,"box","box"
+"A2",103,"you taking a drink","box brush",,"child",,,"mom","box"
+"A2",104,"are you having a drink","box brush",,"child",,,"box","box"
+"A2",105,"ewwww yuck","box brush",,"brush","brush",,,
+"A2",106,"you put it in the box","box","box","brush","brush",,"brush","box"
+"A2",107,"now you have the box","box","box","child",,,,"box"
+"A2",108,"doesnt taste too good","box","brush","child",,,"brush","brush"
+"A2",109,"noisy noisy","box brush","box","child","box",,"box","brush"
+"A2",110,"doesnt taste too good","box brush","box","brush",,,"brush",
+"A2",111,"is that yucky","box brush","brush","child","brush",,"brush",
+"A2",112,"its a brush","box brush","brush","brush","brush",,"brush",
+"A2",113,"brush","box brush","brush","child",,,"brush","brush"
+"A2",114,"can you put this in the box","box brush","brush box","box brush","box brush",,"brush",
+"A2",115,"can you put it in","box brush","brush box","child","box",,"box",
+"A2",116,"put it in the box","box brush","brush box","box","box","box","box","box"
+"A2",117,"put the brush in the box","box brush","brush box","child","brush",,"box","box"
+"A2",118,"you want the brush","box brush","brush","child","brush",,"box","box"
+"A2",119,"open and close","box brush","box","box",,,"box","box"
+"A2",120,"open","box brush","box","box",,,"box","box"
+"A2",121,"close","box brush","box","box",,,"box","box"
+"A2",122,"open","box brush","box","box",,,"box","box"
+"A2",123,"close the box","box brush","box","child",,,"box","box"
+"A2",124,"theres your book and your ball","box brush book ball","book ball","book ball","book ball",,"book ball","box"
+"A2",125,"jonathan wheres your ball","box book ball","ball","child",,,,"box"
+"A2",126,"wheres your ball","box book ball","ball","child","child",,,"box"
+"A2",127,"wheres your ball","box book ball","ball","child",,,,"box"
+"A2",128,"ha  wheres your ball","box book ball","ball","child",,,"box",
+"A2",129,"there it is","box book ball","ball","child",,,"mom","ball"
+"A2",130,"yeah","box book ball","ball","ball",,,,
+"A2",131,"whoops and there it goes","box ball","ball","ball",,,"mom",
+"A2",132,"wanna play ball","book ball","ball","child","ball",,"book",
+"A2",133,"and theres your book","book ball","book","book","ball",,"book","book"
+"A2",134,"thats a great book about the bunny","book ball","book bunny",,,,"book","book"
+"A2",135,"is that your book","book ball","book","child",,,"book","book"
+"A2",136,"wanna read your book","book ball","book","child",,,"book","book"
+"A2",137,"heres your book","book ball","book","book","book",,"book","book"
+"A2",138,"oh lets turn it around","book ball","book","book","book",,"book",
+"A2",139,"theres your book","book ball","book","book","book",,"book",
+"A2",140,"wheres the bunny","book ball","bunny","child","book",,,
+"A2",141,"wheres the bunny","book ball","bunny","book","book",,"book",
+"A2",142,"theres the bunny","book ball","bunny","book","book",,"book","book"
+"A2",143,"soft","book ball","bunny","book","book",,"ball",
+"A2",144,"you wanna play ball","ball","ball","child",,,"mom","ball"
+"A2",145,"can you throw the ball","ball","ball","child",,,"mom",
