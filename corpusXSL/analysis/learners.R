@@ -133,11 +133,62 @@ learn_corpus_guesstest <- function(C, M, a = 1, uniform = TRUE, active = FALSE,
   c(eps_to_learn_decile, episodes)
 }
 
+# Model 3: "Ranked-frequency" (as in corpusXSL_rankedFreq_active_parallel.R) --
+#   tracks a full M-length co-occurrence *count* matrix (not a binary
+#   candidate/eliminated set): every time a word is spoken, its co-occurrence
+#   count with every referent present in the situation is incremented. A word
+#   is learned once its true referent's count is the unique maximum among all
+#   candidate referents for that word. Softer than hard elimination (a
+#   referent is never definitively ruled out, just outweighed), so it is more
+#   robust to any single unrepresentative episode but requires accumulating a
+#   clear count lead rather than merely surviving as the last candidate.
+learn_corpus_rankedfreq <- function(C, M, a = 1, uniform = TRUE, active = FALSE,
+                                     fam_context = FALSE, epsilon = .01) {
+  probs <- if (uniform) rep(1 / M, M) else zipf_probs(M, a)
+
+  hyp <- matrix(1, nrow = M, ncol = M)
+  word_known <- rep(FALSE, M)
+  episodes <- 0
+  n_learned <- 0
+  total <- M * (1 - epsilon)
+  eps_to_learn_decile <- rep(FALSE, 9)
+  deciles <- M * seq(.1, .9, .1)
+
+  while (n_learned < total) {
+    if (active) {
+      unknown <- which(!word_known)
+      target <- if (length(unknown) > 1) sample(unknown, 1, prob = probs[unknown]) else unknown
+    } else {
+      target <- sample(1:M, 1, prob = probs)
+    }
+    nontarg <- setdiff(1:M, target)
+    if (fam_context) {
+      familiar <- 1 / (colSums(hyp) + 1)
+      distractors <- sample(nontarg, C - 1, prob = probs[nontarg] * familiar[nontarg])
+    } else {
+      distractors <- sample(nontarg, C - 1, prob = probs[nontarg])
+    }
+    cc <- c(target, distractors)
+    hyp[cc[1], cc] <- hyp[cc[1], cc] + 1
+    max_cooc <- max(hyp[cc[1], ])
+    if (hyp[cc[1], cc[1]] == max_cooc && !word_known[cc[1]]) {
+      n_learned <- n_learned + 1
+      word_known[cc[1]] <- TRUE
+      for (dd in 1:9) if (n_learned >= deciles[dd] && !eps_to_learn_decile[dd]) eps_to_learn_decile[dd] <- episodes
+    }
+    episodes <- episodes + 1
+  }
+  c(eps_to_learn_decile, episodes)
+}
+
 repeat_sim <- function(learner, C, M, a, uniform, active, fam_context, reps, seed = 982709) {
   set.seed(seed)
-  fn <- if (learner == "eliminative") learn_corpus_eliminative else learn_corpus_guesstest
+  fn <- switch(learner,
+               eliminative = learn_corpus_eliminative,
+               guesstest = learn_corpus_guesstest,
+               rankedfreq = learn_corpus_rankedfreq)
   foreach(i = 1:reps, .combine = rbind,
-          .export = c("zipf_probs", "learn_corpus_eliminative", "learn_corpus_guesstest")) %dopar%
+          .export = c("zipf_probs", "learn_corpus_eliminative", "learn_corpus_guesstest", "learn_corpus_rankedfreq")) %dopar%
     fn(C, M, a, uniform, active, fam_context)
 }
 
