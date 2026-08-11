@@ -1,0 +1,9 @@
+"active","uniform","fam_context","mean_p99","se","n"
+"Passive","Uniform","Random",8339.93333333333,286.311087677727,30
+"Passive","Uniform","Familiar",8197.1,270.465891575531,30
+"Passive","Zipfian","Random",5893267.4,1095646.90508394,30
+"Passive","Zipfian","Familiar",56232.2333333333,4837.78309532713,30
+"Active","Uniform","Random",2894.1,153.447601225432,30
+"Active","Uniform","Familiar",2879.43333333333,150.664296721265,30
+"Active","Zipfian","Random",357957.6,66031.3183042122,30
+"Active","Zipfian","Familiar",5808.56666666667,610.532839982681,30

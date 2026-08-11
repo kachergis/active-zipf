@@ -1,0 +1,36 @@
+Loading required package: foreach
+Loading required package: doParallel
+Loading required package: iterators
+Loading required package: parallel
+[13:21:10]  skip (already done): eliminative M=1000   C=10   a=0    uniform=TRUE  active=FALSE   fam=FALSE   
+[13:21:10]  skip (already done): eliminative M=1000   C=10   a=0    uniform=TRUE  active=FALSE   fam=TRUE    
+[13:21:10]  skip (already done): eliminative M=1000   C=10   a=0    uniform=TRUE  active=TRUE    fam=FALSE   
+[13:21:10]  skip (already done): eliminative M=1000   C=10   a=0    uniform=TRUE  active=TRUE    fam=TRUE    
+[13:21:10]  skip (already done): eliminative M=1000   C=10   a=0.5  uniform=FALSE active=FALSE   fam=FALSE   
+[13:21:10]  skip (already done): eliminative M=1000   C=10   a=0.5  uniform=FALSE active=FALSE   fam=TRUE    
+[13:21:10]  skip (already done): eliminative M=1000   C=10   a=0.5  uniform=FALSE active=TRUE    fam=FALSE   
+[13:21:10]  skip (already done): eliminative M=1000   C=10   a=0.5  uniform=FALSE active=TRUE    fam=TRUE    
+[13:21:10]  skip (already done): eliminative M=1000   C=10   a=1    uniform=FALSE active=FALSE   fam=FALSE   
+[13:21:10]  skip (already done): eliminative M=1000   C=10   a=1    uniform=FALSE active=FALSE   fam=TRUE    
+[13:21:10]  skip (already done): eliminative M=1000   C=10   a=1    uniform=FALSE active=TRUE    fam=FALSE   
+[13:21:10]  skip (already done): eliminative M=1000   C=10   a=1    uniform=FALSE active=TRUE    fam=TRUE    
+[13:21:10]  skip (already done): eliminative M=1000   C=10   a=1.5  uniform=FALSE active=TRUE    fam=FALSE   
+[13:21:10]  skip (already done): eliminative M=1000   C=10   a=1.5  uniform=FALSE active=TRUE    fam=TRUE    
+[13:21:10]  start: eliminative M=1000   C=100  a=0    uniform=TRUE  active=FALSE   fam=FALSE   reps=30 
+[13:21:14]    done in 3.8s, mean p99=9948 
+[13:21:14]  start: eliminative M=1000   C=100  a=0    uniform=TRUE  active=FALSE   fam=TRUE    reps=30 
+[13:21:40]    done in 25.8s, mean p99=9680 
+[13:21:40]  start: eliminative M=1000   C=100  a=0    uniform=TRUE  active=TRUE    fam=FALSE   reps=30 
+[13:21:42]    done in 1.4s, mean p99=3716 
+[13:21:42]  start: eliminative M=1000   C=100  a=0    uniform=TRUE  active=TRUE    fam=TRUE    reps=30 
+[13:21:52]    done in 10.0s, mean p99=3691 
+[13:21:52]  start: eliminative M=1000   C=100  a=0.5  uniform=FALSE active=FALSE   fam=FALSE   reps=30 
+[13:22:11]    done in 19.9s, mean p99=40418 
+[13:22:11]  start: eliminative M=1000   C=100  a=0.5  uniform=FALSE active=FALSE   fam=TRUE    reps=30 
+[13:23:00]    done in 48.2s, mean p99=17062 
+[13:23:00]  start: eliminative M=1000   C=100  a=0.5  uniform=FALSE active=TRUE    fam=FALSE   reps=30 
+[13:23:04]    done in 4.3s, mean p99=8078 
+[13:23:04]  start: eliminative M=1000   C=100  a=0.5  uniform=FALSE active=TRUE    fam=TRUE    reps=30 
+[13:23:16]    done in 12.3s, mean p99=4524 
+[13:23:16]  EXCLUDED from brute force: eliminative C=100 a=1 passive (see header) -- using analytical T+ instead 
+[13:23:16]  start: eliminative M=1000   C=100  a=1    uniform=FALSE active=TRUE    fam=FALSE   reps=30 
