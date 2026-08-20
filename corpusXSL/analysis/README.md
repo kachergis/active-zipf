@@ -14,13 +14,28 @@ how to size the run, how to resume). `summarize_verification_grid.R` prints a pe
 mean/median/censoring-rate table and a side-by-side comparison against the point
 estimates currently in the paper.
 
+## To explore the three new active-selection extensions (partial autonomy, Goldilocks, bounded choice)
+
+```bash
+cd corpusXSL/analysis
+Rscript run_active_modes_grid.R      # fixes M=1000, C=10, a=1 (the paper's "headline" case) and sweeps
+                                      # active_prob / active_policy / choice_k across all three models
+Rscript summarize_active_modes.R     # three figures in ../../paper/: active_prob_sweep.pdf,
+                                      # goldilocks_policy.pdf, choice_k_sweep.pdf
+```
+
+Edit the `SWEEP_*` constants at the top of `run_active_modes_grid.R` to widen the sweep or
+change `C`/`A`/`FAM_CONTEXT` to check whether a finding also holds at C=100 or other exponents.
+Same wall-clock-budgeted, resumable design as `run_verification_grid.R`.
+
 ## Core library
 
 - **`learners.R`** — the three learning mechanisms (`learn_corpus_eliminative`,
   `learn_corpus_guesstest`, `learn_corpus_rankedfreq`) plus `zipf_probs()` and the
   simulation-running helpers. Everything else sources this file. All three learners
   share one interface: `(C, M, a, uniform, active, fam_context, epsilon, max_episodes,
-  max_seconds)`, return `c(dec1..dec9, episodes, censored)`.
+  max_seconds, active_prob, active_policy, choice_k, goldilocks_target,
+  goldilocks_sigma)`, return `c(dec1..dec9, episodes, censored)`.
   - `repeat_sim(...)` — old, fixed-reps API (used by the one-off scripts below).
   - `run_cell_budgeted(...)` — new wall-clock-budgeted API (used by
     `run_verification_grid.R`). Runs replications in parallel batches until a
@@ -28,6 +43,22 @@ estimates currently in the paper.
     `rep_max_seconds` is marked `censored=1` and should be excluded from
     mean/median summaries (but its rate is itself informative — see the caution
     about the ranked-frequency model below).
+  - `choose_target(...)` — the shared active/passive target-selection rule used
+    by all three learners internally, generalized beyond the original binary
+    active/passive choice into three composable dimensions (all backward-
+    compatible: defaults exactly reproduce the original behavior):
+    - `active_prob` (0-1): probability the learner gets to choose actively
+      this episode, rather than falling back to passive/random. Models partial
+      autonomy — a caregiver who doesn't always follow the child's lead.
+    - `active_policy` (`"unknown"` default, or `"goldilocks"`): `"unknown"`
+      prefers any not-yet-known word; `"goldilocks"` prefers not-yet-known
+      words with an *intermediate* amount of prior exposure (tracked via a new
+      per-word `times_targeted` counter), operationalizing the Goldilocks
+      effect (Kidd, Piantadosi, & Aslin, 2012) already cited in the paper as
+      motivation but never previously implemented as the actual selection rule.
+    - `choice_k` (default `Inf`): restricts active choice to a random K-sized
+      window of the vocabulary per episode rather than the full M, modeling a
+      learner who can only choose among what's actually around them right now.
 
 ## One-off scripts already run (results committed, safe to leave alone)
 

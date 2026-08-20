@@ -1,5 +1,7 @@
 # Three cross-situational word-learning mechanisms, each crossed with:
-#   - target selection: passive (random) vs. active (choose an unknown word)
+#   - target selection: passive (random) vs. active (choose an unknown word),
+#     now generalized into three composable dimensions -- see "ACTIVE TARGET
+#     SELECTION" below.
 #   - context selection: random distractors vs. familiar (already-partly-known) distractors
 #   - word frequency distribution: uniform, or Zipfian with a general exponent a
 #     (p_k propto k^-a, matching the parametrization used in the paper's analytical
@@ -31,12 +33,55 @@
 #   a known, verified artifact of the original criterion, not a bug introduced here.
 #   See the paper's "Robustness across Zipf exponent and learning mechanism" section.
 #
-# All three learners accept `max_seconds` (wall-clock cap on a single replication)
-# and `max_episodes` (hard episode-count cap), whichever binds first. A replication
-# that hits either cap returns with `censored=1` and whatever deciles/episode count
-# it had reached; it is NOT a valid draw of "episodes to reach 99%" and should be
-# excluded from mean/median calculations (but its censoring should be reported --
-# see summarize_verification_grid.R).
+# All three learners accept `max_seconds` (wall-clock cap on a single replication,
+# checked every TIME_CHECK_EVERY episodes) and `max_episodes` (hard episode-count
+# cap), whichever binds first. A replication that hits either cap returns with
+# `censored=1` and whatever deciles/episode count it had reached; it is NOT a
+# valid draw of "episodes to reach 99%" and should be excluded from mean/median
+# calculations (but its censoring should be reported -- see
+# summarize_verification_grid.R).
+#
+# ACTIVE TARGET SELECTION
+# ------------------------
+# The original binary `active` (TRUE/FALSE) is generalized into three composable
+# dimensions, all handled by the shared choose_target() below so the three
+# learners don't duplicate this logic three times:
+#
+#   active_prob (p, default: NULL -> falls back to as.numeric(active), i.e. 0 or 1,
+#                exactly reproducing old behavior when unspecified)
+#       Probability that THIS episode's target is chosen actively rather than
+#       passively/randomly. p=1 is "fully active" (the original `active=TRUE`),
+#       p=0 is "fully passive" (the original `active=FALSE`), and 0<p<1 is a
+#       learner who only sometimes gets to exercise choice -- e.g. a caregiver
+#       who isn't always following the child's lead. Answers "how much of the
+#       day must be actively sampled to get the benefits of active learning?"
+#
+#   active_policy (default: "unknown", the original policy)
+#       "unknown"    -- prefer any not-yet-known word, weighted by base frequency
+#                       (this is the ONLY policy used anywhere in the paper so far)
+#       "goldilocks" -- among not-yet-known words, prefer ones with an
+#                       INTERMEDIATE amount of prior exposure (tracked via
+#                       times_targeted, a per-word counter incremented every time
+#                       a word is picked as target, active or passive), rather
+#                       than either completely-fresh (never encountered) or
+#                       heavily-exposed-but-still-unresolved words. Operationalizes
+#                       the "Goldilocks effect" (Kidd, Piantadosi, & Aslin, 2012)
+#                       already cited in the paper as motivation for the active
+#                       learner, but never previously implemented as the actual
+#                       selection rule.
+#
+#   choice_k (K, default: Inf, i.e. unrestricted -- the original behavior)
+#       When acting actively, first restrict the candidate pool to a random
+#       K-sized subset of the vocabulary (redrawn every episode, frequency-
+#       weighted) before applying active_policy within it. Models a learner who
+#       can only exercise choice over what happens to be available right now
+#       (a bounded set of toys in the room), not the entire vocabulary. If the
+#       K-window happens to contain no unknown words, falls back to a passive
+#       draw WITHIN that same window (the learner still can't reach outside it).
+#
+# These three compose freely and are each backward-compatible individually and
+# jointly: leaving all three at their defaults exactly reproduces every result
+# already in the paper.
 
 require(foreach)
 require(doParallel)
@@ -49,6 +94,44 @@ zipf_probs <- function(M, a) {
   sample(probs, length(probs))  # randomize which referent index gets which rank
 }
 
+# Shared active/passive/bounded/Goldilocks target-selection rule used by all
+# three learners. See "ACTIVE TARGET SELECTION" in the file header.
+choose_target <- function(M, probs, word_known, times_targeted, active_prob,
+                           active_policy = "unknown", choice_k = Inf,
+                           goldilocks_target = 2, goldilocks_sigma = 2) {
+  do_active <- if (active_prob >= 1) TRUE else if (active_prob <= 0) FALSE else (runif(1) < active_prob)
+
+  if (!do_active) {
+    return(sample(1:M, 1, prob = probs))
+  }
+
+  if (is.finite(choice_k) && choice_k < M) {
+    pool <- sample(1:M, choice_k, prob = probs)
+  } else {
+    pool <- 1:M
+  }
+
+  unknown_pool <- pool[!word_known[pool]]
+  if (length(unknown_pool) == 0) {
+    # Nothing unknown is available in this window -- the learner still can't
+    # reach outside it, so fall back to a passive draw within the window.
+    if (length(pool) == 1) return(pool)
+    return(sample(pool, 1, prob = probs[pool]))
+  }
+
+  if (active_policy == "goldilocks") {
+    dist <- abs(times_targeted[unknown_pool] - goldilocks_target)
+    w <- exp(-(dist^2) / (2 * goldilocks_sigma^2)) * probs[unknown_pool]
+    if (sum(w) <= 0) w <- probs[unknown_pool]  # degenerate fallback (shouldn't normally trigger)
+    if (length(unknown_pool) == 1) return(unknown_pool)
+    return(sample(unknown_pool, 1, prob = w))
+  }
+
+  # default policy: "unknown" -- prefer any unknown, weighted by base frequency
+  if (length(unknown_pool) == 1) return(unknown_pool)
+  sample(unknown_pool, 1, prob = probs[unknown_pool])
+}
+
 # How often (in episodes) each learner checks the wall-clock. Checking every
 # iteration would make Sys.time() overhead dominate for cheap models; checking
 # too rarely makes max_seconds imprecise. 2000 is a reasonable middle ground
@@ -57,11 +140,15 @@ TIME_CHECK_EVERY <- 2000L
 
 learn_corpus_eliminative <- function(C, M, a = 1, uniform = TRUE, active = FALSE,
                                       fam_context = FALSE, epsilon = .01,
-                                      max_episodes = Inf, max_seconds = Inf) {
+                                      max_episodes = Inf, max_seconds = Inf,
+                                      active_prob = NULL, active_policy = "unknown",
+                                      choice_k = Inf, goldilocks_target = 2, goldilocks_sigma = 2) {
+  if (is.null(active_prob)) active_prob <- as.numeric(active)
   probs <- if (uniform) rep(1 / M, M) else zipf_probs(M, a)
 
   hyp <- matrix(1, nrow = M, ncol = M)
   word_known <- rep(FALSE, M)
+  times_targeted <- rep(0L, M)
   episodes <- 0
   n_learned <- 0
   total <- M * (1 - epsilon)
@@ -77,12 +164,9 @@ learn_corpus_eliminative <- function(C, M, a = 1, uniform = TRUE, active = FALSE
         break
       }
     }
-    if (active) {
-      unknown <- which(!word_known)
-      target <- if (length(unknown) > 1) sample(unknown, 1, prob = probs[unknown]) else unknown
-    } else {
-      target <- sample(1:M, 1, prob = probs)
-    }
+    target <- choose_target(M, probs, word_known, times_targeted, active_prob,
+                             active_policy, choice_k, goldilocks_target, goldilocks_sigma)
+    times_targeted[target] <- times_targeted[target] + 1L
     nontarg <- setdiff(1:M, target)
     if (fam_context) {
       familiar <- 1 / (colSums(hyp) + 1)
@@ -104,13 +188,17 @@ learn_corpus_eliminative <- function(C, M, a = 1, uniform = TRUE, active = FALSE
 
 learn_corpus_guesstest <- function(C, M, a = 1, uniform = TRUE, active = FALSE,
                                     fam_context = FALSE, epsilon = .01,
-                                    max_episodes = Inf, max_seconds = Inf) {
+                                    max_episodes = Inf, max_seconds = Inf,
+                                    active_prob = NULL, active_policy = "unknown",
+                                    choice_k = Inf, goldilocks_target = 2, goldilocks_sigma = 2) {
+  if (is.null(active_prob)) active_prob <- as.numeric(active)
   probs <- if (uniform) rep(1 / M, M) else zipf_probs(M, a)
 
   current_guess <- rep(0L, M)  # current_guess[w]: referent word w currently claims (0 = none)
   claimed_by <- rep(0L, M)     # claimed_by[r]: word currently claiming referent r (0 = unclaimed)
   confirm_count <- rep(0L, M)  # streak of exposures in which word w's guess survived
   word_known <- rep(FALSE, M)
+  times_targeted <- rep(0L, M)
   episodes <- 0
   n_learned <- 0
   total <- M * (1 - epsilon)
@@ -126,12 +214,9 @@ learn_corpus_guesstest <- function(C, M, a = 1, uniform = TRUE, active = FALSE,
         break
       }
     }
-    if (active) {
-      unknown <- which(!word_known)
-      target <- if (length(unknown) > 1) sample(unknown, 1, prob = probs[unknown]) else unknown
-    } else {
-      target <- sample(1:M, 1, prob = probs)
-    }
+    target <- choose_target(M, probs, word_known, times_targeted, active_prob,
+                             active_policy, choice_k, goldilocks_target, goldilocks_sigma)
+    times_targeted[target] <- times_targeted[target] + 1L
     nontarg <- setdiff(1:M, target)
     if (fam_context) {
       familiar <- confirm_count[nontarg] + 1
@@ -172,11 +257,15 @@ learn_corpus_guesstest <- function(C, M, a = 1, uniform = TRUE, active = FALSE,
 
 learn_corpus_rankedfreq <- function(C, M, a = 1, uniform = TRUE, active = FALSE,
                                      fam_context = FALSE, epsilon = .01,
-                                     max_episodes = Inf, max_seconds = Inf) {
+                                     max_episodes = Inf, max_seconds = Inf,
+                                     active_prob = NULL, active_policy = "unknown",
+                                     choice_k = Inf, goldilocks_target = 2, goldilocks_sigma = 2) {
+  if (is.null(active_prob)) active_prob <- as.numeric(active)
   probs <- if (uniform) rep(1 / M, M) else zipf_probs(M, a)
 
   hyp <- matrix(1, nrow = M, ncol = M)
   word_known <- rep(FALSE, M)
+  times_targeted <- rep(0L, M)
   episodes <- 0
   n_learned <- 0
   total <- M * (1 - epsilon)
@@ -192,12 +281,9 @@ learn_corpus_rankedfreq <- function(C, M, a = 1, uniform = TRUE, active = FALSE,
         break
       }
     }
-    if (active) {
-      unknown <- which(!word_known)
-      target <- if (length(unknown) > 1) sample(unknown, 1, prob = probs[unknown]) else unknown
-    } else {
-      target <- sample(1:M, 1, prob = probs)
-    }
+    target <- choose_target(M, probs, word_known, times_targeted, active_prob,
+                             active_policy, choice_k, goldilocks_target, goldilocks_sigma)
+    times_targeted[target] <- times_targeted[target] + 1L
     nontarg <- setdiff(1:M, target)
     if (fam_context) {
       familiar <- 1 / (colSums(hyp) + 1)
@@ -222,13 +308,16 @@ learn_corpus_rankedfreq <- function(C, M, a = 1, uniform = TRUE, active = FALSE,
 # used by run_full_grid.R / run_guesstest_grid.R / run_rankedfreq_grid.R /
 # make_final_figures.R. New code should prefer run_cell_budgeted() below, which
 # adds the wall-clock stopping rule and per-replication censoring.
-repeat_sim <- function(learner, C, M, a, uniform, active, fam_context, reps, seed = 982709) {
+repeat_sim <- function(learner, C, M, a, uniform, active, fam_context, reps, seed = 982709,
+                        active_prob = NULL, active_policy = "unknown", choice_k = Inf,
+                        goldilocks_target = 2, goldilocks_sigma = 2) {
   set.seed(seed)
   fn <- LEARNERS[[learner]]
   out <- foreach(i = 1:reps, .combine = rbind,
-                 .export = c("zipf_probs", "TIME_CHECK_EVERY", "learn_corpus_eliminative",
+                 .export = c("zipf_probs", "TIME_CHECK_EVERY", "choose_target", "learn_corpus_eliminative",
                              "learn_corpus_guesstest", "learn_corpus_rankedfreq")) %dopar%
-    fn(C, M, a, uniform, active, fam_context)
+    fn(C, M, a, uniform, active, fam_context, active_prob = active_prob, active_policy = active_policy,
+       choice_k = choice_k, goldilocks_target = goldilocks_target, goldilocks_sigma = goldilocks_sigma)
   out[, 1:10, drop = FALSE]  # drop the new `censored` column for old callers expecting 10 cols
 }
 
@@ -247,13 +336,18 @@ LEARNERS <- list(
 # replication also carries its own `rep_max_seconds` hard cap (checked inside
 # the learner itself every TIME_CHECK_EVERY episodes).
 #
+# `active_prob`/`active_policy`/`choice_k`/`goldilocks_*` are passed straight
+# through to the learner (see "ACTIVE TARGET SELECTION" in the file header);
+# leave them at their defaults to reproduce the original active/passive design.
+#
 # Returns a data.frame with one row per completed replication (both normal and
 # individually-censored ones are included; censored replications are flagged in
 # the `censored` column and should be excluded from mean/median summaries).
 run_cell_budgeted <- function(learner, C, M, a, uniform, active, fam_context,
                                cell_budget_seconds, rep_max_seconds, reps_max = 10000,
                                ncores = max(1, parallel::detectCores() - 1),
-                               seed = 982709) {
+                               seed = 982709, active_prob = NULL, active_policy = "unknown",
+                               choice_k = Inf, goldilocks_target = 2, goldilocks_sigma = 2) {
   fn <- LEARNERS[[learner]]
   set.seed(seed)
   t_cell_start <- Sys.time()
@@ -266,9 +360,11 @@ run_cell_budgeted <- function(learner, C, M, a, uniform, active, fam_context,
     if (n_done >= reps_max) break
     batch_size <- min(ncores, reps_max - n_done)
     batch <- foreach(i = 1:batch_size, .combine = rbind,
-                      .export = c("zipf_probs", "TIME_CHECK_EVERY", "learn_corpus_eliminative",
+                      .export = c("zipf_probs", "TIME_CHECK_EVERY", "choose_target", "learn_corpus_eliminative",
                                   "learn_corpus_guesstest", "learn_corpus_rankedfreq")) %dopar%
-      fn(C, M, a, uniform, active, fam_context, max_seconds = rep_max_seconds)
+      fn(C, M, a, uniform, active, fam_context, max_seconds = rep_max_seconds,
+         active_prob = active_prob, active_policy = active_policy, choice_k = choice_k,
+         goldilocks_target = goldilocks_target, goldilocks_sigma = goldilocks_sigma)
     all_reps[[length(all_reps) + 1]] <- batch
     n_done <- n_done + batch_size
   }

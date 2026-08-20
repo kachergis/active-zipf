@@ -1,0 +1,80 @@
+Loading required package: foreach
+Loading required package: doParallel
+Loading required package: iterators
+Loading required package: parallel
+[2026-08-20 14:24:39]  Grid: 36 cells (M=1000, C=10, a=1, fam_context=FALSE), NCORES=13 
+[2026-08-20 14:24:39]  Per-cell budget: 60s | per-rep cap: 30s | worst-case total: 36.0 min 
+[2026-08-20 14:24:39]  [1/36] start: eliminative sweep=baseline    active_prob=0.00 policy=unknown     choice_k=Inf 
+[2026-08-20 14:25:41]    done in 61s: 65 reps (65 ok, 0 censored), mean episodes (ok only) = 88353 
+[2026-08-20 14:25:41]  [2/36] start: eliminative sweep=active_prob active_prob=0.10 policy=unknown     choice_k=Inf 
+[2026-08-20 14:26:43]    done in 62s: 286 reps (286 ok, 0 censored), mean episodes (ok only) = 21090 
+[2026-08-20 14:26:43]  [3/36] start: eliminative sweep=active_prob active_prob=0.25 policy=unknown     choice_k=Inf 
+[2026-08-20 14:27:45]    done in 62s: 468 reps (468 ok, 0 censored), mean episodes (ok only) = 12516 
+[2026-08-20 14:27:45]  [4/36] start: eliminative sweep=active_prob active_prob=0.50 policy=unknown     choice_k=Inf 
+[2026-08-20 14:28:45]    done in 60s: 702 reps (702 ok, 0 censored), mean episodes (ok only) = 7868 
+[2026-08-20 14:28:45]  [5/36] start: eliminative sweep=active_prob active_prob=0.75 policy=unknown     choice_k=Inf 
+[2026-08-20 14:29:46]    done in 61s: 923 reps (923 ok, 0 censored), mean episodes (ok only) = 5845 
+[2026-08-20 14:29:46]  [6/36] start: eliminative sweep=active_prob active_prob=1.00 policy=unknown     choice_k=Inf 
+[2026-08-20 14:30:46]    done in 60s: 1144 reps (1144 ok, 0 censored), mean episodes (ok only) = 4679 
+[2026-08-20 14:30:46]  [7/36] start: eliminative sweep=policy      active_prob=1.00 policy=goldilocks  choice_k=Inf 
+[2026-08-20 14:31:46]    done in 60s: 1040 reps (1040 ok, 0 censored), mean episodes (ok only) = 4680 
+[2026-08-20 14:31:47]  [8/36] start: eliminative sweep=policy      active_prob=1.00 policy=unknown     choice_k=Inf 
+[2026-08-20 14:32:47]    done in 60s: 1131 reps (1131 ok, 0 censored), mean episodes (ok only) = 4682 
+[2026-08-20 14:32:47]  [9/36] start: eliminative sweep=choice_k    active_prob=1.00 policy=unknown     choice_k=5 
+[2026-08-20 14:33:48]    done in 61s: 299 reps (299 ok, 0 censored), mean episodes (ok only) = 19568 
+[2026-08-20 14:33:48]  [10/36] start: eliminative sweep=choice_k    active_prob=1.00 policy=unknown     choice_k=20 
+[2026-08-20 14:34:49]    done in 61s: 728 reps (728 ok, 0 censored), mean episodes (ok only) = 7213 
+[2026-08-20 14:34:49]  [11/36] start: eliminative sweep=choice_k    active_prob=1.00 policy=unknown     choice_k=50 
+[2026-08-20 14:35:49]    done in 60s: 910 reps (910 ok, 0 censored), mean episodes (ok only) = 5297 
+[2026-08-20 14:35:49]  [12/36] start: eliminative sweep=choice_k    active_prob=1.00 policy=unknown     choice_k=100 
+[2026-08-20 14:36:50]    done in 61s: 910 reps (910 ok, 0 censored), mean episodes (ok only) = 4846 
+[2026-08-20 14:36:50]  [13/36] start: guesstest   sweep=baseline    active_prob=0.00 policy=unknown     choice_k=Inf 
+[2026-08-20 14:37:52]    done in 62s: 208 reps (208 ok, 0 censored), mean episodes (ok only) = 38278 
+[2026-08-20 14:37:52]  [14/36] start: guesstest   sweep=active_prob active_prob=0.10 policy=unknown     choice_k=Inf 
+[2026-08-20 14:38:54]    done in 62s: 325 reps (325 ok, 0 censored), mean episodes (ok only) = 19738 
+[2026-08-20 14:38:54]  [15/36] start: guesstest   sweep=active_prob active_prob=0.25 policy=unknown     choice_k=Inf 
+[2026-08-20 14:39:55]    done in 61s: 429 reps (429 ok, 0 censored), mean episodes (ok only) = 14685 
+[2026-08-20 14:39:55]  [16/36] start: guesstest   sweep=active_prob active_prob=0.50 policy=unknown     choice_k=Inf 
+[2026-08-20 14:40:55]    done in 60s: 546 reps (546 ok, 0 censored), mean episodes (ok only) = 11050 
+[2026-08-20 14:40:55]  [17/36] start: guesstest   sweep=active_prob active_prob=0.75 policy=unknown     choice_k=Inf 
+[2026-08-20 14:41:55]    done in 60s: 663 reps (663 ok, 0 censored), mean episodes (ok only) = 9170 
+[2026-08-20 14:41:55]  [18/36] start: guesstest   sweep=active_prob active_prob=1.00 policy=unknown     choice_k=Inf 
+[2026-08-20 14:42:56]    done in 61s: 806 reps (806 ok, 0 censored), mean episodes (ok only) = 7934 
+[2026-08-20 14:42:56]  [19/36] start: guesstest   sweep=policy      active_prob=1.00 policy=goldilocks  choice_k=Inf 
+[2026-08-20 14:43:56]    done in 60s: 1638 reps (1638 ok, 0 censored), mean episodes (ok only) = 3596 
+[2026-08-20 14:43:56]  [20/36] start: guesstest   sweep=policy      active_prob=1.00 policy=unknown     choice_k=Inf 
+[2026-08-20 14:44:57]    done in 60s: 806 reps (806 ok, 0 censored), mean episodes (ok only) = 7833 
+[2026-08-20 14:44:57]  [21/36] start: guesstest   sweep=choice_k    active_prob=1.00 policy=unknown     choice_k=5 
+[2026-08-20 14:45:57]    done in 60s: 611 reps (611 ok, 0 censored), mean episodes (ok only) = 11175 
+[2026-08-20 14:45:57]  [22/36] start: guesstest   sweep=choice_k    active_prob=1.00 policy=unknown     choice_k=20 
+[2026-08-20 14:46:57]    done in 60s: 637 reps (637 ok, 0 censored), mean episodes (ok only) = 6644 
+[2026-08-20 14:46:57]  [23/36] start: guesstest   sweep=choice_k    active_prob=1.00 policy=unknown     choice_k=50 
+[2026-08-20 14:48:00]    done in 63s: 286 reps (286 ok, 0 censored), mean episodes (ok only) = 8929 
+[2026-08-20 14:48:00]  [24/36] start: guesstest   sweep=choice_k    active_prob=1.00 policy=unknown     choice_k=100 
+[2026-08-20 14:49:01]    done in 61s: 169 reps (169 ok, 0 censored), mean episodes (ok only) = 11094 
+[2026-08-20 14:49:01]  [25/36] start: rankedfreq  sweep=baseline    active_prob=0.00 policy=unknown     choice_k=Inf 
+[2026-08-20 14:50:04]    done in 62s: 299 reps (299 ok, 0 censored), mean episodes (ok only) = 22659 
+[2026-08-20 14:50:04]  [26/36] start: rankedfreq  sweep=active_prob active_prob=0.10 policy=unknown     choice_k=Inf 
+[2026-08-20 14:51:04]    done in 60s: 1326 reps (1326 ok, 0 censored), mean episodes (ok only) = 4843 
+[2026-08-20 14:51:04]  [27/36] start: rankedfreq  sweep=active_prob active_prob=0.25 policy=unknown     choice_k=Inf 
+[2026-08-20 14:51:59]    done in 55s: 2000 reps (2000 ok, 0 censored), mean episodes (ok only) = 2770 
+[2026-08-20 14:51:59]  [28/36] start: rankedfreq  sweep=active_prob active_prob=0.50 policy=unknown     choice_k=Inf 
+[2026-08-20 14:52:36]    done in 37s: 2000 reps (2000 ok, 0 censored), mean episodes (ok only) = 1700 
+[2026-08-20 14:52:36]  [29/36] start: rankedfreq  sweep=active_prob active_prob=0.75 policy=unknown     choice_k=Inf 
+[2026-08-20 14:53:06]    done in 30s: 2000 reps (2000 ok, 0 censored), mean episodes (ok only) = 1247 
+[2026-08-20 14:53:06]  [30/36] start: rankedfreq  sweep=active_prob active_prob=1.00 policy=unknown     choice_k=Inf 
+[2026-08-20 14:53:30]    done in 24s: 2000 reps (2000 ok, 0 censored), mean episodes (ok only) = 990 
+[2026-08-20 14:53:30]  [31/36] start: rankedfreq  sweep=policy      active_prob=1.00 policy=goldilocks  choice_k=Inf 
+[2026-08-20 14:53:56]    done in 26s: 2000 reps (2000 ok, 0 censored), mean episodes (ok only) = 990 
+[2026-08-20 14:53:56]  [32/36] start: rankedfreq  sweep=policy      active_prob=1.00 policy=unknown     choice_k=Inf 
+[2026-08-20 14:54:20]    done in 24s: 2000 reps (2000 ok, 0 censored), mean episodes (ok only) = 990 
+[2026-08-20 14:54:20]  [33/36] start: rankedfreq  sweep=choice_k    active_prob=1.00 policy=unknown     choice_k=5 
+[2026-08-20 14:55:20]    done in 60s: 1378 reps (1378 ok, 0 censored), mean episodes (ok only) = 4805 
+[2026-08-20 14:55:21]  [34/36] start: rankedfreq  sweep=choice_k    active_prob=1.00 policy=unknown     choice_k=20 
+[2026-08-20 14:55:56]    done in 35s: 2000 reps (2000 ok, 0 censored), mean episodes (ok only) = 1660 
+[2026-08-20 14:55:56]  [35/36] start: rankedfreq  sweep=choice_k    active_prob=1.00 policy=unknown     choice_k=50 
+[2026-08-20 14:56:24]    done in 28s: 2000 reps (2000 ok, 0 censored), mean episodes (ok only) = 1154 
+[2026-08-20 14:56:24]  [36/36] start: rankedfreq  sweep=choice_k    active_prob=1.00 policy=unknown     choice_k=100 
+[2026-08-20 14:56:53]    done in 28s: 2000 reps (2000 ok, 0 censored), mean episodes (ok only) = 1035 
+[2026-08-20 14:56:53]  All done. 0 cells skipped, 36 newly run. 
+[2026-08-20 14:56:53]  Saved 36733 rows. 
