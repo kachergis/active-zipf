@@ -16,16 +16,37 @@ estimates currently in the paper.
 
 ## To explore the three new active-selection extensions (partial autonomy, Goldilocks, bounded choice)
 
+**Quick look** (~30 min, C=10 only, 60s/cell — already run once; see `active_modes_results.rds`):
 ```bash
 cd corpusXSL/analysis
-Rscript run_active_modes_grid.R      # fixes M=1000, C=10, a=1 (the paper's "headline" case) and sweeps
-                                      # active_prob / active_policy / choice_k across all three models
-Rscript summarize_active_modes.R     # three figures in ../../paper/: active_prob_sweep.pdf,
+Rscript run_active_modes_grid.R
+Rscript summarize_active_modes.R     # figures in ../../paper/: active_prob_sweep.pdf,
                                       # goldilocks_policy.pdf, choice_k_sweep.pdf
 ```
+Findings from the quick look: partial autonomy shows strong diminishing returns for all
+three models (most of the benefit from ~10-25% autonomy, not full-time active control);
+Goldilocks targeting does nothing for eliminative/ranked-frequency but is >2x faster than
+"any unknown" for guess-test specifically (plausible reason: guess-test is the only model
+where an unresolved word can be holding a *provably wrong* guess, so revisiting
+already-exposed words fixes errors instead of just spreading effort over fresh, mutually-
+competing proposals); bounded choice showed a puzzling non-monotonic pattern for guess-test
+(K=20 beating even unbounded choice) that didn't have enough reps to trust.
 
-Edit the `SWEEP_*` constants at the top of `run_active_modes_grid.R` to widen the sweep or
-change `C`/`A`/`FAM_CONTEXT` to check whether a finding also holds at C=100 or other exponents.
+**Overnight run** (bigger budget, adds C=100, finer choice_k resolution to resolve the
+non-monotonicity above — up to ~13 hours worst case, resumable, most cells finish much
+faster than the ceiling):
+```bash
+cd corpusXSL/analysis
+Rscript run_active_modes_grid_overnight.R          # or nohup ... & to background it
+Rscript summarize_active_modes_overnight.R         # figures in ../../paper/: *_overnight.pdf,
+                                                    # faceted by C=10 vs C=100; also auto-flags
+                                                    # whether the guess-test choice_k dip is now
+                                                    # outside noise (see its printed NOTE)
+```
+Writes to a separate results file (`active_modes_results_overnight.rds`) rather than
+appending to the quick-look one, so the two don't end up with inconsistent precision mixed
+together. Edit `SWEEPS_BY_C` / `CELL_BUDGET_SECONDS` / `REP_MAX_SECONDS` at the top of
+`run_active_modes_grid_overnight.R` to adjust scope or budget.
 Same wall-clock-budgeted, resumable design as `run_verification_grid.R`.
 
 ## Core library
