@@ -195,9 +195,13 @@ if (nrow(skipped_for_analytical) > 0) {
     cat("Saved to", ANALYTICAL_PATH, "-- these are ESTIMATES, not simulated replications; do not append them to active_modes_results_overnight.rds.\n")
   }
   if (nrow(uncovered) > 0) {
-    cat("\n", nrow(uncovered), "eliminative/C=100 cell(s) remain genuinely open (neither simulated nor analytically covered yet):\n")
+    cat("\n", nrow(uncovered), "eliminative/C=100 cell(s) not covered by the closed-ish-form formula (intermediate\n")
+    cat("active_prob mixtures and/or the goldilocks/bounded-choice_k variants -- see analytical_elimination_bound.R):\n")
     print(as.data.frame(uncovered %>% select(model, C, active_prob, active_policy, choice_k_label)), row.names = FALSE)
-    cat("These are intermediate active_prob mixtures and/or the goldilocks/bounded-choice_k variants -- the\n")
-    cat("current analytical formula only derives the pure-passive and pure-active(unknown,unrestricted) cases.\n")
+    cat("These ARE covered by a separate, lower-confidence method: analytical_mixture_extension.R ratio-transfers\n")
+    cat("real C=10 simulated ratios (relative to real C=10 pure-active) onto the analytical C=100 active baseline,\n")
+    cat("under the UNTESTED assumption that active-selection's relative benefit is roughly C-invariant. Run it\n")
+    cat("directly (Rscript analytical_mixture_extension.R) or see eliminative_C100_mixture_estimates.csv for the\n")
+    cat("saved output -- report these with less confidence than the pure-extreme formulas above.\n")
   }
 }
