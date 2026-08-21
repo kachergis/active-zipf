@@ -190,13 +190,26 @@ learn_corpus_guesstest <- function(C, M, a = 1, uniform = TRUE, active = FALSE,
                                     fam_context = FALSE, epsilon = .01,
                                     max_episodes = Inf, max_seconds = Inf,
                                     active_prob = NULL, active_policy = "unknown",
-                                    choice_k = Inf, goldilocks_target = 2, goldilocks_sigma = 2) {
+                                    choice_k = Inf, goldilocks_target = 2, goldilocks_sigma = 2,
+                                    p_decay = 0) {
+  # p_decay: per-episode forgetting hazard for an UNCONFIRMED (not-yet-learned)
+  # guess. Checked lazily, only when a word holding a guess is re-exposed --
+  # not swept over all M words every episode -- so this stays O(1) per episode
+  # and doesn't undermine guess-test's tractability advantage over the
+  # eliminative learner. A guess surviving `elapsed` idle episodes (since it
+  # was last (re)proposed) has decayed with probability 1-(1-p_decay)^elapsed,
+  # i.e. a constant per-episode hazard applied retroactively over the gap.
+  # Decay is scoped to unconfirmed guesses only: once current_guess[w]==w
+  # (word_known[w] set), it is never revisited -- forgetting an established
+  # word is a different, bigger claim than forgetting a tentative guess.
+  # p_decay=0 (the default) reproduces the original model exactly.
   if (is.null(active_prob)) active_prob <- as.numeric(active)
   probs <- if (uniform) rep(1 / M, M) else zipf_probs(M, a)
 
   current_guess <- rep(0L, M)  # current_guess[w]: referent word w currently claims (0 = none)
   claimed_by <- rep(0L, M)     # claimed_by[r]: word currently claiming referent r (0 = unclaimed)
   confirm_count <- rep(0L, M)  # streak of exposures in which word w's guess survived
+  guess_since <- rep(0L, M)    # episode at which current_guess[w] was last (re)proposed
   word_known <- rep(FALSE, M)
   times_targeted <- rep(0L, M)
   episodes <- 0
@@ -227,6 +240,16 @@ learn_corpus_guesstest <- function(C, M, a = 1, uniform = TRUE, active = FALSE,
     cc <- c(target, distractors)  # target's true referent is "target" itself (1-1 convention)
 
     g <- current_guess[target]
+    if (p_decay > 0 && g != 0L) {
+      elapsed <- episodes - guess_since[target]
+      if (elapsed > 0 && runif(1) < 1 - (1 - p_decay)^elapsed) {
+        # forgotten during the gap since this guess was last checked in on
+        claimed_by[g] <- 0L
+        current_guess[target] <- 0L
+        confirm_count[target] <- 0L
+        g <- 0L
+      }
+    }
     if (g != 0L && !(g %in% cc)) {
       # disconfirmed: the true referent is always present, so a missing guess is wrong
       claimed_by[g] <- 0L
@@ -240,6 +263,7 @@ learn_corpus_guesstest <- function(C, M, a = 1, uniform = TRUE, active = FALSE,
         newg <- if (length(unclaimed) == 1) unclaimed else sample(unclaimed, 1)
         current_guess[target] <- newg
         claimed_by[newg] <- target
+        guess_since[target] <- episodes
       }
     } else {
       confirm_count[target] <- confirm_count[target] + 1L
