@@ -17,16 +17,25 @@
 # them (while giving the already-mostly-complete guesstest/C=100 cells a much
 # smaller, cheaper top-up).
 #
-# HONESTY NOTE: even with a generous cap, it's possible some eliminative/C=100
-# cells (especially low-active_prob / passive-leaning ones, which need far
-# more total episodes than active ones) will NOT reach TARGET_N_OK within any
-# practical budget -- the calibration probe suggests a single passive-leaning
-# replication may need many thousands of seconds. This script does NOT pretend
-# otherwise: it spends each cell's own MAX_CELL_SECONDS ceiling, keeps
-# whatever completed, and prints an honest before/after table plus an
-# extrapolated "time to reach target at this rate" for anything still short,
-# so you can decide whether to raise the ceiling and run it again rather than
-# have it silently fall short forever.
+# UPDATE: brute-force was ruled out entirely for eliminative/C=100, not just
+# under-budgeted. analytical_elimination_bound.R derives (and validates to
+# ~8-12% against real C=10 simulation data) a closed-form-ish approximation
+# for this model's expected episodes; applied to C=100 it predicts T_active
+# ~= 1.46 BILLION episodes and T_passive ~= 11 BILLION -- at the observed
+# ~4000 episodes/sec, that's ~4 DAYS for a single active replication and far
+# longer for passive-leaning ones. No practical rep_max_seconds/cell budget
+# fixes that. So this script no longer attempts brute force for
+# eliminative/C=100 at all: those cells are filled in analytically instead
+# (see the bottom of this script), clearly labeled as estimated, not
+# simulated. Only the guesstest/C=100 cells (genuinely tractable, just
+# under-budgeted at 90s/rep) still go through run_cell_budgeted.
+#
+# The analytical formula currently only covers the two extremes cleanly:
+# active_prob=0 (pure passive) and active_prob=1 with policy="unknown",
+# choice_k=Inf (pure, unrestricted active). It does NOT yet cover
+# intermediate active_prob mixtures, the goldilocks policy, or bounded
+# choice_k -- those cells are left as genuinely open (reported at the end,
+# not silently dropped).
 #
 # USAGE
 #   Rscript fill_incomplete_active_modes_cells.R
@@ -35,10 +44,12 @@
 # ============================================================================
 
 source("learners.R")
+source("analytical_elimination_bound.R")
 suppressMessages(library(dplyr))
 
 ## ---------------------------- CONFIG --------------------------------------
 RESULTS_PATH <- "active_modes_results_overnight.rds"
+ANALYTICAL_PATH <- "eliminative_C100_analytical_estimates.csv"
 TARGET_N_OK <- 100
 M <- 1000
 
@@ -46,9 +57,11 @@ M <- 1000
 # rep_max_seconds: hard cap on ONE replication. cell_max_seconds: ceiling on
 # TOTAL time spent topping up any single cell (not "per batch" -- the whole
 # top-up for that cell stops here regardless of whether TARGET_N_OK was hit).
+# NOTE: eliminative/C=100 deliberately has NO preset here -- brute force is
+# ruled out for it entirely (see header); those cells are skipped in the
+# simulation loop below and filled in analytically at the end instead.
 BUDGET_PRESETS <- list(
-  list(model = "eliminative", C = 100, rep_max_seconds = 3600, cell_max_seconds = 14400),  # 1hr/rep, 4hr/cell ceiling
-  list(model = "guesstest",   C = 100, rep_max_seconds = 180,  cell_max_seconds = 1800)     # already mostly done; cheap top-up
+  list(model = "guesstest", C = 100, rep_max_seconds = 180, cell_max_seconds = 1800)  # already mostly done; cheap top-up
 )
 DEFAULT_BUDGET <- list(rep_max_seconds = 90, cell_max_seconds = 600)
 
@@ -82,19 +95,25 @@ cat("=== Cells needing top-up (", nrow(gaps), "of them ), ordered closest-to-tar
 print(as.data.frame(gaps), row.names = FALSE)
 cat("\n")
 
+sim_gaps <- gaps %>% filter(!(model == "eliminative" & C == 100))
+skipped_for_analytical <- gaps %>% filter(model == "eliminative" & C == 100)
+if (nrow(skipped_for_analytical) > 0) {
+  cat(nrow(skipped_for_analytical), "eliminative/C=100 cell(s) skipped for brute force (infeasible -- see header); handled analytically below instead.\n\n")
+}
+
 cl <- makeCluster(NCORES)
 registerDoParallel(cl)
 
 final_status <- list()
 
-for (i in seq_len(nrow(gaps))) {
-  g <- gaps[i, ]
+for (i in seq_len(nrow(sim_gaps))) {
+  g <- sim_gaps[i, ]
   bud <- budget_for(g$model, g$C)
   choice_k_val <- if (g$choice_k_label == "Inf") Inf else as.numeric(g$choice_k_label)
   needed <- TARGET_N_OK - g$n_ok
 
   log_msg(sprintf("[%d/%d] %-11s C=%-4d active_prob=%.2f policy=%-11s choice_k=%-4s -- have %d/%d, need %d more (rep_cap=%ds, cell_ceiling=%ds)",
-                   i, nrow(gaps), g$model, g$C, g$active_prob, g$active_policy, g$choice_k_label,
+                   i, nrow(sim_gaps), g$model, g$C, g$active_prob, g$active_policy, g$choice_k_label,
                    g$n_ok, TARGET_N_OK, needed, bud$rep_max_seconds, bud$cell_max_seconds))
 
   t0 <- Sys.time()
@@ -138,16 +157,47 @@ for (i in seq_len(nrow(gaps))) {
 stopCluster(cl)
 write.csv(d, "active_modes_results_overnight.csv", row.names = FALSE)
 
-cat("\n=== Summary: before -> after ===\n")
-summary_df <- do.call(rbind, final_status)
-print(as.data.frame(summary_df %>% select(model, C, active_prob, active_policy, choice_k_label, n_ok_before, n_ok_after, secs_spent)),
-      row.names = FALSE)
+if (length(final_status) > 0) {
+  cat("\n=== Simulation summary: before -> after ===\n")
+  summary_df <- do.call(rbind, final_status)
+  print(as.data.frame(summary_df %>% select(model, C, active_prob, active_policy, choice_k_label, n_ok_before, n_ok_after, secs_spent)),
+        row.names = FALSE)
 
-still_short <- summary_df %>% filter(n_ok_after < TARGET_N_OK)
-if (nrow(still_short) > 0) {
-  cat("\n", nrow(still_short), "cell(s) still short of", TARGET_N_OK, "after this run:\n")
-  print(as.data.frame(still_short %>% select(model, C, active_prob, active_policy, choice_k_label, n_ok_after)), row.names = FALSE)
-  cat("Rerun this script (raise BUDGET_PRESETS if a cell is making very slow progress) to keep topping these up.\n")
+  still_short <- summary_df %>% filter(n_ok_after < TARGET_N_OK)
+  if (nrow(still_short) > 0) {
+    cat("\n", nrow(still_short), "cell(s) still short of", TARGET_N_OK, "after this run:\n")
+    print(as.data.frame(still_short %>% select(model, C, active_prob, active_policy, choice_k_label, n_ok_after)), row.names = FALSE)
+    cat("Rerun this script (raise BUDGET_PRESETS if a cell is making very slow progress) to keep topping these up.\n")
+  } else {
+    cat("\nAll simulated cells now at or above target.\n")
+  }
 } else {
-  cat("\nAll cells now at or above target.\n")
+  cat("\nNo cells needed brute-force top-up this run.\n")
+}
+
+## ---- Analytical fill-in for eliminative/C=100 (brute force infeasible) ----
+if (nrow(skipped_for_analytical) > 0) {
+  cat("\n=== Analytical estimates for eliminative/C=100 (see analytical_elimination_bound.R for derivation + validation) ===\n")
+  covered <- skipped_for_analytical %>%
+    filter((active_prob == 0) | (active_prob == 1 & active_policy == "unknown" & choice_k_label == "Inf"))
+  uncovered <- skipped_for_analytical %>% anti_join(covered, by = c("model","C","a","active_prob","active_policy","choice_k_label"))
+
+  if (nrow(covered) > 0) {
+    Nstar <- mean_Nstar(M, 100, 1)
+    est <- covered %>% rowwise() %>% mutate(
+      T_predicted = if (active_prob == 0) predict_T_passive(M, 100, a) else predict_T_active(M, 100, a),
+      method = if (active_prob == 0) "NegBinom(rarest word, N*, min_p) 99th pctile" else "M * mean_w(E[N_w]), no wasted draws",
+      validated_error_at_C10 = if (active_prob == 0) "~12% (79008 vs actual 89454)" else "~8% (4353 vs actual 4695)"
+    ) %>% ungroup()
+    print(as.data.frame(est %>% select(model, C, active_prob, active_policy, choice_k_label, T_predicted, method, validated_error_at_C10)),
+          row.names = FALSE)
+    write.csv(est, ANALYTICAL_PATH, row.names = FALSE)
+    cat("Saved to", ANALYTICAL_PATH, "-- these are ESTIMATES, not simulated replications; do not append them to active_modes_results_overnight.rds.\n")
+  }
+  if (nrow(uncovered) > 0) {
+    cat("\n", nrow(uncovered), "eliminative/C=100 cell(s) remain genuinely open (neither simulated nor analytically covered yet):\n")
+    print(as.data.frame(uncovered %>% select(model, C, active_prob, active_policy, choice_k_label)), row.names = FALSE)
+    cat("These are intermediate active_prob mixtures and/or the goldilocks/bounded-choice_k variants -- the\n")
+    cat("current analytical formula only derives the pure-passive and pure-active(unknown,unrestricted) cases.\n")
+  }
 }
