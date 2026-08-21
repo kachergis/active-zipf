@@ -496,6 +496,42 @@ Mean episodes (log scale, $\pm$ 1 SE) required for an incremental, elimination-b
 
 These results reinforce the paper's central conclusions using a learner that makes neither of the two idealizations most often raised against fast-mapping models: words are not learned on a single exposure, and the number of samples required is not simply a proxy for how often a word is spoken. They also reveal that the two forms of active control we distinguish--choosing what to talk about, and choosing what else is nearby when talking about it--are not interchangeable, and that their relative importance is itself a function of how large the situation is relative to the vocabulary, echoing and extending \cite{Vogt:2012}'s $C/M$ finding to the active-learning setting.
 
+\subsection{How much of the vocabulary matters}
+\label{sec-checkpoints}
+
+The comparisons above, like most of this literature, summarize learning speed with a single number: episodes needed to reach 99\% of the vocabulary. This is a natural default--it mirrors how ``learned'' is operationalized throughout this paper, including the fast-mapping bound of Section~\ref{sec-fastmap}--but it is also, by construction, dominated by whichever handful of words are hardest to acquire, typically the rarest ones under a Zipfian distribution. Two questions follow. First, does reporting a mean conceal a badly skewed distribution, such that a ``typical'' simulated run looks nothing like the reported average? Second, and more substantively, is the size of the active-learning advantage we report specific to the choice of 99\% as a target, or does it hold at more modest completion targets?
+
+To address both, we re-examined the same simulation data underlying Table~\ref{tab-incremental}, at three checkpoints--50\%, 90\%, and 99\% of the vocabulary known--rather than only the last. Each learner already records the episode at which every decile of the vocabulary is first reached, so this required no new simulation, only a finer-grained summary of data already collected.
+
+On the first question, the answer is reassuring: mean and median are effectively indistinguishable at every checkpoint and condition we examined (ratio of mean to median between 0.99 and 1.02 throughout). Despite each individual word's own acquisition time being itself a highly skewed waiting-time process (Section~\ref{sec-fastmap}), the total time to reach a given fraction of an $M$-word vocabulary averages over enough of these individually-skewed waits that the aggregate is close to symmetric. The means reported throughout this paper are therefore not artifacts of a long right tail; a typical simulated learner looks very much like the reported average.
+
+On the second question, the completion target matters a great deal--not for whether active selection helps, but for how large the benefit appears to be. Table~\ref{tab-checkpoint} and Figure~\ref{fig-checkpoint} show the active/passive speedup at each checkpoint. In every condition, active selection is already a clear, non-trivial advantage at 50\% completion--a typical run through half the vocabulary is 1.7--4.1x faster under active selection. But the size of this advantage compounds sharply as the target moves toward completeness: it roughly doubles by 90\%, and doubles again by 99\%, reaching 19x for the eliminative learner at $C=10$. The single 99\%-only estimates reported elsewhere in this paper are therefore close to the maximum size the effect takes across this trajectory, not a representative one--informative in its own right, but not interchangeable with a claim about how much active selection typically matters for everyday word learning.
+
+This bears directly on how Table~\ref{tab-incremental} and Figure~\ref{fig-incremental-sim} should be read. That the last one-in-a-hundred words of a Zipfian vocabulary take disproportionately, sometimes wildly, longer to acquire than the rest is a real and, we think, underappreciated property of frequency-driven word learning--but it is also the piece of these results most likely to reflect what this class of model leaves out, rather than how children actually learn the last few rare words of their lexicon. Real children have recourse to mechanisms with no analogue here--bootstrapping from already-known words, explicit correction, discourse and narrative redundancy, deliberate instruction--that plausibly matter most exactly where pure frequency-driven sampling is weakest: rescuing the rarest words from an otherwise very long wait. The best-supported claim from this analysis is therefore the more modest one: active selection provides a real, substantial speedup for reaching a \textit{functional} vocabulary, and Zipfian skew makes this advantage compound the more completeness is demanded of the learner--not that any specific number of episodes is required to reach a literal 99\% of an adult lexicon.
+
+\begin{table}[h]
+\centering
+\caption{\label{tab-checkpoint} Active/passive speedup (ratio of mean episodes, passive over active; Zipfian, $a=1$, Random context) at three vocabulary-completion checkpoints. Median-based speedups (not shown) agree to within 2\% throughout. Guess-test at $C=100$ is omitted: per-checkpoint data were not preserved from that run (see the Simulation design above), though its 99\%-checkpoint speedup is reported above (Robustness across Zipf exponent and learning mechanism).}
+\begin{tabular}{lrrr}
+\hline
+ & \multicolumn{3}{c}{Speedup at completion checkpoint} \\
+Condition & 50\% & 90\% & 99\% \\
+\hline
+Eliminative, $C=10$  & 4.1x & 9.2x & 19.1x \\
+Eliminative, $C=100$ & 3.1x & 7.5x & 16.5x \\
+Guess-test, $C=10$   & 1.7x & 3.0x & 4.9x  \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.8\linewidth]{checkpoint_divergence.pdf}
+\caption{\label{fig-checkpoint}
+Median episodes (log scale; band = interquartile range) to reach 50\%, 90\%, and 99\% of a Zipfian ($a=1$), $M=1000$-word vocabulary, active vs.\ passive target selection, by learning mechanism and context size. The active/passive gap widens steadily with the completion target rather than being a fixed multiplicative constant.}
+\end{center}
+\end{figure}
+
 \subsection{Robustness across Zipf exponent and learning mechanism}
 Two further checks address whether these conclusions are specific to $a=1$ or to the eliminative mechanism. First, varying the Zipf exponent at $C=10$ (Figure~\ref{fig-exponent}) shows the same dose-response pattern found analytically in Section~\ref{sec-fastmap} (Figure~\ref{fig-estimate}): passive learning slows super-exponentially as $a$ increases (eliminative passive/random: 6,676 episodes at $a=0$, 10,795 at $a=0.5$, 89,454 at $a=1$), and active selection's advantage grows accordingly.
 
@@ -542,7 +578,7 @@ Although the optimal active learning algorithm we have considered may not be cog
 The cognitive plausibility of the specific mechanisms we simulate is a fair question to press on, and the evidence is genuinely mixed rather than uniformly supportive.
 On one hand, infants preferentially attend to stimuli of intermediate, rather than minimal or maximal, predictability or complexity \citep[the ``Goldilocks effect'';][]{Kidd:2012}, consistent with our active learner's preference for referents whose words are not yet known but which are otherwise unremarkable; and self-directed, environment-adapted information search is documented in children from around age three onward \citep{Ruggeri:2022}, well within the age range relevant to our pre-literacy scope (see the Introduction).
 On the other hand, at least one recent, well-controlled study found no advantage of active over passive information selection for infants' retention of novel word-object associations in a gaze-contingent paradigm \citep{Bazhydai:2026}, a direct empirical test of a claim close to the one we model computationally.
-We do not think this null result undermines our central contribution--which is a computational characterization of how large an advantage active control {\it could} confer under Zipfian distributions, not a claim that children realize this advantage in full--but it is a reason for caution in treating our active-learning estimates as a description of typical development, rather than as an upper bound that motivates looking for partial, more constrained forms of active control.
+We do not think this null result undermines our central contribution--which is a computational characterization of how large an advantage active control {\it could} confer under Zipfian distributions, not a claim that children realize this advantage in full--but it is a reason for caution in treating our active-learning estimates as a description of typical development, rather than as an upper bound that motivates looking for partial, more constrained forms of active control. This caution is sharpened by our completion-checkpoint analysis (``How much of the vocabulary matters,'' above): the largest speedups we report are concentrated in the last stretch toward a fully complete vocabulary, a target more likely to reflect what our models leave out--mechanisms besides frequency-driven sampling that could plausibly rescue the rarest remaining words--than any real child's learning trajectory; the more modest, still substantial speedups evident already at 50--90\% completion are the better guide to what active selection buys a typical learner.
 Our analysis also rests on simplifying assumptions common to this modeling tradition \citep{Blythe:2010,Vogt:2012,Blythe:2016} that are worth making explicit.
 First, we assumed a mutually-exclusive lexicon in which each word maps to exactly one referent; in reality many words have synonyms, which may ease learning somewhat (evidence for one member of a synonym set can be informative about related words), but does not change our basic conclusion, since each synonym must still be individually sampled and learned under both the fast-mapping and incremental models we analyze.
 Second, following \cite{Bloom:2000} we targeted a vocabulary of roughly 60,000 words, whereas more recent estimates place adult vocabulary size somewhat lower, around 40,000 word families \citep{Brysbaert:2016}.
