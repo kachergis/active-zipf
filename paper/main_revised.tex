@@ -99,13 +99,14 @@
 
 \authornote{The authors have no conflict of interest to declare.}
 
-% abstract is 186 words 9/11/18
+% abstract updated, ~280 words
 \abstract{
 Children learn thousands of words in the first several years of life, inspiring many theoretical and empirical studies of the mechanisms and pace of word learning.
 Past mathematical analyses have asked how long it should take a child to build an adult-sized vocabulary if words are encountered via random sampling, and concluded that this simple process can succeed in a plausible amount of time--but only under the simplifying assumption that every word is equally likely to be encountered.
 We show that this optimistic conclusion depends heavily on that assumption: under the more realistic, highly-skewed (Zipfian) word and referent frequency distributions observed in child-directed speech and in real-world scenes, random sampling requires an implausibly large number of learning episodes.
 We then ask whether a learner (or caregiver) who can influence which words and referents co-occur, rather than simply encountering them at random, can close this gap.
-Using both mathematical analysis and simulation--including a more realistic incremental learner that does not assume words are learned in a single exposure--we show that such active learners acquire Zipfian vocabularies substantially faster than passive learners exposed to the same random samples, with the size of the advantage depending on how idealized the learning scenario is.
+Using both mathematical analysis and simulation--including three more realistic incremental learners that do not assume words are learned in a single exposure--we show that such active learners acquire Zipfian vocabularies substantially faster than passive learners exposed to the same random samples, with the size of the advantage depending on how idealized the learning scenario is, and growing severalfold between a functional and a fully complete vocabulary.
+This advantage does not depend on an idealization of perfect, unlimited memory for tentative word-referent guesses: it survives, and even strengthens, once a cognitively realistic forgetting mechanism is introduced.
 These results suggest that the statistical structure that children (or their caregivers) impose on everyday learning situations, rather than sheer exposure alone, may be an important piece of the explanation for how children learn vocabulary as quickly as they do.}
 
 \keywords{Word learning; Active learning; Zipf’s law; Fast mapping; Linear programming; Word frequency}
@@ -230,6 +231,27 @@ Two things can vary independently across the models we analyze:
 
 \subsection{A running example}
 Concretely, imagine a toddler learning the names of five toys scattered around a room: a ball, a cup, a dog, a car, and a hat. In one episode, a caregiver says ``ball'' while the child's attention includes the ball itself (the target) along with the cup and the dog (two distractors), but not the car or the hat. A fast-mapping learner is simply assumed to correctly identify the ball as ``ball'''s referent on this very first exposure, without any account of how the cup and dog come to be ruled out; this is best understood as a mathematical idealization of the fastest any learner could possibly do, not a mechanistic proposal about how reference is actually resolved (a point on which prior work in this tradition has, fairly, been criticized as underspecified--see the Independent fast-mapping learning section). An incremental learner would instead note that ``ball'' co-occurred with the ball, cup, and dog this time, and would need further episodes--in which ``ball'' co-occurs with the ball but not consistently with the cup or dog--before confidently learning the mapping. Whether the child hears ``ball'' at all in a given episode, and which other toys happen to be nearby when they do, depends on whether toys are selected passively (e.g., whatever happens to be within reach) or actively (e.g., the child gravitates toward toys whose names they do not yet know).
+
+\subsection{Vocabulary sizes used in this paper}
+Different sections below analyze word or referent spaces of very different sizes, each chosen for a different reason. Table~\ref{tab-sizes-used} collects them in one place as a reading aid.
+
+\begin{table}[h]
+\centering
+\caption{\label{tab-sizes-used} Vocabulary or referent-space sizes ($W$, $M$, or $N$) used in each analysis, and why.}
+\small
+\begin{tabular}{@{}p{2.3cm}p{4.4cm}p{4.0cm}@{}}
+\hline
+Size & Represents & Used for \\
+\hline
+$W=60{,}000$ & Primary comparison target \citep{Bloom:2000}, matching prior work & The main fast-mapping bound and headline numbers throughout \\
+$W=27{,}673$ (or 10,179 / 97,565) & Empirical word counts from CHILDES and Google Books, under different filtering thresholds & Corpus-based validation of the fast-mapping bound (Independent fast-mapping learning) \\
+$N=3{,}458$ & Real object categories in the SUN scene database & Empirical evaluation of active learning's ceiling (Active learning) \\
+$N=1{,}000$, $M=100$ & Synthetic word-referent matrix & Online active learner simulation (Active learning) \\
+$M=1{,}000$ & A 3-year-old's approximate productive vocabulary (Table~\ref{tab-vocab-benchmarks}) & All incremental-learner simulations (Incremental active learning) \\
+$W=10{,}000$ & Pre-literacy comprehension target \citep{Shipley:2015,Anglin:1993} & A rescoped estimate in the Discussion \\
+\hline
+\end{tabular}
+\end{table}
 
 \subsection{Roadmap}
 The Independent fast-mapping learning section analyzes fast-mapping under passive sampling, first for a uniform word frequency distribution (recovering \cite{Blythe:2010}'s original analysis), then for Zipfian and other skewed distributions, and finally for the empirical word frequency distribution of the CHILDES corpus of child-directed speech \citep{MacWhinney1990}. The Active learning section then introduces active learning, first analyzing the idealized case in which the learner has full knowledge of how referents and situations relate, then a more realistic online learner that must estimate this relationship from experience. Finally, the Incremental active learning section reports simulations of the incremental (non-fast-mapping) learner introduced above, crossed with passive and active sampling, to test whether the qualitative pattern of results survives when the most idealized assumptions of the earlier sections are relaxed.
