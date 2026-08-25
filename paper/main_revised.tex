@@ -270,8 +270,8 @@ In this problem, the expected time $T$ to finish sampling all the words is
 \label{eq-fastmap-T}
  E[T] = W \sum_{i=1}^{W} 1/i \approx W \log W. 
 \end{equation}
-For an adult-sized vocabulary $W = 60,000$, the estimated number of samples needed would be $T = 660,126$. % compared to Blythe:2010 estimate of 940,000 samples
-This estimate is comparable with the ``reasonable'' number of samples justified by \citeA{Blythe:2010} which individual children can be exposed to for their 18 years of life.
+For an adult-sized vocabulary $W = 60,000$, the estimated number of samples needed would be $T = 660,126$.
+This is the \textit{mean} completion time--the average across many independent learners--and so is not directly comparable to the $\sim$940,000-sample figure \citep{Blythe:2010} report for this same uniform, $W=60{,}000$ case: their estimate is not a mean but the time by which 99\% of independent learners are expected to have finished the \textit{entire} lexicon (their Eq.~4, $t^{*}\approx W\ln(W/\epsilon)$ at $\epsilon=0.01$)--a later, more conservative quantity than the average, precisely because it accounts for the slowest-finishing tail of learners rather than a typical one. Evaluating this paper's own generalized completion-time formula at the same $\epsilon=0.01$ threshold (Equation~\ref{eq-T}, introduced next) recovers $T\approx936{,}000$--matching \cite{Blythe:2010}'s figure almost exactly, confirming the two analyses agree once compared on the same completion criterion rather than reflecting any real discrepancy between the models.
 % number of exposures suggested by Hart and Risley (2003): 2,100 words per hour, 14 h of exposure per day for 18 years (probably an upper bound as suggested by Blythe et al 2010; Mike Frank suggests 1,000 per hour, if I remember correctly)
 
 \subsection{Number of samples for a general WFD}
