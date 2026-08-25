@@ -2,7 +2,7 @@
 suppressMessages({library(dplyr); library(ggplot2); library(tidyr)})
 
 d <- readRDS("decay_sweep_results.rds") %>% filter(censored == 0)
-d$halflife_label <- factor(d$halflife_label, levels = c("No decay", "t1/2=200", "t1/2=50", "t1/2=10"))
+d$halflife_label <- factor(d$halflife_label, levels = c("No decay", "t1/2=20000", "t1/2=5000", "t1/2=1000", "t1/2=200"))
 
 long <- d %>% pivot_longer(c(dec5, dec9, episodes), names_to = "checkpoint", values_to = "n_episodes") %>%
   mutate(checkpoint = factor(checkpoint, levels = c("dec5", "dec9", "episodes"), labels = c("50%", "90%", "99%")))

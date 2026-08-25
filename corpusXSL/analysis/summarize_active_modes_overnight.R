@@ -67,7 +67,7 @@ print(as.data.frame(s3), row.names = FALSE)
 p3 <- ggplot(s3, aes(x = choice_k_num, y = mean_episodes, color = Clabel, group = Clabel)) +
   geom_line() + geom_point(size = 2) +
   geom_errorbar(aes(ymin = mean_episodes - se, ymax = mean_episodes + se), width = 0.02) +
-  facet_wrap(~model, scales = "free_y") +
+  facet_wrap(~model) +
   scale_x_log10() +
   scale_y_log10(labels = scales::comma) +
   scale_color_manual(values = c("C=10" = "#377eb8", "C=100" = "#D55E00")) +

@@ -61,7 +61,7 @@ print(as.data.frame(s3), row.names = FALSE)
 p3 <- ggplot(s3, aes(x = choice_k_num, y = mean_episodes)) +
   geom_line(color = "#D55E00") + geom_point(size = 2, color = "#D55E00") +
   geom_errorbar(aes(ymin = mean_episodes - se, ymax = mean_episodes + se), width = 0.02) +
-  facet_wrap(~model, scales = "free_y") +
+  facet_wrap(~model) +
   scale_x_log10(breaks = c(5, 20, 50, 100, 1000), labels = c("5", "20", "50", "100", "Inf (M)")) +
   scale_y_log10(labels = scales::comma) +
   labs(x = "K: size of the randomly-available choice window (log scale)",

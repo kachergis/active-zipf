@@ -9,12 +9,23 @@
 # p_decay values are parametrized as forgetting half-lives (in episodes)
 # rather than raw hazard rates, since half-life is the interpretable
 # quantity: p_decay = 1 - 0.5^(1/halflife).
+#
+# CALIBRATION NOTE: the first version of this sweep used half-lives of
+# 200/50/10 episodes, chosen without checking them against the actual
+# distribution of passive revisit gaps. Under passive sampling at C=10, a=1,
+# M=1000, the RAREST word's expected revisit gap is ~7,485 episodes, and 97%
+# of words have a gap exceeding 200 -- meaning all three original half-lives
+# were deep in the "guess almost always decays completely between visits"
+# regime for nearly every word, so the three decay conditions were
+# indistinguishable (all near-saturated) rather than showing a genuine
+# dose-response gradient. Widened here to span below and above the typical
+# revisit-gap range (median ~3,746, rarest ~7,485 episodes).
 
 source("learners.R")
 suppressMessages(library(dplyr))
 
 M <- 1000; a <- 1; C <- 10; REPS <- 30
-half_lives <- c(Inf, 200, 50, 10)  # Inf = no decay (p_decay=0), the baseline
+half_lives <- c(Inf, 20000, 5000, 1000, 200)  # Inf = no decay (p_decay=0), the baseline
 
 to_p_decay <- function(halflife) if (is.infinite(halflife)) 0 else 1 - 0.5^(1 / halflife)
 
@@ -40,7 +51,7 @@ for (hl in half_lives) {
 d <- bind_rows(results)
 d$active <- ifelse(d$active, "Active", "Passive")
 d$halflife_label <- factor(ifelse(is.infinite(d$halflife), "No decay", paste0("t1/2=", d$halflife)),
-                            levels = c("No decay", "t1/2=200", "t1/2=50", "t1/2=10"))
+                            levels = c("No decay", "t1/2=20000", "t1/2=5000", "t1/2=1000", "t1/2=200"))
 
 summ <- d %>% filter(censored == 0) %>%
   group_by(halflife_label, active) %>%

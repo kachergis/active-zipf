@@ -17,7 +17,7 @@ summ10 <- d10 %>% group_by(model, a, active, fam_context) %>%
 p1 <- ggplot(summ10, aes(x = a, y = mean_p99, color = active, linetype = fam_context,
                           group = interaction(active, fam_context))) +
   geom_point(size = 2) + geom_line() +
-  facet_wrap(~model, scales = "free_y") +
+  facet_wrap(~model) +
   scale_y_log10(labels = scales::comma) +
   scale_color_manual(values = c(Passive = "#888888", Active = "#D55E00")) +
   labs(x = "Zipf exponent (a); a=0 is uniform", y = "Mean episodes to learn 99% (log scale)",
