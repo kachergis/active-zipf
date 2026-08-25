@@ -142,7 +142,18 @@ learn_corpus_eliminative <- function(C, M, a = 1, uniform = TRUE, active = FALSE
                                       fam_context = FALSE, epsilon = .01,
                                       max_episodes = Inf, max_seconds = Inf,
                                       active_prob = NULL, active_policy = "unknown",
-                                      choice_k = Inf, goldilocks_target = 2, goldilocks_sigma = 2) {
+                                      choice_k = Inf, goldilocks_target = 2, goldilocks_sigma = 2,
+                                      mutual_exclusivity = FALSE) {
+  # mutual_exclusivity (Reisenauer, Smith, Smith, & Blythe, 2013): the moment a
+  # word is learned, its referent is immediately excluded as a candidate from
+  # every OTHER still-unlearned word's row too, not just its own -- unlike the
+  # default (mutual_exclusivity=FALSE, exactly reproducing the original model),
+  # where each word's candidate set narrows using only its own exposure
+  # history. This can trigger an avalanche: excluding a referent may itself
+  # drop another word to a single remaining candidate, which triggers further
+  # exclusions, processed here via a queue until the avalanche settles within
+  # the same episode (all words learned in one avalanche share that episode's
+  # count, matching Reisenauer et al.'s "instantaneous" cascade).
   if (is.null(active_prob)) active_prob <- as.numeric(active)
   probs <- if (uniform) rep(1 / M, M) else zipf_probs(M, a)
 
@@ -156,6 +167,12 @@ learn_corpus_eliminative <- function(C, M, a = 1, uniform = TRUE, active = FALSE
   deciles <- M * seq(.1, .9, .1)
   t0 <- Sys.time()
   censored <- FALSE
+
+  mark_learned <- function(w) {
+    n_learned <<- n_learned + 1
+    word_known[w] <<- TRUE
+    for (dd in 1:9) if (n_learned >= deciles[dd] && !eps_to_learn_decile[dd]) eps_to_learn_decile[dd] <<- episodes
+  }
 
   while (n_learned < total) {
     if (episodes %% TIME_CHECK_EVERY == 0 && episodes > 0) {
@@ -177,9 +194,22 @@ learn_corpus_eliminative <- function(C, M, a = 1, uniform = TRUE, active = FALSE
     cc <- c(target, distractors)
     hyp[cc[1], which(!is.element(1:M, cc))] <- 0
     if (sum(hyp[cc[1], ]) == 1 && !word_known[cc[1]]) {
-      n_learned <- n_learned + 1
-      word_known[cc[1]] <- TRUE
-      for (dd in 1:9) if (n_learned >= deciles[dd] && !eps_to_learn_decile[dd]) eps_to_learn_decile[dd] <- episodes
+      if (mutual_exclusivity) {
+        queue <- cc[1]
+        while (length(queue) > 0) {
+          w <- queue[1]; queue <- queue[-1]
+          if (word_known[w]) next
+          mark_learned(w)
+          others <- which(!word_known)
+          if (length(others) > 0) {
+            hyp[others, w] <- 0
+            newly_single <- others[rowSums(hyp[others, , drop = FALSE]) == 1]
+            queue <- c(queue, newly_single)
+          }
+        }
+      } else {
+        mark_learned(cc[1])
+      }
     }
     episodes <- episodes + 1
   }
