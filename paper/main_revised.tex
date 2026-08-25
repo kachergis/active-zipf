@@ -117,20 +117,35 @@ These results suggest that the statistical structure that children (or their car
 \section{The remarkable pace of word learning}
 
 Language acquisition proceeds quickly in young children, who within their first year learn the sounds of their language \citep{Kuhl:1992}, begin segmenting speech \citep{Saffran:1996} and even produce their first words \citep{Hulit:2002}.
-By 18 months, children can produce on average 50 words and comprehend 100-150 \citep{Hulit:2002}, with vocabulary size growing to around 1,000 words by age 3 \citep{Hart:1995}, and reaching roughly 60,000 words by 18 years of age \citep{Bloom:2000}.
-Under the assumption that each child has 8 hours of word learning opportunity every day, these estimates have the child learning a new word every learning hour for 18 years, on average. 
-This pace seems remarkable, given the storied complexity of the learning environment: a given word could refer to any of infinite possible meanings in any given situation \citep[cf.][]{Blythe:2016}. % introduce Smith & Yu's short arm / single object finding at some point
-\GK{Although older learners no doubt accelerate word learning as they begin to read, children already show an accelerating pace of learning in the second year of life, growing from an average of 11 words at 12 months to over 300 words by 24 months \citep{wordbankbook,fenson2007}.
-How might young children tackle the daunting problem of mapping words to referents?}
+Under the common assumption of roughly 8 hours of daily word-learning opportunity, reaching the oft-cited target of 60,000 words by 18 years of age \citep{Bloom:2000} implies learning a new word every learning hour, on average, for 18 years.
+This pace seems remarkable, given the storied complexity of the learning environment: a given word could refer to any of infinite possible meanings in any given situation \citep[cf.][]{Blythe:2016}.
 
-Throughout this paper we follow prior theoretical work in analyzing the feasibility of an 18-year, 60,000-word target \citep{Blythe:2010,Vogt:2012,Blythe:2016}, since this is the estimate against which our results are most directly comparable.
-It is worth being explicit, however, about which portion of vocabulary growth this target best describes.
-A commonly-cited developmental trajectory has children recognizing about 50 words at age one, about 1,000 words by age three, and at least 10,000 words by age five \citep{Shipley:2015}--consistent with independent estimates of roughly 10,000 root-word meanings known by early elementary school \citep{Anglin:1993}.
-These are comprehension (recognition) estimates; computing the analogous curve directly from MacArthur-Bates CDI \textit{production} norms \citep{Frank:2017} gives a lower but still rapidly-accelerating trajectory over the age range these instruments cover--an expected productive vocabulary of roughly 7 words at 12 months, 50--120 words at 18 months (depending on instrument), and 220--530 words by 24--30 months--consistent with the general shape of early vocabulary growth, though production instruments do not extend past 30 months and so cannot speak to the age-three or age-five estimates above.
-Age five is also, for most children, when formal reading instruction begins, after which written text becomes an increasingly important source of new vocabulary, one governed by a different frequency distribution, a different sampling process, and plausibly different active and passive mechanisms than the largely auditory, caregiver-mediated input we model here.
-The sampling and learning models we analyze--which assume a single, stationary word frequency distribution encountered through spoken situations--are therefore most directly applicable to this pre-literacy period, during which vocabulary growth is driven overwhelmingly by spoken input rather than text, and less directly applicable to the school-age years during which the bulk of the 60,000-word target is actually reached.
-We are explicit about this scope limitation up front because it shapes how the 60,000-word, 18-year figures used throughout the paper (following past work) should be read: as a common point of comparison with prior theoretical analyses, not as a claim that our spoken-language sampling models are meant to describe word learning across the full 18-year span.
-We return to the implications of this scoping for our conclusions in the Discussion.
+Table~\ref{tab-vocab-benchmarks} summarizes representative vocabulary-size estimates across this developmental window, drawn from several sources that differ in methodology (comprehension vs.\ production, different instruments) and so are not directly comparable to one another; the trajectory they share is a rapidly accelerating one--from single digits of words in the first year to several hundred by two, roughly a thousand by three, and at least ten thousand comprehended words by five \citep{Shipley:2015,Anglin:1993}--well before the 60,000-word, 18-year target most of vocabulary growth still lies ahead.
+
+\begin{table}[h]
+\centering
+\caption{\label{tab-vocab-benchmarks} Representative vocabulary-size estimates across development. Comprehension and production are measured differently and are not directly comparable to one another; see cited sources for instrument details.}
+\small
+\begin{tabular}{@{}p{2.2cm}p{2.2cm}p{3.0cm}p{5.5cm}@{}}
+\hline
+Age & Estimate & Metric & Source \\
+\hline
+12 months & $\sim$7 words & Production (CDI) & \citep{Frank:2017} \\
+18 months & 50--120 words & Production (CDI) & \citep{Frank:2017} \\
+18 months & 100--150 words & Comprehension & \citep{Hulit:2002} \\
+24--30 months & 220--530 words & Production (CDI) & \citep{Frank:2017} \\
+3 years & $\sim$1,000 words & Comprehension & \citep{Hart:1995} \\
+5 years & $\geq$10,000 words & Comprehension & \citep{Shipley:2015} \\
+18 years / adult & $\sim$60,000 words & This paper's primary target & \citep{Bloom:2000} \\
+\hline
+\end{tabular}
+\end{table}
+
+Throughout this paper we follow prior theoretical work in analyzing the feasibility of this 18-year, 60,000-word target \citep{Blythe:2010,Vogt:2012,Blythe:2016}, since it is the estimate against which our results are most directly comparable.
+It is worth flagging up front, however, that this target describes vocabulary growth across childhood as a whole, including the school years; the pre-literacy period our spoken, caregiver-mediated sampling models most directly address reaches only around 10,000 comprehended words by age five (Table~\ref{tab-vocab-benchmarks})--an order of magnitude short of the full target, and before written text, with its different frequency distribution and sampling process, becomes an increasingly important source of new vocabulary.
+We retain the 60,000-word, 18-year benchmark throughout for comparability with prior work, and return to what this scoping implies for our conclusions in the Discussion.
+
+How might young children tackle the daunting problem of mapping words to referents at this pace?
 
 
 A variety of heuristics and mechanisms are thought to help learners mitigate referential uncertainty, and empirical studies have shown that young children can take advantage of many of them in the laboratory. 
@@ -188,6 +203,15 @@ We confirm that simulated learning from the Zipfian WFD in the CHILDES database 
 Given the difficulty of learning naturally-occurring Zipfian WFDs even with the power of fast-mapping, and motivated by the active and curiosity-driven learning literature reviewed above, we explore an extension of the word learning problem in which the learner is not simply a passive recipient of randomly-selected words and referents \citep[as in][]{Blythe:2010,Vogt:2012,Blythe:2016}, but instead has some ability to structure the situations from which they will learn: choosing which referents to bring into a situation, from which a caregiver then selects a target referent to name (see Figure~\ref{fig-overview}).
 % mention active learning in education (e.g., Montessori; Nolan, A., Kilderry, A., and O'Grady, R. (2006). Young children as active learners, Early Childhood Australia, Watson, A.C.T.)
 Our analysis shows that this form of active learning yields substantial speedups over passive random sampling--in some cases bringing learning times within a plausible range for real-world timescales--even under a long-tailed Zipfian WFD, though the size of the speedup depends on how much of the learning process is idealized (see the Active learning section and the Incremental active learning section).
+
+In summary, this paper offers five main contributions:
+\begin{itemize}
+\item {\bf A general analytical bound.} We derive a closed-form bound on fast-mapping time for an arbitrary word frequency distribution, not only the uniform and Zipfian cases analyzed previously, and validate it against two independent corpora (CHILDES child-directed speech and Google Books).
+\item {\bf Formal and empirical characterization of active learning's ceiling.} We characterize the maximum benefit active control over learning situations can confer, evaluated using real object-scene co-occurrence statistics from the SUN database, and test a more realistic online learner that must estimate this structure from experience rather than know it in advance.
+\item {\bf Three incremental learning mechanisms.} We simulate three distinct mechanisms that require multiple exposures rather than a single co-occurrence--each embodying a different account of how evidence for a word's meaning accumulates--crossed with active and passive selection of both target words and their accompanying distractors.
+\item {\bf The advantage depends on the completion target.} We show that the size of the active-learning advantage is not a single number: it grows severalfold between a functional (50--90\%) and a fully complete (99\%) vocabulary.
+\item {\bf The advantage survives, and strengthens under, forgetting.} We test whether this advantage depends on an idealization of perfect, unlimited memory for tentative guesses, and find that it does not merely survive a more cognitively realistic forgetting mechanism, but strengthens under it.
+\end{itemize}
 
 % Vogt:2012 - Fig. 4 shows that when C/M=0.1, the learning time t~=10^8, which in 18 years would amount to 15,221 words per day. When C/M 1⁄4 0.2, however, the learning time t~=2.9x10^9, which comes to about 441,400 words per day in 18 years. Assuming the upper bound of the number of words that parents are estimated to speak to their children (Hart & Risley, 2003), when hearing 2,100 words for 7.2 h per day, learning 60,000 words in 18 years is feasible with XSL, if C/M 1⁄4 0.1. However, children would require 210 h of input per day if C/M=0.2. Clearly, the former situation is plausible, and the latter is not.
 
