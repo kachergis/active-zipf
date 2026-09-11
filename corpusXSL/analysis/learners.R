@@ -143,7 +143,7 @@ learn_corpus_eliminative <- function(C, M, a = 1, uniform = TRUE, active = FALSE
                                       max_episodes = Inf, max_seconds = Inf,
                                       active_prob = NULL, active_policy = "unknown",
                                       choice_k = Inf, goldilocks_target = 2, goldilocks_sigma = 2,
-                                      mutual_exclusivity = FALSE) {
+                                      mutual_exclusivity = FALSE, active_prob_fn = NULL) {
   # mutual_exclusivity (Reisenauer, Smith, Smith, & Blythe, 2013): the moment a
   # word is learned, its referent is immediately excluded as a candidate from
   # every OTHER still-unlearned word's row too, not just its own -- unlike the
@@ -154,6 +154,13 @@ learn_corpus_eliminative <- function(C, M, a = 1, uniform = TRUE, active = FALSE
   # exclusions, processed here via a queue until the avalanche settles within
   # the same episode (all words learned in one avalanche share that episode's
   # count, matching Reisenauer et al.'s "instantaneous" cascade).
+  #
+  # active_prob_fn (default NULL, exactly reproducing the original constant-
+  # active_prob model): an optional function(episodes) -> active_prob,
+  # re-evaluated every episode, for simulating a developmental trajectory
+  # (e.g. a child who starts passive -- carried, little control over scenes --
+  # and becomes more active over time as motor/attentional control develops)
+  # rather than a fixed degree of autonomy throughout.
   if (is.null(active_prob)) active_prob <- as.numeric(active)
   probs <- if (uniform) rep(1 / M, M) else zipf_probs(M, a)
 
@@ -181,7 +188,8 @@ learn_corpus_eliminative <- function(C, M, a = 1, uniform = TRUE, active = FALSE
         break
       }
     }
-    target <- choose_target(M, probs, word_known, times_targeted, active_prob,
+    ap_t <- if (is.null(active_prob_fn)) active_prob else active_prob_fn(episodes)
+    target <- choose_target(M, probs, word_known, times_targeted, ap_t,
                              active_policy, choice_k, goldilocks_target, goldilocks_sigma)
     times_targeted[target] <- times_targeted[target] + 1L
     nontarg <- setdiff(1:M, target)
