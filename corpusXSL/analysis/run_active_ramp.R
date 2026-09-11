@@ -27,8 +27,29 @@ suppressMessages(library(dplyr))
 
 M <- 1000; a <- 1; C <- 10; REPS <- 30
 
-make_linear_ramp   <- function(Tt) function(ep) pmin(1, ep / Tt)
-make_reverse_ramp  <- function(Tt) function(ep) pmax(0, 1 - ep / Tt)
+make_linear_ramp   <- function(Tt) { force(Tt); function(ep) pmin(1, ep / Tt) }
+make_reverse_ramp  <- function(Tt) { force(Tt); function(ep) pmax(0, 1 - ep / Tt) }
+# force(Tt) matters here: the returned closure doesn't touch Tt until it's
+# actually CALLED (deep inside the simulation loop, long after any `for`
+# loop that generated several of these has finished), and without forcing,
+# R's lazy evaluation would resolve Tt against whatever the calling scope's
+# variable holds AT THAT LATER TIME -- e.g. inside `for (Tt in T_NEW) ...`,
+# every closure built this way would silently end up using T_NEW's LAST
+# value instead of its own. Confirmed empirically: before this fix, all 4
+# T_NEW conditions (2000/3000/8000/12000) converged on nearly identical
+# results, all consistent with actually running at T=12000 (the last value
+# T_NEW takes), not their own intended T.
+
+# T values: the original 3 (1000, 5000, 20000) plus 4 more added to resolve
+# the curve's shape, concentrated around 5000-20000 where the reverse ramp's
+# transition (still near-passive vs. behaving like sustained high activity;
+# see the code comment on that result below) turned out to happen. New T
+# conditions are APPENDED, not interleaved, so the original 12 conditions
+# keep their original list positions and therefore their original seeds
+# (`1000 * which(names(conditions) == nm) + s`) -- the first 3 T values'
+# numbers reproduce exactly, not just approximately, when this is re-run.
+T_ORIG <- c(1000, 5000, 20000)
+T_NEW <- c(2000, 3000, 8000, 12000)
 
 conditions <- list(
   passive              = list(active_prob = 0),
@@ -44,6 +65,10 @@ conditions <- list(
   ramp_rev_T5000        = list(active_prob_fn = make_reverse_ramp(5000)),
   ramp_rev_T20000       = list(active_prob_fn = make_reverse_ramp(20000))
 )
+for (Tt in T_NEW) {
+  conditions[[sprintf("ramp_fwd_T%d", Tt)]] <- list(active_prob_fn = make_linear_ramp(Tt))
+  conditions[[sprintf("ramp_rev_T%d", Tt)]] <- list(active_prob_fn = make_reverse_ramp(Tt))
+}
 
 cat(sprintf("Eliminative learner, M=%d, C=%d, a=%d, %d reps/condition\n\n", M, C, a, REPS))
 results <- list()

@@ -900,6 +900,50 @@ The linger-vs-move-on choice itself shows a genuine crossover rather than one po
 
 This result should be read as a demonstration that the mechanism generalizes to real co-occurrence structure and that the linger-versus-move-on tradeoff is a real, locatable phenomenon, not as a claim about what value \texttt{move\_cost} actually takes for a child or caregiver in practice--we have no direct estimate of that value, and supplying one is a natural target for future work. It is also worth being explicit that Flickr8k captions are adult-crowdsourced descriptions of generic photographs, not child-directed speech or a child's own visual experience, so this appendix speaks to whether the mechanisms in this paper behave sensibly on naturalistic language statistics, not to developmental realism specifically.
 
+\section{A developmental passive-to-active trajectory}
+\label{app-ramp}
+
+Every active-learning condition elsewhere in this paper holds the degree of autonomy fixed for the whole simulated lifetime of the learner--constantly active, constantly passive, or some constant blend of the two throughout (the Incremental active learning section's partial-autonomy sweep). Real infants do not work this way: a newborn is carried from room to room with essentially no say over which scenes it experiences, and only gradually acquires the visual, postural, and locomotor control--head-turning, pointing, reaching, eventually crawling and walking--that lets it actively select what to attend to. This appendix asks whether that developmental trajectory itself, quite apart from its eventual endpoint, has consequences for how much of active selection's benefit a learner realizes.
+
+\subsection{Motivation and setup}
+The completion-checkpoint analysis (``How much of the vocabulary matters,'' main text) already implies an answer is possible: the active/passive gap widens over the course of learning (roughly 4-fold at 50\% completion, 9-fold at 90\%, 19-fold at 99\%, for the eliminative learner at $C=10$), meaning active selection's marginal value is low early--common words get learned quickly under either policy--and high late, when only rare stragglers remain. If a fixed ``active budget'' is worth more late than early, a learner who starts passive and becomes active over time should outperform a constant blend that spends the same budget evenly, and should do considerably better than a learner who front-loads the same budget into the early, low-value period.
+
+We extended the eliminative learner with an optional \texttt{active\_prob\_fn}: a function of the episode count, re-evaluated every episode, in place of a constant \texttt{active\_prob}. We compare a forward, linear ramp from passive to active, $\text{active\_prob}(t) = \min(1, t/T)$, against its mirror image, a reverse ramp from active to passive, $\text{active\_prob}(t) = \max(0, 1-t/T)$--the reverse direction serving as a directional sanity check, since it spends an identical total ``active investment'' but places it exactly where the checkpoint analysis says it is worth least. Both are indexed by episode count rather than fraction of vocabulary learned, since real motor and attentional development runs on its own maturational clock and is not contingent on how much vocabulary a particular child happens to have acquired so far; this makes the ramp's timescale $T$ a free parameter, swept here (at $M=1{,}000$, $C=10$, $a=1$, 30 replications per condition) rather than fixed at a single guessed value.
+
+\subsection{Results}
+Table~\ref{tab-ramp} gives the fixed reference points--pure passive and active sampling, and constant blends at four intermediate autonomy levels--and Figure~\ref{fig-ramp} shows both ramp directions across seven timescales, $T \in \{1{,}000, 2{,}000, 3{,}000, 5{,}000, 8{,}000, 12{,}000, 20{,}000\}$ episodes.
+
+\begin{table}
+\centering
+\caption{\label{tab-ramp} Mean episodes to learn 99\% of a Zipfian ($a=1$), $M=1{,}000$-word vocabulary, eliminative learner, $C=10$: fixed reference points (no developmental trajectory).}
+\begin{tabular}{lr}
+\hline
+Condition & Episodes \\
+\hline
+Passive (active\_prob=0)     & 91{,}963 \\
+Constant blend, active\_prob=0.10 & 20{,}907 \\
+Constant blend, active\_prob=0.25 & 12{,}527 \\
+Constant blend, active\_prob=0.50 &  7{,}823 \\
+Constant blend, active\_prob=0.75 &  5{,}888 \\
+Active (active\_prob=1)      &  4{,}659 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.8\linewidth]{active_ramp.pdf}
+\caption{\label{fig-ramp}
+Mean episodes to learn 99\% of the vocabulary vs.\ ramp timescale $T$, forward (passive-to-active) vs.\ reverse (active-to-passive) developmental trajectories. Dashed lines mark the pure passive and pure active reference points from Table~\ref{tab-ramp}.}
+\end{center}
+\end{figure}
+
+The clearest single comparison is at the shortest timescale tested. A forward ramp with $T=1{,}000$--fully passive for the first 1,000 episodes, then linearly increasing to fully active--reaches 99\% in 4,874 episodes, within 4.6\% of pure active sampling (4,659). The reverse ramp at the identical $T=1{,}000$--fully active for the first 1,000 episodes, then decaying to fully passive--reaches 99\% in 89,961 episodes, statistically indistinguishable from pure passive sampling (91,963). Same timescale, same total quantity of active exposure, opposite placement in the learning trajectory: one recovers essentially all of active selection's benefit, the other essentially none of it.
+
+Extending the sweep past the original three timescales reveals a further, unanticipated regularity. The forward ramp increases smoothly and monotonically with $T$, exactly as expected: more time spent passive before transitioning costs more, roughly in proportion to $T$ itself (4,874 at $T=1{,}000$ up to 10,643 at $T=20{,}000$). The reverse ramp, by contrast, does not decline smoothly--it stays close to the passive baseline through $T=8{,}000$ (57,934) and then falls sharply by $T=12{,}000$ (6,059), a roughly ten-fold drop between two adjacent timescales rather than a gradual one. We interpret this as follows: for large $T$, an active-heavy start completes the vocabulary quickly enough that the ramp never gets far into its decay before the learner is essentially done, so the process behaves like sustained high activity rather than a genuine transition to passivity. For small $T$, activity decays away well before the vocabulary is anywhere near complete, so nearly the entire (much longer) remaining run happens under passive-like conditions. The threshold falls close to pure active sampling's own completion time (4,659 episodes)--exactly where a fast, active-driven trajectory would either finish before the ramp bites (large $T$) or run headlong into a fully-decayed, passive-dominated remainder (small $T$)--which is a satisfying, if informal, confirmation that the mechanism we propose is the right one.
+
+\subsection{Scope}
+These results support a narrow but useful claim: a plausible developmental trajectory--little control early, more control later--is not merely "a blend of the extremes" with a worse average, and under the mechanism we model here, it need not sacrifice much of active selection's benefit relative to being fully active from birth, provided the transition happens on a fast-enough timescale relative to the vocabulary at hand. We make no claim about what timescale actually describes real infant development, nor have we tested ramp shapes other than linear, or mechanisms other than eliminative learning at a single $C$ and Zipf exponent; extending this analysis to the other learning mechanisms and to a data-driven estimate of the transition's real timescale--plausibly informed by egocentric video of infants' own visual experience as their motor repertoire develops--is a natural next step, not one we take here.
 
 % % we don't currently refer to this Appendix: where should we?
 % Suppose that $(1-p_{T})$ is the probability that the learner has learned all the $N$ words by observing $T$ samples of them. If there exists a quantity in the limit $$R := - \lim_{T \to \infty} \frac{\log p_{T}}{T},$$ we call it the rate of word learning. This definition of the word learning rate is motivated by information theory, in which the rate characterizes the exponential increase of the number of codes per letter for the triplet of the encoder, decoder, and channel.  Any word learning scheme with the rate $R$ implies that the learning error decreases exponentially, $e^{-RT}$, as the function of the number of samples $T$ in a long run. Thus, from the information-theoretic perspective, the class of word learning schemes with the same rate is {\it equivalent} with respect to the learning rate in a long run.
