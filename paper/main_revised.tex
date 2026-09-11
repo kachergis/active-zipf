@@ -855,7 +855,52 @@ We traced this to a specific, verifiable property of how the two target-selectio
 
 We see two useful takeaways. First, \cite{Reisenauer:2013}'s rescue of elimination-based learning at large $C$ is real and substantial in our own Zipfian word-and-referent setting, not only in their resampled-Zipf confounder construction--reinforcing the Discussion's point that this paper's $C=100$ passive numbers likely overstate the true difficulty of learning under referential uncertainty. Second, mutual exclusivity and active target selection, both independently beneficial mechanisms elsewhere in this paper, do not simply compound when combined at large $C$; the source of active selection's advantage (avoiding wasted attention on known words) and the source of mutual exclusivity's advantage (a lucky early cascade) turn out to be almost entirely non-overlapping. Working out the general conditions under which two otherwise-beneficial active-learning mechanisms fail to compose--already noted for guess-test's active-target/familiar-context combination in the main text--seems a genuinely open question for this literature, not a peculiarity of any one mechanism pairing.
 
-% \section{Appendix 0: Rate of word learning}
+\section{Active target selection and scene-switching cost on real image captions}
+\label{app-flickr}
+
+Every simulation in the main text draws situations from synthetic Zipfian word and referent distributions. Here we test the same eliminative mechanism on real, naturalistic co-occurrence structure instead, using Flickr8k \citep{Hodosh:2013}: 8,108 photographs, each independently described by five human-written captions. Real captions let us ask a further question the synthetic simulations cannot pose at all: beyond choosing \textit{which} word to target, a learner who can request another caption of the scene already in view, rather than only ever moving on to a new one, faces a second active choice with no synthetic analogue--and it is not obvious in advance which side of that choice should win.
+
+\subsection{Setup}
+We treat each caption as a situation: a target word plus whichever other content words co-occur in that sentence, playing the role of distractors. After excluding function words (articles, prepositions, pronouns, and similar) via a hand-curated stoplist and words occurring only once, 4,318 content words remain, averaging 5.76 per caption--a naturally-occurring analogue of context size $C$, close to this paper's own $C=10$ condition. A word is eliminative-learnable if the intersection of the word-sets of every caption in which it appears narrows to the word itself; 83.3\% (3,598 words) are learnable this way, and the remainder are stuck with at most 8 residual confusable alternatives, not a pathological blowup.
+
+We compare three policies. \textit{Passive}: sample a photo uniformly at random, reveal one of its captions at random, and always move on. \textit{Active, move-on}: target the rarest not-yet-learned learnable word, sample a photo containing it, reveal one caption, and always move on. \textit{Active, linger}: as move-on, but remain on the current photo--revealing another of its remaining captions--for as long as doing so is still shrinking some unknown word's candidate set, moving on only once the current photo stops paying off. A \texttt{move\_cost} parameter charges additional episodes for switching to a new photo, formalizing the idea that eliciting another description of the scene already in view may be cheaper than obtaining a new scene built around a specific word; \texttt{move\_cost}$=0$ makes the two active policies differ only in information, not economy.
+
+\subsection{Results}
+Table~\ref{tab-flickr} and Figure~\ref{fig-flickr} report mean episodes to reach 50\%, 90\%, and 99\% of the learnable vocabulary (30 replications per cell). Active target selection alone is, as throughout this paper, the dominant effect: even at the highest scene-switching cost we tested, both active policies still finish 99\% of the vocabulary in under half the episodes passive sampling requires, and at zero switching cost the advantage reaches 23-fold.
+
+\begin{table}
+\centering
+\caption{\label{tab-flickr} Mean episodes to reach 50/90/99\% of the 3,598-word learnable vocabulary, Flickr8k captions, eliminative mechanism. \texttt{move\_cost} is the number of extra episodes charged for switching to a new photo (passive sampling has no such switching decision).}
+\begin{tabular}{llrrr}
+\hline
+Condition & move\_cost & 50\% & 90\% & 99\% \\
+\hline
+Passive        & --  & 10{,}386 & 60{,}719 & 151{,}671 \\
+Active, move-on & 0  &  2{,}779 &  5{,}643 &   6{,}528 \\
+Active, linger  & 0  &  3{,}125 &  6{,}511 &   7{,}515 \\
+Active, move-on & 1  &  5{,}558 & 11{,}285 &  13{,}057 \\
+Active, linger  & 1  &  5{,}483 & 11{,}587 &  13{,}461 \\
+Active, move-on & 3  & 11{,}117 & 22{,}570 &  26{,}113 \\
+Active, linger  & 3  & 10{,}199 & 21{,}740 &  25{,}354 \\
+Active, move-on & 10 & 30{,}571 & 62{,}069 &  71{,}811 \\
+Active, linger  & 10 & 26{,}705 & 57{,}275 &  66{,}980 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.8\linewidth]{flickr_linger_crossover.pdf}
+\caption{\label{fig-flickr}
+Mean episodes to learn 99\% of the vocabulary vs.\ \texttt{move\_cost}, active eliminative learner on Flickr8k captions. Moving on to a new photo wins when switching is cheap; lingering on the current photo overtakes it once switching costs more, with the crossover between \texttt{move\_cost}=1 and 3.}
+\end{center}
+\end{figure}
+
+The linger-vs-move-on choice itself shows a genuine crossover rather than one policy dominating throughout. At \texttt{move\_cost} 0--1, always moving to a fresh photo wins: a new scene supplies more diverse elimination context than a second, independently-written description of the same one, so the extra information from a new scene outweighs the (zero or small) cost of obtaining it. Between \texttt{move\_cost} 1 and 3, the ranking flips, and lingering's advantage widens as switching gets more expensive--7\% faster than moving on at \texttt{move\_cost}=10. In other words, whether "ask for more about what's already in view" is the better strategy is not fixed; it depends on the relative cost of obtaining a new situation versus refining the current one, exactly the kind of parameter this paper's synthetic simulations, which never separated situation-content from situation-acquisition cost, could not have exposed.
+
+This result should be read as a demonstration that the mechanism generalizes to real co-occurrence structure and that the linger-versus-move-on tradeoff is a real, locatable phenomenon, not as a claim about what value \texttt{move\_cost} actually takes for a child or caregiver in practice--we have no direct estimate of that value, and supplying one is a natural target for future work. It is also worth being explicit that Flickr8k captions are adult-crowdsourced descriptions of generic photographs, not child-directed speech or a child's own visual experience, so this appendix speaks to whether the mechanisms in this paper behave sensibly on naturalistic language statistics, not to developmental realism specifically.
+
+
 % % we don't currently refer to this Appendix: where should we?
 % Suppose that $(1-p_{T})$ is the probability that the learner has learned all the $N$ words by observing $T$ samples of them. If there exists a quantity in the limit $$R := - \lim_{T \to \infty} \frac{\log p_{T}}{T},$$ we call it the rate of word learning. This definition of the word learning rate is motivated by information theory, in which the rate characterizes the exponential increase of the number of codes per letter for the triplet of the encoder, decoder, and channel.  Any word learning scheme with the rate $R$ implies that the learning error decreases exponentially, $e^{-RT}$, as the function of the number of samples $T$ in a long run. Thus, from the information-theoretic perspective, the class of word learning schemes with the same rate is {\it equivalent} with respect to the learning rate in a long run.
 
