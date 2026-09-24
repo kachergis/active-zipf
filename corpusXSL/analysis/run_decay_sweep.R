@@ -21,6 +21,11 @@
 # dose-response gradient. Widened here to span below and above the typical
 # revisit-gap range (median ~3,746, rarest ~7,485 episodes).
 
+# BUG-FIX NOTE: results produced before the known-word exemption was actually
+# enforced in learners.R (see comment at the decay check there) showed passive
+# slowing from ~38.8k to ~69.9k episodes while active stayed flat. That pattern
+# was an artifact of the bug, not of forgetting; re-run after the fix.
+
 source("learners.R")
 suppressMessages(library(dplyr))
 

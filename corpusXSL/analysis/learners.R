@@ -229,7 +229,7 @@ learn_corpus_guesstest <- function(C, M, a = 1, uniform = TRUE, active = FALSE,
                                     max_episodes = Inf, max_seconds = Inf,
                                     active_prob = NULL, active_policy = "unknown",
                                     choice_k = Inf, goldilocks_target = 2, goldilocks_sigma = 2,
-                                    p_decay = 0) {
+                                    p_decay = 0, lock_k = 0) {
   # p_decay: per-episode forgetting hazard for an UNCONFIRMED (not-yet-learned)
   # guess. Checked lazily, only when a word holding a guess is re-exposed --
   # not swept over all M words every episode -- so this stays O(1) per episode
@@ -241,6 +241,19 @@ learn_corpus_guesstest <- function(C, M, a = 1, uniform = TRUE, active = FALSE,
   # (word_known[w] set), it is never revisited -- forgetting an established
   # word is a different, bigger claim than forgetting a tentative guess.
   # p_decay=0 (the default) reproduces the original model exactly.
+  #
+  # lock_k: with lock_k=0 (the default, original model), a word counts as
+  # learned the instant its guess is correct -- so decay can only ever erase
+  # WRONG guesses, at the same moment disconfirmation would have anyway, and
+  # cannot slow learning by construction. With lock_k>0, a guess must survive
+  # lock_k consecutive re-exposures (confirmations) before the learner locks
+  # it in, and until then ANY guess -- correct or not -- can decay. Also:
+  #   - a confirmation counts as rehearsal and resets the decay clock;
+  #   - active target selection uses the LEARNER'S OWN lock state (which it
+  #     can observe), not the simulator's knowledge of correctness (which it
+  #     can't), so a wrongly-locked word is not re-targeted actively;
+  #   - a word is scored as learned when its guess is both locked and correct.
+  #     A locked wrong guess can still be disconfirmed (dropping its lock).
   if (is.null(active_prob)) active_prob <- as.numeric(active)
   probs <- if (uniform) rep(1 / M, M) else zipf_probs(M, a)
 
@@ -265,7 +278,8 @@ learn_corpus_guesstest <- function(C, M, a = 1, uniform = TRUE, active = FALSE,
         break
       }
     }
-    target <- choose_target(M, probs, word_known, times_targeted, active_prob,
+    believed_known <- if (lock_k > 0) confirm_count >= lock_k else word_known
+    target <- choose_target(M, probs, believed_known, times_targeted, active_prob,
                              active_policy, choice_k, goldilocks_target, goldilocks_sigma)
     times_targeted[target] <- times_targeted[target] + 1L
     nontarg <- setdiff(1:M, target)
@@ -278,7 +292,14 @@ learn_corpus_guesstest <- function(C, M, a = 1, uniform = TRUE, active = FALSE,
     cc <- c(target, distractors)  # target's true referent is "target" itself (1-1 convention)
 
     g <- current_guess[target]
-    if (p_decay > 0 && g != 0L) {
+    # !word_known[target] enforces the exemption described above. Without it
+    # (as in an earlier version), a known word re-sampled after a long gap would
+    # lose its correct guess, re-propose, and claim ANOTHER word's referent --
+    # blocking that word. Only passive sampling ever re-targets known words, so
+    # this bug slowed passive but not active learning, masquerading as a
+    # "forgetting widens the active advantage" result.
+    exempt <- if (lock_k > 0) confirm_count[target] >= lock_k else word_known[target]
+    if (p_decay > 0 && g != 0L && !exempt) {
       elapsed <- episodes - guess_since[target]
       if (elapsed > 0 && runif(1) < 1 - (1 - p_decay)^elapsed) {
         # forgotten during the gap since this guess was last checked in on
@@ -305,9 +326,11 @@ learn_corpus_guesstest <- function(C, M, a = 1, uniform = TRUE, active = FALSE,
       }
     } else {
       confirm_count[target] <- confirm_count[target] + 1L
+      if (lock_k > 0) guess_since[target] <- episodes  # rehearsal resets the decay clock
     }
 
-    if (!word_known[target] && current_guess[target] == target) {
+    if (!word_known[target] && current_guess[target] == target &&
+        (lock_k == 0 || confirm_count[target] >= lock_k)) {
       n_learned <- n_learned + 1
       word_known[target] <- TRUE
       for (dd in 1:9) if (n_learned >= deciles[dd] && !eps_to_learn_decile[dd]) eps_to_learn_decile[dd] <- episodes

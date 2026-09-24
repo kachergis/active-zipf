@@ -17,7 +17,7 @@ p <- ggplot(summ, aes(x = checkpoint, y = mean_ep, color = active, group = activ
   scale_y_log10(labels = scales::comma) +
   scale_color_manual(values = c(Active = "#377eb8", Passive = "#D55E00")) +
   labs(x = "Vocabulary completion checkpoint", y = "Mean episodes (log scale)", color = NULL,
-       title = "Forgetting widens, rather than narrows, guess-test's active/passive gap",
+       title = "Forgetting of unconfirmed guesses leaves guess-test's active/passive gap unchanged",
        subtitle = "Unconfirmed guesses decay if not rehearsed (t1/2 = forgetting half-life in episodes); C=10, a=1") +
   theme_bw(base_size = 12) + theme(strip.background = element_rect(fill = "grey90"))
 ggsave("../../paper/decay_sweep.pdf", p, width = 11, height = 4.5)
