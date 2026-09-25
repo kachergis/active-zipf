@@ -1,6 +1,6 @@
 # Builds the completion-checkpoint (50/90/99%) table and figure for the paper,
 # from the EXACT datasets already backing Table~tab-incremental and
-# Figure~fig-incremental-sim (full_grid_results.rds, old_eliminative_C100.csv,
+# Figure~fig-incremental-sim (full_grid_results.rds, c100_a1_results.rds,
 # guesstest_results.rds) -- not a new simulation, and not the separate
 # active-selection-extensions sweep used elsewhere in corpusXSL/analysis.
 # Every learner records dec5 (episodes to 50% known), dec9 (90%), and p99
@@ -9,12 +9,14 @@
 
 suppressMessages({library(dplyr); library(ggplot2); library(tidyr)})
 
-## ---- Eliminative, C=10 and C=100 (Zipfian, a=1, Random context) ----
+## ---- Eliminative, C=10 (Random context) and C=100 (Familiar context), Zipfian a=1 ----
+## At C=100 no random-context run finishes (run_c100_a1.R), so the C=100 row
+## uses familiar context, the only condition in which learning completes.
 elim10 <- readRDS("full_grid_results.rds") %>%
   filter(M == 1000, a == 1, uniform == "Zipfian", C == 10, fam_context == "Random")
-elim100 <- read.csv("old_eliminative_C100.csv") %>%
-  filter(uniform == "Zipfian", fam_context == "Random") %>%
-  mutate(C = 100)
+elim100 <- readRDS("c100_a1_results.rds") %>%
+  filter(context == "Familiar") %>%
+  mutate(C = 100, p99 = episodes)
 elim <- bind_rows(elim10 %>% select(active, C, dec5, dec9, p99),
                    elim100 %>% select(active, C, dec5, dec9, p99)) %>%
   mutate(model = "Eliminative")
@@ -28,7 +30,8 @@ gt10 <- readRDS("guesstest_results.rds") %>%
 
 d <- bind_rows(elim, gt10)
 d$model <- factor(d$model, levels = c("Eliminative", "Guess-test"))
-d$Clabel <- factor(paste0("C=", d$C), levels = c("C=10", "C=100"))
+d$Clabel <- factor(ifelse(d$C == 10, "C=10 (random context)", "C=100 (familiar context)"),
+                   levels = c("C=10 (random context)", "C=100 (familiar context)"))
 
 long <- d %>%
   pivot_longer(c(dec5, dec9, p99), names_to = "checkpoint", values_to = "episodes") %>%
