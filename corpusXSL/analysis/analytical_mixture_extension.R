@@ -1,3 +1,12 @@
+# SUPERSEDED (see run_c100_a1.R, run_c100_active_modes.R, c100_absence_probability.R).
+# This bound approximates the distractor draw as WITH replacement, giving the
+# most frequent referent an absence probability of ~7e-7 at C=100, a=1; the
+# exact value for the actual without-replacement draw is ~5.4e-10. Its C=100
+# predictions (e.g. 1.46e9 episodes for pure active selection) are therefore
+# far too optimistic: simulation with the exact C++ learner shows that
+# random-context learning at C=100, a=1 never completes, even under pure
+# active selection. Kept for the record; do not use its estimates.
+#
 # Extends analytical_elimination_bound.R's C=100 coverage from the two pure
 # extremes (active_prob=0, active_prob=1/unknown/unrestricted) to the 8
 # genuinely-open eliminative/C=100 cells: intermediate active_prob mixtures,

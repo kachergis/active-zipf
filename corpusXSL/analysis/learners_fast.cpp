@@ -1,6 +1,8 @@
 // Exact C++ port of learn_corpus_eliminative() (learners.R) for the cases the
-// R version cannot finish at C=100: constant active_prob in {0,1}, random or
-// familiar context, with or without cross-word mutual exclusivity. Same model, same sampling rule, same
+// R version cannot finish at C=100: random or familiar context, with or
+// without cross-word mutual exclusivity, and the full target-selection rule of
+// learners.R's choose_target() (active_prob mixtures, the "unknown" and
+// "goldilocks" policies, and bounded choice sets choice_k). Same model, same sampling rule, same
 // learning criterion -- only the bookkeeping differs:
 //   - weighted draws use a Fenwick tree (O(log M)) instead of R's sample(),
 //     whose weighted sampling without replacement is O(M*C) per episode;
@@ -41,7 +43,19 @@ struct Fenwick {
 // [[Rcpp::export]]
 NumericVector elim_fast(int C, int M, NumericVector probs, bool active,
                         bool fam_context, double epsilon = 0.01,
-                        double max_episodes = 1e18, bool mutual_exclusivity = false) {
+                        double max_episodes = 1e18, bool mutual_exclusivity = false,
+                        double active_prob = -1, int policy = 0, int choice_k = 0,
+                        double gold_target = 2, double gold_sigma = 2) {
+  // Target selection mirrors choose_target() in learners.R:
+  //   active_prob < 0 -> use `active` (0 or 1), as in the original model;
+  //     otherwise each episode is active with probability active_prob (a
+  //     uniform draw is consumed only when 0 < active_prob < 1, as in R).
+  //   passive episode: target ~ probs over all words.
+  //   active episode: pool = all words (choice_k = 0) or choice_k words drawn
+  //     without replacement ~ probs; among the pool's unknown words choose
+  //     ~ probs (policy 0, "unknown") or ~ probs * exp(-(times_targeted -
+  //     gold_target)^2 / (2 gold_sigma^2)) (policy 1, "goldilocks"); if the
+  //     pool has no unknown word, a passive draw within the pool.
   // mutual_exclusivity (as in learners.R): when word w is learned, referent w is
   // removed from every still-unknown word's candidate set (hyp[others, w] <- 0),
   // and any word left with a single candidate is learned in the same episode,
@@ -53,9 +67,12 @@ NumericVector elim_fast(int C, int M, NumericVector probs, bool active,
   std::vector<char> known(M, 0), seen(M, 0), inctx(M, 0);
   std::vector<std::vector<int>> cand(M);
   std::vector<int> colcount(M, M);  // colSums(hyp): hyp starts all ones
-  Fenwick targ(M), dist(M);
+  const double AP = active_prob < 0 ? (active ? 1.0 : 0.0) : active_prob;
+  Fenwick targ_all(M), targ_unk(M), dist(M);  // targ_unk: known words zeroed
+  std::vector<int> times_targeted(M, 0);
   for (int i = 0; i < M; i++) {
-    targ.set(i, probs[i]);
+    targ_all.set(i, probs[i]);
+    targ_unk.set(i, probs[i]);
     dist.set(i, fam_context ? probs[i] / (M + 1.0) : probs[i]);
   }
   auto refresh_dist = [&](int r) {
@@ -68,16 +85,60 @@ NumericVector elim_fast(int C, int M, NumericVector probs, bool active,
   std::vector<double> saved(C);
   auto mark_learned = [&](int w) {
     known[w] = 1; n_learned++;
-    if (active) targ.set(w, 0.0);
+    targ_unk.set(w, 0.0);
     for (int d = 0; d < 9; d++)
       if (n_learned >= M * 0.1 * (d + 1) && dec[d] == 0) dec[d] = episodes;
   };
 
+  // weighted draw from an explicit candidate list (R's sample(x, 1, prob = w))
+  auto pick = [&](const std::vector<int> &x, const std::vector<double> &wt) {
+    if (x.size() == 1) return x[0];
+    double tot = 0; for (double v : wt) tot += v;
+    double u = unif_rand() * tot;
+    for (size_t i = 0; i < x.size(); i++) { u -= wt[i]; if (u < 0) return x[i]; }
+    return x.back();
+  };
+  std::vector<int> pool, unk; std::vector<double> pw, pool_saved;
+  auto choose_target = [&]() -> int {
+    bool do_active = AP >= 1 ? true : (AP <= 0 ? false : unif_rand() < AP);
+    if (!do_active) return targ_all.sample();
+    if (choice_k <= 0 || choice_k >= M) {
+      if (policy == 0) return targ_unk.sample();
+      unk.clear(); pw.clear();
+      for (int i = 0; i < M; i++) if (!known[i]) {
+        double dd = times_targeted[i] - gold_target;
+        unk.push_back(i); pw.push_back(exp(-(dd * dd) / (2 * gold_sigma * gold_sigma)) * probs[i]);
+      }
+      double tot = 0; for (double v : pw) tot += v;
+      if (tot <= 0) for (size_t i = 0; i < unk.size(); i++) pw[i] = probs[unk[i]];
+      return pick(unk, pw);
+    }
+    // bounded choice set: choice_k words without replacement ~ probs
+    pool.clear(); pool_saved.clear();
+    for (int k = 0; k < choice_k; k++) {
+      int r = targ_all.sample(); pool.push_back(r); pool_saved.push_back(targ_all.w[r]); targ_all.set(r, 0.0);
+    }
+    for (int k = choice_k - 1; k >= 0; k--) targ_all.set(pool[k], pool_saved[k]);
+    unk.clear(); pw.clear();
+    for (int r : pool) if (!known[r]) {
+      unk.push_back(r);
+      if (policy == 1) { double dd = times_targeted[r] - gold_target;
+        pw.push_back(exp(-(dd * dd) / (2 * gold_sigma * gold_sigma)) * probs[r]); }
+      else pw.push_back(probs[r]);
+    }
+    if (unk.empty()) {
+      pw.clear(); for (int r : pool) pw.push_back(probs[r]);
+      return pick(pool, pw);
+    }
+    if (policy == 1) { double tot = 0; for (double v : pw) tot += v;
+      if (tot <= 0) for (size_t i = 0; i < unk.size(); i++) pw[i] = probs[unk[i]]; }
+    return pick(unk, pw);
+  };
+
   while (n_learned < total_needed) {
     if (episodes >= max_episodes) { censored = true; break; }
-    // target: passive ~ probs over all words; active ~ probs over unknown words
-    // (targ has known words zeroed when active)
-    int target = targ.sample();
+    int target = choose_target();
+    times_targeted[target]++;
     // distractors: C-1 draws without replacement from non-targets, weights dist
     saved[0] = dist.w[target]; dist.set(target, 0.0); ctx[0] = target;
     for (int k = 1; k < C; k++) {

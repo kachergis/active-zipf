@@ -1,3 +1,12 @@
+# SUPERSEDED (see run_c100_a1.R, run_c100_active_modes.R, c100_absence_probability.R).
+# This bound approximates the distractor draw as WITH replacement, giving the
+# most frequent referent an absence probability of ~7e-7 at C=100, a=1; the
+# exact value for the actual without-replacement draw is ~5.4e-10. Its C=100
+# predictions (e.g. 1.46e9 episodes for pure active selection) are therefore
+# far too optimistic: simulation with the exact C++ learner shows that
+# random-context learning at C=100, a=1 never completes, even under pure
+# active selection. Kept for the record; do not use its estimates.
+#
 # Analytical approximation for the ELIMINATIVE model's expected episodes to
 # learn a Zipfian vocabulary, as an alternative to brute-force simulation for
 # conditions (like C=100) where simulation is impractically slow.
