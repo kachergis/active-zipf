@@ -40,12 +40,12 @@ struct Fenwick {
   }
 };
 
-// [[Rcpp::export]]
-NumericVector elim_fast(int C, int M, NumericVector probs, bool active,
-                        bool fam_context, double epsilon = 0.01,
-                        double max_episodes = 1e18, bool mutual_exclusivity = false,
-                        double active_prob = -1, int policy = 0, int choice_k = 0,
-                        double gold_target = 2, double gold_sigma = 2, bool pool_uniform = false) {
+static NumericVector elim_core(int C, int M, NumericVector probs, bool active,
+                        bool fam_context, double epsilon,
+                        double max_episodes, bool mutual_exclusivity,
+                        double active_prob, int policy, int choice_k,
+                        double gold_target, double gold_sigma, bool pool_uniform,
+                        bool fam_seen_only, int trace_every, std::vector<double> *trace) {
   // Target selection mirrors choose_target() in learners.R:
   //   active_prob < 0 -> use `active` (0 or 1), as in the original model;
   //     otherwise each episode is active with probability active_prob (a
@@ -58,6 +58,13 @@ NumericVector elim_fast(int C, int M, NumericVector probs, bool active,
   //     pool has no unknown word, a passive draw within the pool.
   //   pool_uniform (diagnostic only; not in learners.R): draw the choice_k
   //     pool uniformly without replacement instead of ~ probs.
+  // fam_seen_only (diagnostic only; not in learners.R): familiar-context
+  //   weights use the number of SEEN words still holding referent r as a
+  //   candidate, 1/(colcount[r] - n_unseen + 1), instead of colSums(hyp).
+  //   An unseen word's row is all ones, so in the original weighting every
+  //   unseen word adds the same +1 to every referent's count, diluting the
+  //   familiarity signal while many words are unseen; this option removes
+  //   that dilution (non-ME only).
   // mutual_exclusivity (as in learners.R): when word w is learned, referent w is
   // removed from every still-unknown word's candidate set (hyp[others, w] <- 0),
   // and any word left with a single candidate is learned in the same episode,
@@ -72,14 +79,22 @@ NumericVector elim_fast(int C, int M, NumericVector probs, bool active,
   const double AP = active_prob < 0 ? (active ? 1.0 : 0.0) : active_prob;
   Fenwick targ_all(M), targ_unk(M), dist(M);  // targ_unk: known words zeroed
   std::vector<int> times_targeted(M, 0);
+  int n_unseen = M;
+  auto fam_weight = [&](int r) {
+    return probs[r] / (colcount[r] - (fam_seen_only ? n_unseen : 0) + 1.0);
+  };
   for (int i = 0; i < M; i++) {
     targ_all.set(i, probs[i]);
     targ_unk.set(i, probs[i]);
-    dist.set(i, fam_context ? probs[i] / (M + 1.0) : probs[i]);
+    dist.set(i, fam_context ? fam_weight(i) : probs[i]);
   }
   auto refresh_dist = [&](int r) {
-    if (fam_context) dist.set(r, probs[r] / (colcount[r] + 1.0));
+    if (fam_context) dist.set(r, fam_weight(r));
   };
+  // tracing: competitor survival = share of the target's remaining competitors
+  // (candidates other than its true referent) that reappear as distractors,
+  // i.e. fail to be eliminated, on episodes where the target was already seen
+  double tr_surv = 0, tr_n = 0;
   NumericVector dec(9, 0.0);
   double n_learned = 0, episodes = 0;
   bool censored = false;
@@ -158,12 +173,18 @@ NumericVector elim_fast(int C, int M, NumericVector probs, bool active,
     }
     for (int k = C - 1; k >= 0; k--) dist.set(ctx[k], saved[k]);  // restore
     for (int k = 0; k < C; k++) inctx[ctx[k]] = 1;
+    if (trace && seen[target] && cand[target].size() > 1) {
+      int hits = 0;
+      for (int r : cand[target]) if (r != target && inctx[r]) hits++;
+      tr_surv += (double)hits / (cand[target].size() - 1); tr_n++;
+    }
     // eliminate target's candidates absent from this context
     if (!seen[target]) {
-      seen[target] = 1;
+      seen[target] = 1; n_unseen--;
       if (!mutual_exclusivity) {
         for (int r = 0; r < M; r++) if (!inctx[r]) { colcount[r]--; refresh_dist(r); }
         cand[target].assign(ctx.begin(), ctx.end());
+        if (fam_context && fam_seen_only) for (int r = 0; r < M; r++) refresh_dist(r);
       } else {
         // row already has zeros at known referents (an unseen word is unknown)
         for (int r = 0; r < M; r++) if (!inctx[r] && !known[r]) { colcount[r]--; refresh_dist(r); }
@@ -209,10 +230,46 @@ NumericVector elim_fast(int C, int M, NumericVector probs, bool active,
       }
     }
     episodes++;
+    if (trace && trace_every > 0 && ((long long)episodes % trace_every) == 0) {
+      trace->push_back(episodes); trace->push_back(n_unseen); trace->push_back(n_learned);
+      trace->push_back(tr_n > 0 ? tr_surv / tr_n : NA_REAL);
+      tr_surv = 0; tr_n = 0;
+    }
     if (((long long)episodes & 0xFFFF) == 0) Rcpp::checkUserInterrupt();
   }
   NumericVector out(11);
   for (int d = 0; d < 9; d++) out[d] = dec[d];
   out[9] = episodes; out[10] = censored ? 1 : 0;
   return out;
+}
+
+// [[Rcpp::export]]
+NumericVector elim_fast(int C, int M, NumericVector probs, bool active,
+                        bool fam_context, double epsilon = 0.01,
+                        double max_episodes = 1e18, bool mutual_exclusivity = false,
+                        double active_prob = -1, int policy = 0, int choice_k = 0,
+                        double gold_target = 2, double gold_sigma = 2, bool pool_uniform = false,
+                        bool fam_seen_only = false) {
+  return elim_core(C, M, probs, active, fam_context, epsilon, max_episodes, mutual_exclusivity,
+                   active_prob, policy, choice_k, gold_target, gold_sigma, pool_uniform,
+                   fam_seen_only, 0, nullptr);
+}
+
+// Same simulation, additionally returning a trajectory sampled every
+// trace_every episodes: n_unseen (words never yet targeted), n_learned, and
+// the mean competitor-survival rate over the preceding window (see above).
+// [[Rcpp::export]]
+List elim_trace(int C, int M, NumericVector probs, bool fam_context, int trace_every,
+                double max_episodes = 1e18, double active_prob = 1, int policy = 0,
+                int choice_k = 0, bool pool_uniform = false, bool fam_seen_only = false) {
+  std::vector<double> tr;
+  NumericVector res = elim_core(C, M, probs, false, fam_context, 0.01, max_episodes, false,
+                                active_prob, policy, choice_k, 2, 2, pool_uniform,
+                                fam_seen_only, trace_every, &tr);
+  int n = tr.size() / 4;
+  NumericVector ep(n), un(n), le(n), sv(n);
+  for (int i = 0; i < n; i++) { ep[i] = tr[4*i]; un[i] = tr[4*i+1]; le[i] = tr[4*i+2]; sv[i] = tr[4*i+3]; }
+  return List::create(Named("result") = res,
+                      Named("trace") = DataFrame::create(Named("episode") = ep, Named("n_unseen") = un,
+                                                         Named("n_learned") = le, Named("competitor_survival") = sv));
 }
