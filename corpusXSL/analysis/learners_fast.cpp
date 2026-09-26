@@ -45,7 +45,7 @@ NumericVector elim_fast(int C, int M, NumericVector probs, bool active,
                         bool fam_context, double epsilon = 0.01,
                         double max_episodes = 1e18, bool mutual_exclusivity = false,
                         double active_prob = -1, int policy = 0, int choice_k = 0,
-                        double gold_target = 2, double gold_sigma = 2) {
+                        double gold_target = 2, double gold_sigma = 2, bool pool_uniform = false) {
   // Target selection mirrors choose_target() in learners.R:
   //   active_prob < 0 -> use `active` (0 or 1), as in the original model;
   //     otherwise each episode is active with probability active_prob (a
@@ -56,6 +56,8 @@ NumericVector elim_fast(int C, int M, NumericVector probs, bool active,
   //     ~ probs (policy 0, "unknown") or ~ probs * exp(-(times_targeted -
   //     gold_target)^2 / (2 gold_sigma^2)) (policy 1, "goldilocks"); if the
   //     pool has no unknown word, a passive draw within the pool.
+  //   pool_uniform (diagnostic only; not in learners.R): draw the choice_k
+  //     pool uniformly without replacement instead of ~ probs.
   // mutual_exclusivity (as in learners.R): when word w is learned, referent w is
   // removed from every still-unknown word's candidate set (hyp[others, w] <- 0),
   // and any word left with a single candidate is learned in the same episode,
@@ -115,10 +117,19 @@ NumericVector elim_fast(int C, int M, NumericVector probs, bool active,
     }
     // bounded choice set: choice_k words without replacement ~ probs
     pool.clear(); pool_saved.clear();
-    for (int k = 0; k < choice_k; k++) {
-      int r = targ_all.sample(); pool.push_back(r); pool_saved.push_back(targ_all.w[r]); targ_all.set(r, 0.0);
+    if (pool_uniform) {
+      // partial Fisher-Yates over 0..M-1
+      std::vector<int> idx(M); for (int i = 0; i < M; i++) idx[i] = i;
+      for (int k = 0; k < choice_k; k++) {
+        int j = k + (int)(unif_rand() * (M - k)); if (j >= M) j = M - 1;
+        std::swap(idx[k], idx[j]); pool.push_back(idx[k]);
+      }
+    } else {
+      for (int k = 0; k < choice_k; k++) {
+        int r = targ_all.sample(); pool.push_back(r); pool_saved.push_back(targ_all.w[r]); targ_all.set(r, 0.0);
+      }
+      for (int k = choice_k - 1; k >= 0; k--) targ_all.set(pool[k], pool_saved[k]);
     }
-    for (int k = choice_k - 1; k >= 0; k--) targ_all.set(pool[k], pool_saved[k]);
     unk.clear(); pw.clear();
     for (int r : pool) if (!known[r]) {
       unk.push_back(r);

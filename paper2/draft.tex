@@ -38,27 +38,30 @@
 \begin{itemize}
 \item \textbf{The starting point.} Hidaka, Torii, \& Kachergis (companion paper) show that active selection of learning situations--choosing which word to target, and/or which distractors accompany it--dramatically speeds up cross-situational word learning under Zipfian word and referent distributions, robustly across idealized analysis, incremental simulation with three distinct learning mechanisms, and two independent real datasets (SUN scene database, Flickr8k captions).
 
-\item \textbf{The gap that paper leaves open.} Throughout, ``active'' is treated as a fixed property of the learner: constantly active, constantly passive, or some constant blend, for the whole simulated run. This is true of every condition in that paper, including its own partial-autonomy sweep (active\_prob as a constant). Two things this abstraction leaves out:
+\item \textbf{The gap that paper leaves open.} Throughout, ``active'' is treated as a fixed, idealized property of the learner: active on every episode or on none, for the whole simulated run, and when active, free to choose among the entire vocabulary. Three things this abstraction leaves out:
   \begin{itemize}
   \item[--] \textit{Situations aren't free to obtain, and not all ways of obtaining one cost the same.} Real active selection isn't just ``pick a target word''--a learner (or caregiver) can also choose whether to linger on the situation already in front of them (ask for more information about the current scene) or seek out a new one (construct/find a new scene). These plausibly have different costs, and the earlier paper's synthetic simulations, which never separated situation content from situation-acquisition cost, couldn't expose this dimension at all.
-  \item[--] \textit{Real learners aren't born active.} Infants start with essentially no control over which scenes they experience--carried from room to room--and only gradually acquire the motor and attentional control (head-turning, pointing, reaching, eventually crawling and walking) that lets them actively select what to attend to. The companion paper's constant-active\_prob framing has no way to represent this trajectory, only its time-averaged level.
+  \item[--] \textit{Real learners aren't born active.} Infants start with essentially no control over which scenes they experience--carried from room to room--and only gradually acquire the motor and attentional control (head-turning, pointing, reaching, eventually crawling and walking) that lets them actively select what to attend to. The companion paper's framing has no way to represent this trajectory.
+  \item[--] \textit{Real learners are only sometimes in control, and only over what is at hand.} A child exercises choice on some occasions and not others, chooses among the objects that happen to be available rather than every object it will ever name, and may prefer items of intermediate familiarity rather than simply the least-known.
   \end{itemize}
 
-\item \textbf{What this paper adds.} Two results, developed as appendices to the companion paper before we recognized they answer a different question than the one that paper is about:
+\item \textbf{What this paper adds.} Three results. Studies 1 and 2 were developed as appendices to the companion paper before we recognized they answer a different question than the one that paper is about; Study 3 replaces a partial-autonomy analysis that was never part of that paper:
   \begin{itemize}
   \item[--] \textbf{Study 1 (real data): the linger-vs-move-on tradeoff.} Using Flickr8k (8,108 photographs, 5 independent captions each) as a naturalistic testbed, we show target selection's benefit is robust to real (non-synthetic) co-occurrence structure, and that a second active choice--linger on the current scene for another caption, or move to a new one--has a genuine crossover: moving on wins when switching scenes is cheap, lingering wins once switching is expensive enough, located precisely between two tested cost levels.
   \item[--] \textbf{Study 2 (developmental timing): passive-to-active trajectories.} Motivated by the observation (from the companion paper's completion-checkpoint analysis) that active selection's marginal value grows over the course of learning, we show a learner who starts passive and becomes active on a fast-enough timescale captures nearly all of active selection's benefit--and, more surprisingly, that the ``reverse'' trajectory (active early, passive late) shows a sharp threshold rather than a graceful degradation, located near pure-active sampling's own completion time.
+  \item[--] \textbf{Study 3 (the active learner): partial autonomy, Goldilocks targeting, and bounded choice.} Being active on only a quarter of episodes captures most of active selection's benefit in every setting tested. Goldilocks targeting and bounded choice sets matter little in most settings but a great deal at large context size with familiar-context selection, where frequency-weighted choice sets make learning up to 11 times slower--a cost that disappears when the choice set is drawn uniformly.
   \end{itemize}
 
-\item \textbf{The unifying claim (to be sharpened).} Active learning's benefit is not simply a dial (how much autonomy does the learner have) but has real structure in \textit{how} that autonomy gets deployed--across situations (explore vs.\ exploit the current one) and across developmental time (when does the transition to self-direction happen, not just how much self-direction accumulates). Both studies point the same direction: naive intuitions (``more active time is better, spent however''; ``a constant blend should be about as good as a well-timed one'') are each wrong in a specific, locatable way.
+\item \textbf{The unifying claim (to be sharpened).} Active learning's benefit is not simply a dial (how much autonomy does the learner have) but has real structure in \textit{how} that autonomy gets deployed--across situations (explore vs.\ exploit the current one) across developmental time (when does the transition to self-direction happen, not just how much self-direction accumulates), and across what the learner can choose among (whether the choice set spans the vocabulary or over-represents common items). All three studies point the same direction: naive intuitions (``more active time is better, spent however''; ``a constant blend should be about as good as a well-timed one''; ``any choice is nearly as good as full choice'') are each wrong in a specific, locatable way.
 
 \item \textbf{What's still needed before this is submittable} (not yet done; flagging honestly):
   \begin{itemize}
   \item[--] An actual Introduction connecting to the relevant literatures: foraging theory / patch-leaving decisions (Marginal Value Theorem) for Study 1; infant motor development and its relationship to visual/attentional experience (e.g.\ crawling-onset literature) for Study 2.
-  \item[--] A Discussion tying the two studies together under the unifying claim above, and being honest about how far that claim actually extends (right now the connection is more thematic than mechanistic--the two studies don't share a common formal framework yet).
-  \item[--] Possibly: extending Study 1 and/or 2 to the other two learning mechanisms (guess-test, ranked-frequency), currently both eliminative-only.
+  \item[--] A Discussion tying the three studies together under the unifying claim above, and being honest about how far that claim actually extends (right now the connection is more thematic than mechanistic--the studies don't share a common formal framework yet).
+  \item[--] Possibly: extending Studies 1--3 to the other two learning mechanisms (guess-test, ranked-frequency), currently all eliminative-only.
+  \item[--] Study 3: testing the conjectured mechanism behind the bounded-choice and Goldilocks effects at $C=100$ with familiar context (spreading exposures across the vocabulary; see Study 3's Results).
   \item[--] Possibly: a data-driven estimate of Study 2's ramp timescale $T$, rather than treating it as a swept free parameter--egocentric child video (e.g.\ SAYCam) is the natural source, as discussed in the companion paper's Discussion re: AI sample efficiency.
-  \item[--] Deciding whether Study 1 and Study 2 are better presented as two studies in one paper (current plan) or split further--they are thematically related (both about the deployment, not existence, of active selection's benefit) but methodologically fairly separate (real captions vs.\ synthetic ramps).
+  \item[--] Deciding whether Studies 1--3 are better presented as three studies in one paper (current plan) or split further--they are thematically related (all about the deployment, not existence, of active selection's benefit) but methodologically fairly separate (real captions vs.\ synthetic simulations).
   \end{itemize}
 \end{itemize}
 
@@ -110,7 +113,7 @@ This result should be read as a demonstration that the mechanism generalizes to 
 \section{Study 2: A developmental passive-to-active trajectory}
 \label{app-ramp}
 
-Every active-learning condition in the companion paper holds the degree of autonomy fixed for the whole simulated lifetime of the learner--constantly active, constantly passive, or some constant blend of the two throughout (that paper's partial-autonomy sweep). Real infants do not work this way: a newborn is carried from room to room with essentially no say over which scenes it experiences, and only gradually acquires the visual, postural, and locomotor control--head-turning, pointing, reaching, eventually crawling and walking--that lets it actively select what to attend to. This study asks whether that developmental trajectory itself, quite apart from its eventual endpoint, has consequences for how much of active selection's benefit a learner realizes.
+Every active-learning condition in the companion paper holds the degree of autonomy fixed for the whole simulated lifetime of the learner--constantly active or constantly passive throughout; constant blends of the two are examined in Study 3 below. Real infants do not work this way: a newborn is carried from room to room with essentially no say over which scenes it experiences, and only gradually acquires the visual, postural, and locomotor control--head-turning, pointing, reaching, eventually crawling and walking--that lets it actively select what to attend to. This study asks whether that developmental trajectory itself, quite apart from its eventual endpoint, has consequences for how much of active selection's benefit a learner realizes.
 
 \subsection{Motivation and setup}
 The companion paper's completion-checkpoint analysis already implies an answer is possible: the active/passive gap widens over the course of learning (roughly 4-fold at 50\% completion, 9-fold at 90\%, 19-fold at 99\%, for the eliminative learner at $C=10$), meaning active selection's marginal value is low early--common words get learned quickly under either policy--and high late, when only rare stragglers remain. If a fixed ``active budget'' is worth more late than early, a learner who starts passive and becomes active over time should outperform a constant blend that spends the same budget evenly, and should do considerably better than a learner who front-loads the same budget into the early, low-value period.
@@ -152,8 +155,64 @@ Extending the sweep past the original three timescales reveals a further, unanti
 \subsection{Scope}
 These results support a narrow but useful claim: a plausible developmental trajectory--little control early, more control later--is not merely ``a blend of the extremes'' with a worse average, and under the mechanism we model here, it need not sacrifice much of active selection's benefit relative to being fully active from birth, provided the transition happens on a fast-enough timescale relative to the vocabulary at hand. We make no claim about what timescale actually describes real infant development, nor have we tested ramp shapes other than linear, or mechanisms other than eliminative learning at a single $C$ and Zipf exponent; extending this analysis to the other learning mechanisms and to a data-driven estimate of the transition's real timescale--plausibly informed by egocentric video of infants' own visual experience as their motor repertoire develops--is a natural next step, not one we take here.
 
+\section{Study 3: How much autonomy, and over what?}
+\label{sec-modes}
+
+Studies 1 and 2 ask how active selection is deployed across situations and across developmental time. A third question concerns the active learner itself. In the companion paper, an active learner is idealized in two ways: it exercises choice on every episode, and whenever it does, it can choose among the entire vocabulary, preferring any word it does not yet know. Real learners exercise control only some of the time; they choose among whatever happens to be available (the toys in the room, not every object they will ever name); and they may not simply prefer the least-known item, since infants preferentially attend to stimuli of intermediate familiarity \citep[the ``Goldilocks effect'';][]{Kidd:2012}. This study relaxes each idealization in turn.
+
+\subsection{Setup}
+We extended the eliminative learner's target selection in three ways. \textit{Partial autonomy}: each episode is active with probability $\text{active\_prob} \in \{0.25, 0.5, 0.75\}$ and passive otherwise, a constant blend of the kind used as the reference point in Study 2. \textit{Goldilocks targeting}: among not-yet-known words, the learner prefers those it has encountered about twice, weighting each by $\exp(-(n-2)^2/8)$ times its frequency, where $n$ is the number of times the word has been the target so far. \textit{Bounded choice}: on each active episode the learner may choose only among a choice set of $k \in \{100, 50, 20, 5\}$ words, drawn without replacement in proportion to frequency (so that commonly-encountered things are more likely to be at hand), preferring an unknown word within the set and making a passive draw from the set if it contains none.
+
+We ran each condition, together with pure passive and fully active selection, in four settings for a Zipfian vocabulary of $M=1{,}000$ words: $C=10$ with random and with familiar context selection ($a=1$), and two settings at $C=100$. The companion paper shows that at $C=100$, $a=1$, the eliminative learner never completes with randomly-composed contexts, even under fully active selection, so there we use the two $C=100$ settings in which learning does complete: familiar context at $a=1$, and random context at $a=0.75$, the steepest skew at which random-context learning finished in every run. All conditions were simulated with the companion paper's fast reimplementation of the eliminative learner, which we validated for each of these target-selection rules against the reference implementation (200 replications per condition at $C=10$, 30 at $C=100$).
+
+\subsection{Results}
+Table~\ref{tab-modes} and Figure~\ref{fig-modes} report each condition's episodes to learn 99\% of the vocabulary relative to fully active selection in the same setting.
+
+\begin{table}[h]
+\centering
+\caption{\label{tab-modes} Episodes to learn 99\% of an $M=1{,}000$-word Zipfian vocabulary, eliminative learner, relative to fully active selection in the same setting (first row: fully active episodes). Values above 1 are slower than fully active.}
+\small
+\begin{tabular}{lrrrr}
+\hline
+ & \multicolumn{2}{c}{$C=10$, $a=1$} & \multicolumn{1}{c}{$C=100$, $a=0.75$} & \multicolumn{1}{c}{$C=100$, $a=1$} \\
+Condition & Random & Familiar & Random & Familiar \\
+\hline
+Fully active (episodes) & 4{,}692 & 3{,}132 & 628{,}691 & 16{,}060 \\
+\hline
+Passive & 19.0x & 14.2x & 10.6x & 26.6x \\
+25\% active & 2.67x & 2.51x & 2.33x & 1.81x \\
+50\% active & 1.67x & 1.63x & 1.58x & 1.34x \\
+75\% active & 1.24x & 1.23x & 1.21x & 1.11x \\
+Goldilocks & 1.00x & 1.04x & 1.00x & 0.56x \\
+Choice set of 100 & 1.03x & 1.09x & 1.03x & 5.51x \\
+Choice set of 50 & 1.13x & 1.15x & 1.09x & 8.01x \\
+Choice set of 20 & 1.54x & 1.43x & 1.32x & 11.3x \\
+Choice set of 5 & 4.15x & 3.32x & 2.78x & 10.4x \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=\linewidth]{active_modes.pdf}
+\caption{\label{fig-modes}
+Episodes to learn 99\% of the vocabulary relative to fully active selection (log scale; dashed line = fully active), eliminative learner, for partial autonomy, Goldilocks targeting, and bounded choice sets, in four settings. Pure passive sampling (10.6--26.6x) is omitted for scale.}
+\end{center}
+\end{figure}
+
+\textit{Partial autonomy shows steeply diminishing returns.} In every setting, a learner who is active on only a quarter of episodes already captures most of active selection's benefit: measured on a log scale, between two-thirds and four-fifths of the full passive-to-active speedup (e.g., at $C=10$ with random context, 7.1x of a possible 19.0x). Each further increment of autonomy buys less. This agrees with the constant blends in Study 2 (Table~\ref{tab-ramp}), and complements it: Study 2 shows that \textit{when} autonomy arrives matters a great deal, while this study shows that, once it has arrived, even occasional exercise of it goes a long way.
+
+\textit{Goldilocks targeting matters in only one setting.} Preferring words encountered about twice makes no difference in three of the four settings (0.996--1.04x), but nearly halves learning time at $C=100$ with familiar context (0.56x).
+
+\textit{The cost of bounded choice depends on the setting.} In three settings, restricting choice costs little until the choice set is small, and costs more the smaller it is (1.03--1.09x with 100 words to choose from, rising to 2.8--4.1x with 5). At $C=100$ with familiar context, the pattern is different: even a choice set of 100 makes learning 5.5 times slower, and the cost is not monotone in the size of the set (11.3x with 20 words, 10.4x with 5).
+
+A diagnostic isolates the cause of this last pattern. Drawing the choice set uniformly rather than in proportion to frequency, and otherwise leaving everything unchanged, removes the cost almost entirely at $C=100$ with familiar context: 15,124 episodes with a uniform set of 100 words and 15,894 with 20, against 15,876 for unrestricted choice (30 replications each). The cost therefore comes not from restricting choice as such but from choice sets that over-represent frequent words: when the set is drawn by frequency and the target is then chosen from it by frequency again, a rare word's chance of being targeted scales roughly with the square of its frequency, and rare words are rarely targeted at all. Together with the Goldilocks result, this suggests that at $C=100$ with familiar context, learning is fastest when exposures are spread across the whole vocabulary, including its rare words. We conjecture that this is because familiar-context selection's benefit is collective--a referent becomes an innocuous distractor only once it has been ruled out as the meaning of many words, which requires many different words to have been encountered--but we have not tested this directly.
+
+\subsection{Scope}
+Two conclusions seem robust across the settings we tested: partial autonomy has steeply diminishing returns, and most of active selection's benefit survives a learner who exercises it only occasionally. The results for Goldilocks targeting and bounded choice are more conditional. Their size, and at $C=100$ with familiar context their direction relative to other settings, depends on context size and on whether distractors are controlled, and at least for bounded choice, on what the available choice set contains rather than merely how large it is. If children's accessible objects are, like the objects they encounter generally, dominated by common ones, the composition of what is at hand may matter as much as the freedom to choose among it. We have tested only the eliminative mechanism, four settings, and frequency-weighted or uniform choice sets; how real choice sets are composed, and how large they are, are empirical questions we do not address.
+
 \section{Discussion (TODO)}
-Not yet written. Should connect Study 1 and Study 2 under the shared theme sketched in the Introduction bullets, discuss the foraging-theory and infant-motor-development literatures, and be explicit about what would be needed to strengthen the "unifying claim" from thematic to mechanistic.
+Not yet written. Should connect Studies 1--3 under the shared theme sketched in the Introduction bullets, discuss the foraging-theory and infant-motor-development literatures (and, for Study 3, the literature on curiosity and intermediate-familiarity preferences), and be explicit about what would be needed to strengthen the "unifying claim" from thematic to mechanistic.
 
 \bibliographystyle{apacite}
 \setlength{\bibleftmargin}{.125in}
