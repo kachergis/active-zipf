@@ -1,0 +1,3 @@
+"model","C","a","active_prob","active_policy","choice_k_label","n_ok","n_total","T_predicted","method","validated_error_at_C10"
+"eliminative",100,1,0,"unknown","Inf",0,91,10978359096.4997,"NegBinom(rarest word, N*, min_p) 99th pctile","~12% (79008 vs actual 89454)"
+"eliminative",100,1,1,"unknown","Inf",0,91,1463806499.74515,"M * mean_w(E[N_w]), no wasted draws","~8% (4353 vs actual 4695)"
