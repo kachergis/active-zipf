@@ -45,7 +45,8 @@ static NumericVector elim_core(int C, int M, NumericVector probs, bool active,
                         double max_episodes, bool mutual_exclusivity,
                         double active_prob, int policy, int choice_k,
                         double gold_target, double gold_sigma, bool pool_uniform,
-                        bool fam_seen_only, int trace_every, std::vector<double> *trace) {
+                        bool fam_seen_only, int trace_every, std::vector<double> *trace,
+                        std::vector<double> *learn_rec = nullptr) {
   // Target selection mirrors choose_target() in learners.R:
   //   active_prob < 0 -> use `active` (0 or 1), as in the original model;
   //     otherwise each episode is active with probability active_prob (a
@@ -102,6 +103,7 @@ static NumericVector elim_core(int C, int M, NumericVector probs, bool active,
   std::vector<double> saved(C);
   auto mark_learned = [&](int w) {
     known[w] = 1; n_learned++;
+    if (learn_rec) { learn_rec->push_back(w + 1); learn_rec->push_back(episodes); learn_rec->push_back(times_targeted[w]); }
     targ_unk.set(w, 0.0);
     for (int d = 0; d < 9; d++)
       if (n_learned >= M * 0.1 * (d + 1) && dec[d] == 0) dec[d] = episodes;
@@ -262,14 +264,21 @@ NumericVector elim_fast(int C, int M, NumericVector probs, bool active,
 List elim_trace(int C, int M, NumericVector probs, bool fam_context, int trace_every,
                 double max_episodes = 1e18, double active_prob = 1, int policy = 0,
                 int choice_k = 0, bool pool_uniform = false, bool fam_seen_only = false) {
-  std::vector<double> tr;
+  std::vector<double> tr, lr;
   NumericVector res = elim_core(C, M, probs, false, fam_context, 0.01, max_episodes, false,
                                 active_prob, policy, choice_k, 2, 2, pool_uniform,
-                                fam_seen_only, trace_every, &tr);
+                                fam_seen_only, trace_every, &tr, &lr);
   int n = tr.size() / 4;
   NumericVector ep(n), un(n), le(n), sv(n);
   for (int i = 0; i < n; i++) { ep[i] = tr[4*i]; un[i] = tr[4*i+1]; le[i] = tr[4*i+2]; sv[i] = tr[4*i+3]; }
+  int nl = lr.size() / 3;
+  IntegerVector lw(nl); NumericVector lep(nl), lex(nl);
+  for (int i = 0; i < nl; i++) { lw[i] = (int)lr[3*i]; lep[i] = lr[3*i+1]; lex[i] = lr[3*i+2]; }
+  // learned: word index (1-based, into probs), episode at which it was learned,
+  // and the number of times it had been the target by then (its exposures)
   return List::create(Named("result") = res,
                       Named("trace") = DataFrame::create(Named("episode") = ep, Named("n_unseen") = un,
-                                                         Named("n_learned") = le, Named("competitor_survival") = sv));
+                                                         Named("n_learned") = le, Named("competitor_survival") = sv),
+                      Named("learned") = DataFrame::create(Named("word") = lw, Named("episode") = lep,
+                                                           Named("exposures") = lex));
 }
