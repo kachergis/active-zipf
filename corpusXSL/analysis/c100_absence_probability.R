@@ -34,6 +34,28 @@ absent_prob <- function(w, r, k, lo = 1e-4, hi = 1e7, n = 12000) {
   sum(f * t) * diff(lt[1:2])  # dt = t d(log t)
 }
 
+# Same computation in C++, for large vocabularies (e.g. M=60,000, where the R
+# version's per-item loop is too slow). Checked against absent_prob() below.
+Rcpp::cppFunction('
+double absent_prob_fast(NumericVector w, int r, int k, double lo = 1e-4, double hi = 1e7, int n = 12000) {
+  int M = w.size(); double wr = w[r - 1];
+  double dlt = (std::log(hi) - std::log(lo)) / (n - 1), total = 0;
+  std::vector<double> dp(k);
+  for (int g = 0; g < n; g++) {
+    double t = std::exp(std::log(lo) + g * dlt);
+    std::fill(dp.begin(), dp.end(), 0.0); dp[0] = 1.0;
+    for (int j = 0; j < M; j++) {
+      if (j == r - 1) continue;
+      double pj = 1 - std::exp(-w[j] * t);
+      for (int i = k - 1; i >= 1; i--) dp[i] = dp[i] * (1 - pj) + dp[i - 1] * pj;
+      dp[0] *= (1 - pj);
+    }
+    double lower = 0; for (int i = 0; i < k; i++) lower += dp[i];
+    total += wr * std::exp(-wr * t) * (1 - lower) * t;
+  }
+  return total * dlt;
+}')
+
 if (sys.nframe() == 0) {
   M <- 1000
   out <- expand.grid(a = c(0.25, 0.5, 0.6, 0.7, 0.75, 0.8, 0.85, 0.9, 1), C = c(10, 100))
@@ -44,6 +66,18 @@ if (sys.nframe() == 0) {
   out$exposures_to_eliminate_top <- 1 / out$p_absent_top
   print(out, digits = 3)
   write.csv(out, "c100_absence_probability.csv", row.names = FALSE)
+
+  # Vocabulary-size comparison (C++ version), for the scaling table
+  sz <- expand.grid(M = c(1000, 10000, 60000), C = c(10, 100))
+  sz$p_top <- sz$p_absent_top <- sz$rarest_p <- NA
+  for (i in seq_len(nrow(sz))) {
+    w <- (1:sz$M[i])^-1; w <- w / sum(w)
+    sz$p_top[i] <- w[1]; sz$rarest_p[i] <- w[sz$M[i]]
+    sz$p_absent_top[i] <- absent_prob_fast(w[-sz$M[i]], 1, sz$C[i] - 1)
+  }
+  sz$episodes_for_rarest_to_rule_out_top <- 1 / (sz$p_absent_top * sz$rarest_p)
+  print(sz, digits = 3)
+  write.csv(sz, "absence_probability_by_M.csv", row.names = FALSE)
 
   # Check against direct simulation where the probability is large enough
   set.seed(7)
