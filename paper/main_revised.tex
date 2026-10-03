@@ -256,7 +256,15 @@ $W=10{,}000$ & Pre-literacy comprehension target \citep{Shipley:2015,Anglin:1993
 \end{table}
 
 \subsection{Roadmap}
-The Independent fast-mapping learning section analyzes fast-mapping under passive sampling, first for a uniform word frequency distribution (recovering \cite{Blythe:2010}'s original analysis), then for Zipfian and other skewed distributions, and finally for the empirical word frequency distribution of the CHILDES corpus of child-directed speech \citep{MacWhinney1990}. The Active learning section then introduces active learning, first analyzing the idealized case in which the learner has full knowledge of how referents and situations relate, then a more realistic online learner that must estimate this relationship from experience. Finally, the Incremental active learning section reports simulations of the incremental (non-fast-mapping) learner introduced above, crossed with passive and active sampling, to test whether the qualitative pattern of results survives when the most idealized assumptions of the earlier sections are relaxed.
+The Independent fast-mapping learning section analyzes fast-mapping under passive sampling, first for a uniform word frequency distribution (recovering \cite{Blythe:2010}'s original analysis), then for Zipfian and other skewed distributions, and finally for the empirical word frequency distribution of the CHILDES corpus of child-directed speech \citep{MacWhinney1990}. The Active learning section then introduces active learning, first analyzing the idealized case in which the learner has full knowledge of how referents and situations relate, then a more realistic online learner that must estimate this relationship from experience. Finally, the Incremental active learning section reports simulations of the incremental (non-fast-mapping) learner introduced above, crossed with passive and active sampling, to test whether the qualitative pattern of results survives when the most idealized assumptions of the earlier sections are relaxed. Figure~\ref{fig-processes} summarizes the forms of active control we analyze, and the main result for each.
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=\linewidth]{fig_active_processes.pdf}
+\caption{\label{fig-processes}
+Forms of active control analyzed in this paper, illustrated with the running example of a toddler learning the names of five toys. (A) In the fast-mapping analysis (Active learning section), the learner or caregiver chooses among scenes, each with its own mix of objects. Choosing scenes at random leaves the rarest words very rare; the active mixture $\hat q$ makes the rarest word as likely as possible. (B) In the incremental simulations (Incremental active learning section), each episode is composed in two steps--which word is the target, and what else is in view--before the learner updates each word's candidate referents. Grey: passive; orange: active. Italic notes give the main result for each form of control.}
+\end{center}
+\end{figure}
 
 \section{Independent fast-mapping learning}
 \label{sec-fastmap}
