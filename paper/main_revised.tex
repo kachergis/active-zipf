@@ -24,13 +24,7 @@
 \authornote{The authors have no conflict of interest to declare.}
 
 \abstract{
-Mathematical analyses of vocabulary growth have asked how long a learner who encounters words at random would take to learn a vocabulary, and have concluded that the time is plausible when every word is equally likely to be encountered.
-We show that this conclusion depends on that assumption. When a learner must wait for each word to occur, the rarest word sets the pace, and under the Zipfian word frequencies of child-directed speech the required number of learning episodes grows by a factor of about $\ln W$ for a vocabulary of $W$ words--7.5 to 11.6 times for vocabularies of 1,000 to 60,000 words, and more for real corpora.
-We then ask how much of this cost a learner (or caregiver) who influences which words and referents co-occur can recover.
-Choosing among scenes so that the rarest word becomes as likely as possible speeds learning 6.7-fold on a dataset of captioned photographs and 235-fold on a database of labeled scenes, and this choice can be learned online.
-Incremental learners that need several exposures per word, and preferentially target words they do not yet know, learn about 2--10 times faster than passive learners by the time they know 50--90\% of their vocabulary, and up to 19--28 times faster at 99\%.
-When tentative guesses can be forgotten, this advantage grows, because returning to unknown words also rehearses them.
-How children and caregivers structure learning situations, not exposure alone, may therefore be central to how a Zipfian vocabulary is learned.}
+Mathematical analyses of vocabulary growth have concluded that a learner who encounters words at random could learn a vocabulary in a plausible time, assuming every word is equally likely. We show that this conclusion depends on that assumption. When each word must be waited for, the rarest word sets the pace, and Zipfian word frequencies like those of child-directed speech multiply the required number of learning episodes by about $\ln W$ for a vocabulary of $W$ words--7.5 to 11.6 times for 1,000 to 60,000 words, and more for real corpora. We then ask how much of this cost a learner or caregiver who shapes which words and referents co-occur can recover. Choosing scenes so that the rarest word becomes as likely as possible speeds learning 6.7-fold on captioned photographs and 235-fold on labeled scenes, and the choice can be learned online. Incremental learners that target words they do not yet know learn about 2--10 times faster than passive learners by 50--90\% of their vocabulary, and up to 19--28 times faster at 99\%; the advantage grows when tentative guesses can be forgotten. How learning situations are structured, not exposure alone, may be central to learning a Zipfian vocabulary.}
 
 \keywords{Word learning; Cross-situational learning; Active learning; Zipf's law; Coupon collector problem}
 
@@ -136,7 +130,7 @@ Under a Zipfian distribution with exponent $a$, $p_r = r^{-a}/H_{W,a}$, where $H
 \end{equation}
 which for the standard exponent $a=1$ is simply $H_W \approx \ln W + 0.58$. This is 7.5 for $W=1{,}000$, 9.8 for 10,000, and 11.6 for 60,000--the factor of 11.58 reported by \cite{Blythe:2010} for 60,000 words. The penalty grows only logarithmically with vocabulary size, so it is nearly the same whether the target is a toddler's or an adult's vocabulary (Table~\ref{tab-Tplus}).
 
-The bound is tight in this case. For $W=60{,}000$, $a=1$, and $\epsilon=0.01$, $T_{+} = 1.08 \times 10^7$, while the exact root of Equation~\ref{eq-root} is $8.97 \times 10^6$. Steeper distributions are much harder: $\log T_+$ is convex in $a$ (Appendix~\ref{app-bound}), so $T_+$ grows faster than exponentially with the exponent (Figure~\ref{fig-estimate}).
+The bound is tight. For $W=60{,}000$, $a=1$, and $\epsilon=0.01$, $T_{+} = 1.08 \times 10^7$, while the exact root of Equation~\ref{eq-root} is $8.97 \times 10^6$. Across the range of Figure~\ref{fig-estimate} ($0 < a \le 1.5$; $\epsilon$ from 0.01 to 0.99; $W$ of 10,000 or 60,000), $T_+$ exceeds the exact root by 11--43\%, and for the CHILDES distribution below by 11\%; it is therefore accurate enough for the order-of-magnitude comparisons we make. Steeper distributions are much harder: $\log T_+$ is convex in $a$ (Appendix~\ref{app-bound}), so $T_+$ grows faster than exponentially with the exponent (Figure~\ref{fig-estimate}).
 
 \begin{figure}[h]
 \begin{center}
@@ -147,7 +141,9 @@ Episodes needed for a fast-mapping learner to learn every word of a vocabulary o
 \end{figure}
 
 \subsection{Empirical word frequencies}
-Real distributions are more extreme than the idealized one. Table~\ref{tab-Tplus} applies Equation~\ref{eq-Tbound} to word frequencies from CHILDES, a corpus of child-directed speech \citep{MacWhinney1990}, and from Google Books \citep{Michel:2011} (Figure~\ref{fig-freq}). For CHILDES we excluded words occurring once, which are the most likely to be specific to one household, such as a pet's name. Because $T_+$ depends only on the rarest word, it is sensitive to how a corpus treats rare words: pooling many families may make some words look rarer than any one child finds them, while a finite corpus may miss rare words that every child hears. Excluding all words with fewer than 11 occurrences lowers $T_+$ to near the idealized Zipfian value; the Google Books list, which omits every word with fewer than 100,000 occurrences, still gives a value in the same range as the CHILDES estimate. Across these choices, the empirical penalty relative to uniform frequencies is 67 to 138 times, compared with 10 to 12 for an idealized Zipf distribution of the same size. We therefore treat the corpus estimates as confirming the direction and rough size of the Zipfian penalty, not as precise bounds.
+Real distributions are more extreme than the idealized one. Table~\ref{tab-Tplus} applies Equation~\ref{eq-Tbound} to word frequencies from CHILDES, a corpus of child-directed speech \citep{MacWhinney1990}, and from Google Books \citep{Michel:2011} (Figure~\ref{fig-freq}). For CHILDES we excluded words occurring once, which are the most likely to be specific to one household, such as a pet's name. Because $T_+$ depends only on the rarest word, it is sensitive to how a corpus treats rare words: pooling many families may make some words look rarer than any one child finds them, while a finite corpus may miss rare words that every child hears. Excluding all words with fewer than 11 occurrences lowers $T_+$ to near the idealized Zipfian value (the exact root, $7.7 \times 10^6$, is 19\% lower still); the Google Books list, which omits every word with fewer than 100,000 occurrences, still gives a value in the same range as the CHILDES estimate. Across these choices, the empirical penalty relative to uniform frequencies is 67 to 138 times, compared with 10 to 12 for an idealized Zipf distribution of the same size. We therefore treat the corpus estimates as confirming the direction and rough size of the Zipfian penalty, not as precise bounds.
+
+The CHILDES distribution is close to the standard exponent in its head but steeper in its tail. Fitting $p_r \propto r^{-a}$ to the token counts by maximum likelihood gives $a = 1.08$ for all words, $1.00$ for content words, and $0.91$ for the 213 function words (determiners, pronouns, auxiliaries, prepositions, conjunctions). These fits are dominated by frequent words. A log-log fit over ranks 10 and above gives slopes of 1.6--1.7 for all words and for content words alone. It is this steeper tail of rare content words, not a different exponent for function words, that makes the empirical penalty in Table~\ref{tab-Tplus} larger than the idealized value of $H_W$.
 
 \begin{table}[h]
 \centering
@@ -209,7 +205,7 @@ $\hat q$ assumes the learner knows $P$. To see whether this matters, we simulate
 \begin{figure}[h]
 \begin{center}
 \includegraphics[width=\linewidth]{OnlineActiveLearning.eps}
-\caption{\label{fig-online} Distribution of the number of episodes to finish learning for passive (red), optimal (green), and online active learners (blue), $W=1{,}000$, $S=100$. On average, online active learning was as fast as optimal active learning.}
+\caption{\label{fig-online} Distribution of the number of episodes to finish learning for the online active learner (orange circles: histogram over 100 runs; line: smoothed estimate), with the medians for the passive learner (black vertical line) and the optimal active learner (blue vertical line), $W=1{,}000$, $S=100$. On average, online active learning was as fast as optimal active learning.}
 \end{center}
 \end{figure}
 
