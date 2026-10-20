@@ -251,9 +251,9 @@ Zipfian penalty, passive & 13.4x & 12.5x & 12.8x \\
 \end{tabular}
 \end{table}
 
-Varying the exponent (Figure~\ref{fig-exponent}) gives the same dose-response pattern as the fast-mapping analysis: passive learning slows steeply as $a$ increases (eliminative: 6,676 episodes at $a=0$, 10,795 at $a=0.5$, 89,454 at $a=1$), and active selection's advantage grows with it.
+Varying the exponent (Figure~\ref{fig-exponent}) gives the same dose-response pattern as the fast-mapping analysis: passive learning slows steeply as $a$ increases (eliminative: 6,676 episodes at $a=0$, 10,795 at $a=0.5$, 89,454 at $a=1$, and $6.4 \times 10^7$ at $a=1.5$), and active selection's advantage grows with it, from 3.2-fold at $a=0$ to 19-fold at $a=1$ and 216-fold at $a=1.5$ (296,637 episodes).
 
-The guess-test learner shows the same pattern with smaller magnitudes. At $a=1$ it is faster than the eliminative learner under passive sampling (38,037 episodes), and active selection speeds it up 4.9-fold (7,747 episodes). Because it needs only one correct guess rather than the elimination of every competitor, it also copes better with steep skew: at $a=1.5$, active guess-test learning takes 37,570 episodes, against 296,637 for the eliminative learner.
+The guess-test learner shows the same pattern with smaller magnitudes. At $a=1$ it is faster than the eliminative learner under passive sampling (38,037 episodes), and active selection speeds it up 4.9-fold (7,747 episodes). Because it needs only one correct guess rather than the elimination of every competitor, it also copes much better with steep skew: at $a=1.5$, guess-test learning takes 253,259 episodes passively and 37,570 actively (6.7-fold), against $6.4 \times 10^7$ and 296,637 for the eliminative learner.
 
 \begin{figure}[h]
 \begin{center}
@@ -289,15 +289,15 @@ Eliminative, Flickr8k captions & 3.7x & 10.8x & 23.2x \\
 \label{sec-decay}
 All learners so far keep a tentative guess indefinitely. We added forgetting to the guess-test learner, whose single guess per word is a natural target for decay. In the learner as described, a word counts as learned the moment its guess is correct, so forgetting could only erase wrong guesses, which disconfirmation removes anyway.\footnote{Adding forgetting to this learner left both active and passive learning unchanged at every half-life tested (passive: 37,642--38,774 episodes to 99\%; active: 6,963--8,166).} We therefore required a guess to \textit{lock in} by surviving two consecutive re-exposures of its word. Until then, an unlocked guess decays back to ``no guess'' with a constant per-episode hazard $p$ if its word is not heard, so it survives $t$ episodes without rehearsal with probability $(1-p)^t$; each confirmation restarts this clock. Locked guesses do not decay. A word is learned once its guess is locked and correct. Because the learner cannot know whether a guess is correct, active selection here targets words whose guesses are not yet locked.
 
-Active selection, by returning to words that are not yet locked, rehearses them. Passive sampling does not: under Zipfian frequencies a rare word may go thousands of episodes between exposures. At $C=10$, $a=1$, the rarest word's expected gap between passive exposures is about 7,485 episodes, and 97\% of words have gaps longer than 200. We therefore tested half-lives $t_{1/2} \in \{20{,}000, 5{,}000, 1{,}000, 200\}$ episodes, with 30 replications per cell and a cap of two million episodes, and report medians, counting runs that never reached a checkpoint as slower than the cap.
+Active selection, by returning to words that are not yet locked, rehearses them. Passive sampling does not: under Zipfian frequencies a rare word may go thousands of episodes between exposures. At $C=10$, $a=1$, the rarest word's expected gap between passive exposures is about 7,485 episodes, and 97\% of words have gaps longer than 200. We therefore tested half-lives $t_{1/2} \in \{20{,}000, 5{,}000, 1{,}000, 200\}$ episodes, with 30 replications per cell and a cap of two million episodes (20 million for passive learning at $t_{1/2}=200$), and report medians, counting runs that never reached a checkpoint as slower than the cap.
 
-Forgetting slowed active learning modestly and passive learning greatly (Table~\ref{tab-decay}, Figure~\ref{fig-decay}). Requiring confirmation slows both learners even without forgetting (compare 38,037 and 7,747 episodes without lock-in). With the shortest half-life, active learning took about twice as long as without forgetting, while passive learning slowed more than 14-fold already at $t_{1/2}=1{,}000$, and at $t_{1/2}=200$ no passive run reached 90\% of the vocabulary. The speedup at 99\% grew from 4.4 times without forgetting to 56 times at $t_{1/2}=1{,}000$ and more than 70 times at $t_{1/2}=200$, and widened at every checkpoint. Requiring three confirmations instead of two gave the same pattern, if anything stronger. The size of the effect follows from the ratio between the forgetting half-life and how long a tentative guess must wait to be rehearsed, which under passive sampling depends on the word's rarity and under active selection does not.
+Forgetting slowed active learning modestly and passive learning greatly (Table~\ref{tab-decay}, Figure~\ref{fig-decay}). Requiring confirmation slows both learners even without forgetting (compare 38,037 and 7,747 episodes without lock-in). With the shortest half-life, active learning took about twice as long as without forgetting, while passive learning slowed more than 14-fold already at $t_{1/2}=1{,}000$, and more than 200-fold at $t_{1/2}=200$, where it needed a median of 12.6 million episodes to learn 99\% of the vocabulary. The speedup at 99\% grew from 4.4 times without forgetting to 56 times at $t_{1/2}=1{,}000$ and 467 times at $t_{1/2}=200$, and widened at every checkpoint. Requiring three confirmations instead of two gave the same pattern, more strongly: the speedup at 99\% was 5.1 times without forgetting and 238 times at $t_{1/2}=1{,}000$, and at $t_{1/2}=200$ passive learning took a median of 5.6 million episodes to reach 50\% of the vocabulary (135 times as many as active learning) and no run reached 90\% within 20 million episodes. The size of the effect follows from the ratio between the forgetting half-life and how long a tentative guess must wait to be rehearsed, which under passive sampling depends on the word's rarity and under active selection does not.
 
 In 2--4 of 30 active runs per condition with two-confirmation locking (none with three), learning stalled just short of 99\%: a few words had locked in a wrong guess confirmed by chance, holding the true referents of other words, and an active learner never revisits words it believes it knows. The medians are unaffected, but the stall shows a limit of purely active selection: some passively encountered input, which real learners always have, is needed to correct confident errors.
 
 \begin{table}[h]
 \centering
-\caption{\label{tab-decay} Median episodes for the guess-test learner (guesses lock after two consecutive confirmations; unlocked guesses decay if unrehearsed) to learn 50\%, 90\%, and 99\% of a Zipfian ($a=1$), $W=1{,}000$-word vocabulary, $C=10$, by forgetting half-life $t_{1/2}$ (episodes). ``$>$2M'': no run reached the checkpoint within two million episodes.}
+\caption{\label{tab-decay} Median episodes for the guess-test learner (guesses lock after two consecutive confirmations; unlocked guesses decay if unrehearsed) to learn 50\%, 90\%, and 99\% of a Zipfian ($a=1$), $W=1{,}000$-word vocabulary, $C=10$, by forgetting half-life $t_{1/2}$ (episodes). Runs were capped at two million episodes, except passive learning at $t_{1/2}=200$, rerun with a cap of 20 million, which every run reached.}
 \small
 \begin{tabular}{lrrrrrrr}
 \hline
@@ -308,7 +308,7 @@ No forgetting & 7{,}517 & 10{,}368 & 12{,}758 & 14{,}851 & 34{,}382 & 55{,}814 &
 20{,}000 & 7{,}589 & 10{,}670 & 13{,}700 & 16{,}142 & 39{,}802 & 74{,}310 & 5.4x \\
 5{,}000 & 7{,}776 & 10{,}012 & 11{,}303 & 19{,}803 & 63{,}236 & 139{,}282 & 12.3x \\
 1{,}000 & 10{,}310 & 13{,}136 & 14{,}510 & 49{,}325 & 297{,}240 & 815{,}432 & 56.2x \\
-200 & 21{,}982 & 26{,}269 & 27{,}059 & 412{,}969 & $>$2M & $>$2M & $>$70x \\
+200 & 21{,}982 & 26{,}269 & 27{,}059 & 417{,}074 & 4{,}304{,}048 & 12{,}633{,}889 & 467x \\
 \hline
 \end{tabular}
 \end{table}
@@ -317,7 +317,7 @@ No forgetting & 7{,}517 & 10{,}368 & 12{,}758 & 14{,}851 & 34{,}382 & 55{,}814 &
 \begin{center}
 \includegraphics[width=\linewidth]{decay_lock_sweep.pdf}
 \caption{\label{fig-decay}
-Median episodes (log scale; bars = interquartile range) for the guess-test learner to learn 50\%, 90\%, and 99\% of the vocabulary, active vs.\ passive target selection, $C=10$, $a=1$, without forgetting and with half-lives of 20,000, 5,000, 1,000, and 200 episodes for guesses not yet locked in. Open triangles mark cells in which the median run did not reach the checkpoint within two million episodes.}
+Median episodes (log scale; bars = interquartile range) for the guess-test learner to learn 50\%, 90\%, and 99\% of the vocabulary, active vs.\ passive target selection, $C=10$, $a=1$, without forgetting and with half-lives of 20,000, 5,000, 1,000, and 200 episodes for guesses not yet locked in. Every median run reached every checkpoint.}
 \end{center}
 \end{figure}
 

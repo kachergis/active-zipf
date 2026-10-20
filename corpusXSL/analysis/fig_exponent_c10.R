@@ -7,7 +7,11 @@ suppressMessages({library(dplyr); library(ggplot2)})
 elim <- readRDS("full_grid_results.rds") %>% mutate(model = "Eliminative")
 guess <- readRDS("guesstest_results.rds") %>% mutate(model = "Guess-test")
 
-summ <- bind_rows(elim, guess) %>%
+# Passive a = 1.5 cells come from run_overnight_fill.R (group G1).
+g1 <- bind_rows(lapply(list.files("overnight_fill/G1", pattern = "rds$", full.names = TRUE), readRDS)) %>%
+  transmute(model, C = 10, a = 1.5, active = "Passive", fam_context = context, p99)
+
+summ <- bind_rows(elim, guess, g1) %>%
   filter(C == 10, fam_context == "Random") %>%
   group_by(model, a, active) %>%
   summarise(mean_p99 = mean(p99), n = n(), .groups = "drop") %>%
