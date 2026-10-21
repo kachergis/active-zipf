@@ -69,6 +69,9 @@
 #                       already cited in the paper as motivation for the active
 #                       learner, but never previously implemented as the actual
 #                       selection rule.
+#       "uniform"    -- prefer any not-yet-known word, chosen UNIFORMLY among
+#                       them (ignoring base frequency). Opt-in; see
+#                       run_uniform_active.R.
 #
 #   choice_k (K, default: Inf, i.e. unrestricted -- the original behavior)
 #       When acting actively, first restrict the candidate pool to a random
@@ -125,6 +128,11 @@ choose_target <- function(M, probs, word_known, times_targeted, active_prob,
     if (sum(w) <= 0) w <- probs[unknown_pool]  # degenerate fallback (shouldn't normally trigger)
     if (length(unknown_pool) == 1) return(unknown_pool)
     return(sample(unknown_pool, 1, prob = w))
+  }
+
+  if (active_policy == "uniform") {
+    if (length(unknown_pool) == 1) return(unknown_pool)
+    return(sample(unknown_pool, 1))
   }
 
   # default policy: "unknown" -- prefer any unknown, weighted by base frequency

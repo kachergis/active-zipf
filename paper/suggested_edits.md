@@ -87,7 +87,7 @@ Legend: `[x]` done · `[ ]` open · `[~]` partly done, or decided against
 - [ ] Acknowledgments and funding (paper 1 and paper 2).
 - [x] Paper 2: Studies 2–4 extended to the guess-test learner (`run_guesstest_paper2.R`, `flickr_guesstest.R`). New findings: partial control can beat full control; Goldilocks targeting helps; active learning on captions plateaus near 98%.
 - [x] Paper 2: guess-test mechanisms diagnosed (`diagnose_guesstest.R`, `diag_gt/`). Familiar context at C=100: wrong guesses confirm themselves when known words are never rehearsed. Choice sets: frequency counted twice (P ∝ p^1.6–1.9) starves the rare words that block frequent ones.
-- [ ] Follow-up: uniform targeting among unknown words is 2–4x faster than frequency-weighted targeting for guess-test. Check the eliminative learner too, and consider what this means for paper 1's active policy.
+- [x] Uniform vs. frequency-weighted active targeting (`run_uniform_active.R`, `uniform_active/`). Eliminative: no difference with random context (paper 1 robustness note added); about 2x faster with familiar context at C=100 (both policies reported in paper 2, Study 1). Guess-test: paper 1 now notes that uniform targeting roughly doubles its active speedup (4.9x → 9.9x).
 - [ ] Paper 2: curiosity citation (Oudeyer).
 - [ ] Optional: merge the CHILDES frequency figure into Fig. 3.
 - [ ] Optional: a data-driven estimate of the ramp timescale from egocentric video (future work, out of scope).

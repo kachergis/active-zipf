@@ -55,8 +55,9 @@ static NumericVector elim_core(int C, int M, NumericVector probs, bool active,
   //   active episode: pool = all words (choice_k = 0) or choice_k words drawn
   //     without replacement ~ probs; among the pool's unknown words choose
   //     ~ probs (policy 0, "unknown") or ~ probs * exp(-(times_targeted -
-  //     gold_target)^2 / (2 gold_sigma^2)) (policy 1, "goldilocks"); if the
-  //     pool has no unknown word, a passive draw within the pool.
+  //     gold_target)^2 / (2 gold_sigma^2)) (policy 1, "goldilocks") or
+  //     uniformly (policy 2, "uniform"); if the pool has no unknown word, a
+  //     passive draw within the pool.
   //   pool_uniform (diagnostic only; not in learners.R): draw the choice_k
   //     pool uniformly without replacement instead of ~ probs.
   // fam_seen_only (diagnostic only; not in learners.R): familiar-context
@@ -78,7 +79,7 @@ static NumericVector elim_core(int C, int M, NumericVector probs, bool active,
   std::vector<std::vector<int>> cand(M);
   std::vector<int> colcount(M, M);  // colSums(hyp): hyp starts all ones
   const double AP = active_prob < 0 ? (active ? 1.0 : 0.0) : active_prob;
-  Fenwick targ_all(M), targ_unk(M), dist(M);  // targ_unk: known words zeroed
+  Fenwick targ_all(M), targ_unk(M), targ_unk_unif(M), dist(M);  // targ_unk*: known words zeroed
   std::vector<int> times_targeted(M, 0);
   int n_unseen = M;
   auto fam_weight = [&](int r) {
@@ -87,6 +88,7 @@ static NumericVector elim_core(int C, int M, NumericVector probs, bool active,
   for (int i = 0; i < M; i++) {
     targ_all.set(i, probs[i]);
     targ_unk.set(i, probs[i]);
+    targ_unk_unif.set(i, 1.0);
     dist.set(i, fam_context ? fam_weight(i) : probs[i]);
   }
   auto refresh_dist = [&](int r) {
@@ -105,6 +107,7 @@ static NumericVector elim_core(int C, int M, NumericVector probs, bool active,
     known[w] = 1; n_learned++;
     if (learn_rec) { learn_rec->push_back(w + 1); learn_rec->push_back(episodes); learn_rec->push_back(times_targeted[w]); }
     targ_unk.set(w, 0.0);
+    targ_unk_unif.set(w, 0.0);
     for (int d = 0; d < 9; d++)
       if (n_learned >= M * 0.1 * (d + 1) && dec[d] == 0) dec[d] = episodes;
   };
@@ -123,6 +126,7 @@ static NumericVector elim_core(int C, int M, NumericVector probs, bool active,
     if (!do_active) return targ_all.sample();
     if (choice_k <= 0 || choice_k >= M) {
       if (policy == 0) return targ_unk.sample();
+      if (policy == 2) return targ_unk_unif.sample();
       unk.clear(); pw.clear();
       for (int i = 0; i < M; i++) if (!known[i]) {
         double dd = times_targeted[i] - gold_target;
@@ -152,6 +156,7 @@ static NumericVector elim_core(int C, int M, NumericVector probs, bool active,
       unk.push_back(r);
       if (policy == 1) { double dd = times_targeted[r] - gold_target;
         pw.push_back(exp(-(dd * dd) / (2 * gold_sigma * gold_sigma)) * probs[r]); }
+      else if (policy == 2) pw.push_back(1.0);
       else pw.push_back(probs[r]);
     }
     if (unk.empty()) {
