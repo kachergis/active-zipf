@@ -85,7 +85,8 @@ Legend: `[x]` done · `[ ]` open · `[~]` partly done, or decided against
 
 - [ ] Co-author review of the reframed claim and the cuts (Shohei Hidaka, Takuma Torii), since this changes the paper's central argument.
 - [ ] Acknowledgments and funding (paper 1 and paper 2).
-- [ ] Paper 2: extend Studies 2–4 to the guess-test learner (new simulations).
+- [x] Paper 2: Studies 2–4 extended to the guess-test learner (`run_guesstest_paper2.R`, `flickr_guesstest.R`). New findings: partial control can beat full control; Goldilocks targeting helps; active learning on captions plateaus near 98%.
+- [ ] Paper 2: trace why full active control fails for guess-test with familiar context at C=100, and why choice sets of intermediate size cost the most.
 - [ ] Paper 2: curiosity citation (Oudeyer).
 - [ ] Optional: merge the CHILDES frequency figure into Fig. 3.
 - [ ] Optional: a data-driven estimate of the ramp timescale from egocentric video (future work, out of scope).

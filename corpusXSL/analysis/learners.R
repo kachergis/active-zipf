@@ -229,7 +229,10 @@ learn_corpus_guesstest <- function(C, M, a = 1, uniform = TRUE, active = FALSE,
                                     max_episodes = Inf, max_seconds = Inf,
                                     active_prob = NULL, active_policy = "unknown",
                                     choice_k = Inf, goldilocks_target = 2, goldilocks_sigma = 2,
-                                    p_decay = 0, lock_k = 0) {
+                                    p_decay = 0, lock_k = 0, active_prob_fn = NULL) {
+  # active_prob_fn: as in learn_corpus_eliminative -- an optional
+  # function(episodes) -> active_prob for developmental trajectories. NULL
+  # (the default) reproduces the original constant-active_prob model exactly.
   # p_decay: per-episode forgetting hazard for an UNCONFIRMED (not-yet-learned)
   # guess. Checked lazily, only when a word holding a guess is re-exposed --
   # not swept over all M words every episode -- so this stays O(1) per episode
@@ -279,7 +282,8 @@ learn_corpus_guesstest <- function(C, M, a = 1, uniform = TRUE, active = FALSE,
       }
     }
     believed_known <- if (lock_k > 0) confirm_count >= lock_k else word_known
-    target <- choose_target(M, probs, believed_known, times_targeted, active_prob,
+    ap_t <- if (is.null(active_prob_fn)) active_prob else active_prob_fn(episodes)
+    target <- choose_target(M, probs, believed_known, times_targeted, ap_t,
                              active_policy, choice_k, goldilocks_target, goldilocks_sigma)
     times_targeted[target] <- times_targeted[target] + 1L
     nontarg <- setdiff(1:M, target)
