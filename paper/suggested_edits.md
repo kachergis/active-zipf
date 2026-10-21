@@ -86,7 +86,8 @@ Legend: `[x]` done · `[ ]` open · `[~]` partly done, or decided against
 - [ ] Co-author review of the reframed claim and the cuts (Shohei Hidaka, Takuma Torii), since this changes the paper's central argument.
 - [ ] Acknowledgments and funding (paper 1 and paper 2).
 - [x] Paper 2: Studies 2–4 extended to the guess-test learner (`run_guesstest_paper2.R`, `flickr_guesstest.R`). New findings: partial control can beat full control; Goldilocks targeting helps; active learning on captions plateaus near 98%.
-- [ ] Paper 2: trace why full active control fails for guess-test with familiar context at C=100, and why choice sets of intermediate size cost the most.
+- [x] Paper 2: guess-test mechanisms diagnosed (`diagnose_guesstest.R`, `diag_gt/`). Familiar context at C=100: wrong guesses confirm themselves when known words are never rehearsed. Choice sets: frequency counted twice (P ∝ p^1.6–1.9) starves the rare words that block frequent ones.
+- [ ] Follow-up: uniform targeting among unknown words is 2–4x faster than frequency-weighted targeting for guess-test. Check the eliminative learner too, and consider what this means for paper 1's active policy.
 - [ ] Paper 2: curiosity citation (Oudeyer).
 - [ ] Optional: merge the CHILDES frequency figure into Fig. 3.
 - [ ] Optional: a data-driven estimate of the ramp timescale from egocentric video (future work, out of scope).
