@@ -58,6 +58,11 @@ static NumericVector elim_core(int C, int M, NumericVector probs, bool active,
   //     gold_target)^2 / (2 gold_sigma^2)) (policy 1, "goldilocks") or
   //     uniformly (policy 2, "uniform"); if the pool has no unknown word, a
   //     passive draw within the pool.
+  //   policy 3, "heard" (word-driven pursuit): among unknown words that have
+  //     already been heard at least once (been the target before), ~ probs.
+  //     A word never heard cannot be pursued; if no heard word is unknown,
+  //     the episode is a passive draw over all words. (Within a bounded
+  //     choice set, the same restriction applies inside the set.)
   //   pool_uniform (diagnostic only; not in learners.R): draw the choice_k
   //     pool uniformly without replacement instead of ~ probs.
   // fam_seen_only (diagnostic only; not in learners.R): familiar-context
@@ -80,6 +85,8 @@ static NumericVector elim_core(int C, int M, NumericVector probs, bool active,
   std::vector<int> colcount(M, M);  // colSums(hyp): hyp starts all ones
   const double AP = active_prob < 0 ? (active ? 1.0 : 0.0) : active_prob;
   Fenwick targ_all(M), targ_unk(M), targ_unk_unif(M), dist(M);  // targ_unk*: known words zeroed
+  Fenwick targ_heard(M);  // policy 3: heard-but-unknown words only (others zero)
+  int n_heard_unk = 0;
   std::vector<int> times_targeted(M, 0);
   int n_unseen = M;
   auto fam_weight = [&](int r) {
@@ -108,6 +115,7 @@ static NumericVector elim_core(int C, int M, NumericVector probs, bool active,
     if (learn_rec) { learn_rec->push_back(w + 1); learn_rec->push_back(episodes); learn_rec->push_back(times_targeted[w]); }
     targ_unk.set(w, 0.0);
     targ_unk_unif.set(w, 0.0);
+    if (targ_heard.w[w] > 0) { targ_heard.set(w, 0.0); n_heard_unk--; }
     for (int d = 0; d < 9; d++)
       if (n_learned >= M * 0.1 * (d + 1) && dec[d] == 0) dec[d] = episodes;
   };
@@ -127,6 +135,7 @@ static NumericVector elim_core(int C, int M, NumericVector probs, bool active,
     if (choice_k <= 0 || choice_k >= M) {
       if (policy == 0) return targ_unk.sample();
       if (policy == 2) return targ_unk_unif.sample();
+      if (policy == 3) return n_heard_unk > 0 ? targ_heard.sample() : targ_all.sample();
       unk.clear(); pw.clear();
       for (int i = 0; i < M; i++) if (!known[i]) {
         double dd = times_targeted[i] - gold_target;
@@ -152,7 +161,7 @@ static NumericVector elim_core(int C, int M, NumericVector probs, bool active,
       for (int k = choice_k - 1; k >= 0; k--) targ_all.set(pool[k], pool_saved[k]);
     }
     unk.clear(); pw.clear();
-    for (int r : pool) if (!known[r]) {
+    for (int r : pool) if (!known[r] && (policy != 3 || seen[r])) {
       unk.push_back(r);
       if (policy == 1) { double dd = times_targeted[r] - gold_target;
         pw.push_back(exp(-(dd * dd) / (2 * gold_sigma * gold_sigma)) * probs[r]); }
@@ -188,6 +197,7 @@ static NumericVector elim_core(int C, int M, NumericVector probs, bool active,
     // eliminate target's candidates absent from this context
     if (!seen[target]) {
       seen[target] = 1; n_unseen--;
+      if (!known[target]) { targ_heard.set(target, probs[target]); n_heard_unk++; }
       if (!mutual_exclusivity) {
         for (int r = 0; r < M; r++) if (!inctx[r]) { colcount[r]--; refresh_dist(r); }
         cand[target].assign(ctx.begin(), ctx.end());

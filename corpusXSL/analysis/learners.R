@@ -72,6 +72,15 @@
 #       "uniform"    -- prefer any not-yet-known word, chosen UNIFORMLY among
 #                       them (ignoring base frequency). Opt-in; see
 #                       run_uniform_active.R.
+#       "heard"      -- word-driven pursuit: prefer a not-yet-known word that
+#                       has already been HEARD at least once (times_targeted > 0;
+#                       in these models a word is heard only when it is the
+#                       target), weighted by base frequency. A word never heard
+#                       cannot be pursued, so if no heard word is unknown the
+#                       episode falls back to a passive draw. Contrast with the
+#                       default, object-driven policy, which can reach words
+#                       never heard by bringing their (unnamed) referents into
+#                       view. See run_word_driven.R.
 #
 #   choice_k (K, default: Inf, i.e. unrestricted -- the original behavior)
 #       When acting actively, first restrict the candidate pool to a random
@@ -114,7 +123,7 @@ choose_target <- function(M, probs, word_known, times_targeted, active_prob,
     pool <- 1:M
   }
 
-  unknown_pool <- pool[!word_known[pool]]
+  unknown_pool <- if (active_policy == "heard") pool[!word_known[pool] & times_targeted[pool] > 0] else pool[!word_known[pool]]
   if (length(unknown_pool) == 0) {
     # Nothing unknown is available in this window -- the learner still can't
     # reach outside it, so fall back to a passive draw within the window.
