@@ -77,7 +77,12 @@
 \node[font=\scriptsize, anchor=west] at (8.95, 7.38) {drawn uniformly:};
 \node[font=\scriptsize, anchor=west] at (11.55, 7.38) {\{kite, cup, owl, yak, dog, \dots\}\;\textcolor{black!55}{rare words too}};
 \node[res, text width=7.7cm] at (8.9, 7.05)
-  {Sets that over-represent frequent words can make learning up to 11$\times$ slower; uniform sets cost almost nothing. Preferring words heard about twice (Goldilocks) helps by spreading targets.};
+  {Over-representing frequent words: up to 11$\times$ slower; uniform sets cost almost nothing. Goldilocks preference helps by spreading targets.};
+
+% object-driven vs word-driven pursuit
+\node[note] at (8.9, 6.38) {\textbf{Objects or words:} seek unnamed objects, or only words already heard};
+\node[res, text width=7.7cm] at (8.9, 5.98)
+  {3.4$\times$ rather than 19$\times$ faster than passive (\Cv\,=\,10); without passive input, can fixate on one word.};
 
 \begin{scope}[on background layer]
   \node[fill=panel, rounded corners=5pt, fit={(Bt) (8.75,5.45) (17.05,11.0)}, inner sep=5pt] {};
@@ -129,10 +134,10 @@
 
 \draw[flow, active, rounded corners=4pt] ($(photo.south)+(-0.35,0)$) -- ++(0,-0.38) -- ++(0.7,0) -- ($(photo.south)+(0.35,0)$);
 \node[font=\scriptsize, text=active, anchor=north] at ($(photo.south)+(0,-0.42)$) {stay: hear another caption};
-\draw[flow, passive] (photo.east) -- node[above, font=\scriptsize, text=passive] {move on} node[below, font=\scriptsize, text=passive] {(+ switching cost)} (newp.west);
+\draw[flow, passive] (photo.east) -- node[above, font=\scriptsize, text=passive] {move on} node[below, font=\scriptsize, text=passive] {(+ search cost)} (newp.west);
 
 \node[res, text width=7.7cm] at (8.9, 1.88)
-  {Moving on wins when switching is cheap; staying wins once it costs about one or two extra episodes (up to 7\% faster for the eliminative learner, 28\% for the guess-test learner).};
+  {Moving on wins when seeking a new photo is cheap; staying wins once it costs about one or two extra episodes (up to 7\% faster for the eliminative learner, 28\% for the guess-test learner).};
 
 \begin{scope}[on background layer]
   \node[fill=panel, rounded corners=5pt, fit={(Dt) (8.75,0.95) (17.05,5.0)}, inner sep=5pt] {};
