@@ -46,7 +46,8 @@ static NumericVector elim_core(int C, int M, NumericVector probs, bool active,
                         double active_prob, int policy, int choice_k,
                         double gold_target, double gold_sigma, bool pool_uniform,
                         bool fam_seen_only, int trace_every, std::vector<double> *trace,
-                        std::vector<double> *learn_rec = nullptr) {
+                        std::vector<double> *learn_rec = nullptr,
+                        double ramp_T = 0, int ramp_dir = 1) {
   // Target selection mirrors choose_target() in learners.R:
   //   active_prob < 0 -> use `active` (0 or 1), as in the original model;
   //     otherwise each episode is active with probability active_prob (a
@@ -65,6 +66,10 @@ static NumericVector elim_core(int C, int M, NumericVector probs, bool active,
   //     choice set, the same restriction applies inside the set.)
   //   pool_uniform (diagnostic only; not in learners.R): draw the choice_k
   //     pool uniformly without replacement instead of ~ probs.
+  // ramp_T > 0 (as active_prob_fn in learners.R, Study 3): the probability
+  //   that an episode is active is min(1, t/ramp_T) (ramp_dir = 1, forward)
+  //   or max(0, 1 - t/ramp_T) (ramp_dir = -1, reverse) at episode t, in place
+  //   of a constant active_prob.
   // fam_seen_only (diagnostic only; not in learners.R): familiar-context
   //   weights use the number of SEEN words still holding referent r as a
   //   candidate, 1/(colcount[r] - n_unseen + 1), instead of colSums(hyp).
@@ -130,7 +135,9 @@ static NumericVector elim_core(int C, int M, NumericVector probs, bool active,
   };
   std::vector<int> pool, unk; std::vector<double> pw, pool_saved;
   auto choose_target = [&]() -> int {
-    bool do_active = AP >= 1 ? true : (AP <= 0 ? false : unif_rand() < AP);
+    double ap = AP;
+    if (ramp_T > 0) ap = ramp_dir > 0 ? std::min(1.0, episodes / ramp_T) : std::max(0.0, 1.0 - episodes / ramp_T);
+    bool do_active = ap >= 1 ? true : (ap <= 0 ? false : unif_rand() < ap);
     if (!do_active) return targ_all.sample();
     if (choice_k <= 0 || choice_k >= M) {
       if (policy == 0) return targ_unk.sample();
@@ -266,10 +273,10 @@ NumericVector elim_fast(int C, int M, NumericVector probs, bool active,
                         double max_episodes = 1e18, bool mutual_exclusivity = false,
                         double active_prob = -1, int policy = 0, int choice_k = 0,
                         double gold_target = 2, double gold_sigma = 2, bool pool_uniform = false,
-                        bool fam_seen_only = false) {
+                        bool fam_seen_only = false, double ramp_T = 0, int ramp_dir = 1) {
   return elim_core(C, M, probs, active, fam_context, epsilon, max_episodes, mutual_exclusivity,
                    active_prob, policy, choice_k, gold_target, gold_sigma, pool_uniform,
-                   fam_seen_only, 0, nullptr);
+                   fam_seen_only, 0, nullptr, nullptr, ramp_T, ramp_dir);
 }
 
 // Same simulation, additionally returning a trajectory sampled every

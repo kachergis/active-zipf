@@ -4,9 +4,9 @@
 # lines.
 suppressMessages({library(ggplot2); library(dplyr)})
 
-# Uses the per-replication rerun from run_overnight_fill.R (group G3), which
-# supersedes active_ramp_results.rds (means only).
-g3 <- bind_rows(lapply(list.files("overnight_fill/G3", pattern = "rds$", full.names = TRUE), readRDS))
+# Uses the 200-replication C++ runs from run_more_reps.R (group E3), which
+# supersede the 30 R runs in overnight_fill/G3 and active_ramp_results.rds.
+g3 <- bind_rows(lapply(list.files("elim_ramp_cpp", pattern = "rds$", full.names = TRUE), readRDS))
 ramps <- g3 %>% filter(condition != "blend") %>% group_by(condition, T) %>%
   summarise(episodes = mean(episodes), .groups = "drop") %>%
   mutate(direction = ifelse(condition == "ramp_fwd", "Forward (passive -> active)", "Reverse (active -> passive)"))
