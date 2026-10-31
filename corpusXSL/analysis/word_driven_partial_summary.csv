@@ -1,0 +1,13 @@
+"learner","setting","policy","ap","n","n_censored","mean99","median99","se99"
+"eliminative","C=100, a=1, familiar","object-driven",0.25,30,0,28722.5333333333,28701,235.970788827932
+"eliminative","C=100, a=1, familiar","object-driven",0.5,30,0,21191.3333333333,21151,126.770081801057
+"eliminative","C=100, a=1, familiar","object-driven",0.75,30,0,18046.7,17960.5,108.842226318121
+"eliminative","C=100, a=1, familiar","word-driven",0.25,30,0,52581.7666666667,51275.5,1063.36532869026
+"eliminative","C=100, a=1, familiar","word-driven",0.5,30,0,73267.4,71595.5,1952.31095459926
+"eliminative","C=100, a=1, familiar","word-driven",0.75,30,0,133950.233333333,133363.5,2915.30360859834
+"guess-test","C=100, a=1, familiar","word-driven",0.25,30,0,70020.5,70484.5,1105.65418899047
+"guess-test","C=100, a=1, familiar","word-driven",0.5,30,0,68910.7,69788.5,915.38846618416
+"guess-test","C=100, a=1, familiar","word-driven",0.75,30,0,85905.2,81808.5,2857.81669553653
+"guess-test","C=100, a=1, random","word-driven",0.25,30,0,253364.666666667,252626.5,8792.75890605882
+"guess-test","C=100, a=1, random","word-driven",0.5,30,0,215624.6,205491.5,9565.29030504407
+"guess-test","C=100, a=1, random","word-driven",0.75,30,0,182397.966666667,178285,5753.62179458592

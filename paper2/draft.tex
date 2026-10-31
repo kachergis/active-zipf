@@ -4,172 +4,174 @@
 \usepackage[utf8x]{inputenc}
 \usepackage{amsmath}
 \usepackage{graphicx}
-\usepackage{soul}
+\graphicspath{{./}{../paper/}}
+\def\citeA{\citep}
 
-\title{The economics and timing of active word learning (WORKING TITLE / DRAFT SKELETON)}
-\shorttitle{Economics of active word learning}
+\title{Levers and limits of active control in cross-situational word learning}
+\shorttitle{Levers of active word learning}
 \author{Shohei Hidaka$^1$, Takuma Torii$^1$, and George Kachergis$^2$}
 \affiliation{$^1$School of Knowledge Science, Japan Advanced Institute of Science and Technology, Nomi, Ishikawa, 923-1292, Japan and $^2$Department of Psychology, Stanford University, Stanford, CA, 94305, USA}
+
+\authornote{The authors have no conflict of interest to declare.}
+
+\abstract{
+Learners who seek the names of objects they cannot yet name can recover much of the cost that a Zipfian vocabulary imposes on learning from random input. Analyses of this benefit have idealized the learner's control: it chooses only which object is named, on every episode, from the entire vocabulary, at no cost. We relax each idealization for two cross-situational learners, one eliminating candidate referents and one testing a single guess per word. (1) Which lever: with small contexts, choosing the target does most of the work; with 100 referents per context, elimination under Zipfian distractors never finishes unless the learner also controls what else is in view. (2) How much control, and over what: a learner active on a quarter of episodes gains much of the full benefit, and partial control can beat full control; choice sets that over-represent frequent words can make learning over 10 times slower; and a learner that can pursue only words it has already heard gains far less (3.4-fold rather than 19-fold with small contexts) and, without passive input, can fixate on a word it cannot resolve. (3) When: becoming active late is at most slightly better than spreading the same autonomy evenly; stopping early is much worse. (4) At what cost: on real image captions, staying with the current scene beats seeking a new one once seeking costs more than an episode or two. The benefit of active control depends on which levers a learner has and how they combine, not only on how much control.}
+
+\keywords{Word learning; Cross-situational learning; Active learning; Self-directed learning; Zipf's law; Development}
 
 \begin{document}
 \maketitle
 
-% ============================================================================
-% NOTE (not for submission): this file was split off from
-% paper/main_revised.tex (the "Active learning expedites cross-situational
-% word learning" paper). That paper establishes that active selection of
-% learning situations dramatically speeds up word learning under Zipfian
-% distributions, robustly across idealized analysis, incremental simulation,
-% and real data (SUN, Flickr8k). This draft assumes that result and asks a
-% different, narrower question: given that active selection helps, how
-% should a resource- or time-constrained learner actually deploy it? The two
-% sections below were originally written as Appendix F (linger-vs-move-on on
-% real Flickr8k captions) and Appendix G (a developmental passive-to-active
-% trajectory) of that paper; they are reproduced here essentially verbatim,
-% since both are self-contained, complete results, not stubs. What's missing
-% is everything that makes this its own paper: an Introduction motivating
-% the shared question, a Discussion connecting the two results to each
-% other and to the literature, and probably additional evidence (the
-% Introduction bullets below sketch what that might look like).
-% ============================================================================
+\section{Introduction}
 
-\section{Introduction (bullet-point sketch, not prose)}
+Children hear words in a world that is far from uniform. Both the words caregivers say and the objects infants see follow highly skewed, Zipfian distributions \citep{LaviRotbain:2023,Clerkin:2017}, and under such distributions a learner who takes input as it comes must wait a long time for the rarest words. In a companion paper (Hidaka, Torii, \& Kachergis, in preparation; hereafter Paper 1), we showed that this wait multiplies the number of learning episodes needed by roughly $\ln W$ for a vocabulary of $W$ words, and that a learner who influences its input can recover much of the cost. A learner choosing among scenes can make rare words more likely, and an incremental learner who targets words it does not yet know learns 2--10 times faster than a passive one by the time it knows 50--90\% of its vocabulary.
 
+That analysis, like most formal treatments of active learning \citep{Settles:2012}, idealized the learner's control in four ways. The learner chose only which object to hear named, not what else was in view. It chose on every episode, from the whole vocabulary, among all the objects it could not yet name. Its control was the same from the first episode to the last. And obtaining a situation was free. None of these is true of children. Children are active learners \citep{Foushee:2023,Gureckis:2012}: they direct their gaze, hands, and requests toward what interests them \citep{Yu:2009active,Partridge:2015}, prefer stimuli of intermediate rather than minimal or maximal complexity \citep{Kidd:2012}, and adapt their information search to the environment from about age three \citep{Ruggeri:2022}. But their control is partial. Much of what they hear is not directed by them at all. They choose among the objects at hand, not among every object they will ever name. Their capacity for control grows with motor development, which reshapes what infants see and do \citep{Kretch:2014,Iverson:2010,Walle:2014}. And, like adults, they do not always choose well \citep{Tauber:2013,Bazhydai:2026}.
+
+This paper asks how the benefit of active control depends on these features. We organize the question around four aspects of control.
+
+\textit{Which lever.} Caregivers and children shape not only what is named but what else is in view when it is named: in play, they often arrange for a single object to dominate the child's view \citep{Yu:2009active,Suanda:2018}, and children exclude already-known objects as candidate referents for a new word \citep{Grassmann:2015}. Study 1 asks how control over the target word and control over the accompanying distractors combine, and how this depends on the number of referents in view.
+
+\textit{How much, and over what.} Study 2 asks how much of the benefit survives when the learner is active only some of the time, when it chooses only among a small set of available words, and when it prefers words of intermediate familiarity, as the Goldilocks effect suggests infants do \citep{Kidd:2012}. It also asks which unnamed objects a learner should pursue, and how much of the benefit remains if the learner can pursue only words it has already heard.
+
+\textit{When.} Infants begin with little control over what they experience and gain it as they learn to reach, crawl, and walk. Because active selection is worth more late in learning, when only rare words remain, the timing of control could matter in its own right. Study 3 compares developmental trajectories from passive to active, and the reverse, with constant levels of control.
+
+\textit{At what cost.} Gaining a new situation takes effort; asking more about the current one may take less. This is the patch-leaving problem of foraging theory \citep{Charnov:1976}, which has been applied to search in memory and other cognitive domains \citep{Hills:2015}. Study 4 asks, using real image captions, when a learner should stay with the current scene and when it should move on.
+
+Across the four studies, the same theme emerges: active control helps by directing the learner's episodes toward its current bottleneck, and different levers act on different bottlenecks. Levers that act on different bottlenecks need not combine, and constraints that change where the bottleneck lies can change which lever matters.
+Figure~\ref{fig-overview} summarizes the four aspects and the main result for each.
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=\linewidth]{fig_overview.pdf}
+\caption{\label{fig-overview}
+Overview of the four studies. (A) An eliminative learner can be held up by rare words that are heard too seldom, or by frequent competitors that are almost always in view; target selection acts on the first, and context selection or cross-word mutual exclusivity on the second. (B) A learner may exercise control only on some episodes, only over a set of words at hand, and only over words it has already heard rather than any object it cannot name. (C) Control may arrive or fade over development. (D) On real captions, a learner can stay with the current photo for another caption or seek a new one at a cost. Orange marks active choices, grey passive input or properties of the learner; italic notes give the main result for each study.}
+\end{center}
+\end{figure}
+
+\section{General method}
+\label{sec-method}
+
+All studies use the two incremental learners of Paper 1, an eliminative learner \citep[after][]{Siskind:1996,Vogt:2012} and a guess-test learner \citep[after][]{Trueswell:2013}. There are $W$ words, each paired with one of $W$ referents. In each episode the learner hears one word, the \textit{target}, in a situation containing its referent and $C-1$ distractor referents. The eliminative learner keeps, for each word, the set of referents present every time that word has been heard, and learns the word once a single candidate remains. The guess-test learner keeps one guess per word, proposing a referent from the current situation that no other word claims, discarding the guess if the word is later heard without it, and learning the word once its guess is correct. The learner itself cannot observe that its guess is correct, yet in this model a word counts as learned, and an active learner stops pursuing it, as soon as it is. In Paper 1, a version that instead treats a word as known only once its guess has been confirmed twice, which the learner can observe, kept most of the active advantage at $C=10$ (4.4-fold, against 4.9-fold). We report the original version throughout, for comparability with Paper 1, and test which of its results survive the observable criterion in Studies 2--4.
+
+Word and referent frequencies are Zipfian, $p_r \propto r^{-a}$ over frequency rank $r$, with $a=1$ unless stated ($a=0$ is uniform). Two choices define each episode:
 \begin{itemize}
-\item \textbf{The starting point.} Hidaka, Torii, \& Kachergis (companion paper) show that active selection of learning situations--choosing which word to target, and/or which distractors accompany it--dramatically speeds up cross-situational word learning under Zipfian word and referent distributions, robustly across idealized analysis, incremental simulation with three distinct learning mechanisms, and two independent real datasets (SUN scene database, Flickr8k captions).
-
-\item \textbf{The gap that paper leaves open.} Throughout, ``active'' is treated as a fixed, idealized property of the learner: active on every episode or on none, for the whole simulated run, and when active, free to choose among the entire vocabulary. Three things this abstraction leaves out:
-  \begin{itemize}
-  \item[--] \textit{Situations aren't free to obtain, and not all ways of obtaining one cost the same.} Real active selection isn't just ``pick a target word''--a learner (or caregiver) can also choose whether to linger on the situation already in front of them (ask for more information about the current scene) or seek out a new one (construct/find a new scene). These plausibly have different costs, and the earlier paper's synthetic simulations, which never separated situation content from situation-acquisition cost, couldn't expose this dimension at all.
-  \item[--] \textit{Real learners aren't born active.} Infants start with essentially no control over which scenes they experience--carried from room to room--and only gradually acquire the motor and attentional control (head-turning, pointing, reaching, eventually crawling and walking) that lets them actively select what to attend to. The companion paper's framing has no way to represent this trajectory.
-  \item[--] \textit{Real learners are only sometimes in control, and only over what is at hand.} A child exercises choice on some occasions and not others, chooses among the objects that happen to be available rather than every object it will ever name, and may prefer items of intermediate familiarity rather than simply the least-known.
-  \end{itemize}
-
-\item \textbf{What this paper adds.} Three results. Studies 1 and 2 were developed as appendices to the companion paper before we recognized they answer a different question than the one that paper is about; Study 3 replaces a partial-autonomy analysis that was never part of that paper:
-  \begin{itemize}
-  \item[--] \textbf{Study 1 (real data): the linger-vs-move-on tradeoff.} Using Flickr8k (8,108 photographs, 5 independent captions each) as a naturalistic testbed, we show target selection's benefit is robust to real (non-synthetic) co-occurrence structure, and that a second active choice--linger on the current scene for another caption, or move to a new one--has a genuine crossover: moving on wins when switching scenes is cheap, lingering wins once switching is expensive enough, located precisely between two tested cost levels.
-  \item[--] \textbf{Study 2 (developmental timing): passive-to-active trajectories.} Motivated by the observation (from the companion paper's completion-checkpoint analysis) that active selection's marginal value grows over the course of learning, we show a learner who starts passive and becomes active on a fast-enough timescale captures nearly all of active selection's benefit--and, more surprisingly, that the ``reverse'' trajectory (active early, passive late) shows a sharp threshold rather than a graceful degradation, located near pure-active sampling's own completion time.
-  \item[--] \textbf{Study 3 (the active learner): partial autonomy, Goldilocks targeting, and bounded choice.} Being active on only a quarter of episodes captures most of active selection's benefit in every setting tested. Goldilocks targeting and bounded choice sets matter little in most settings but a great deal at large context size with familiar-context selection, where frequency-weighted choice sets make learning up to 11 times slower--a cost that disappears when the choice set is drawn uniformly. A mechanism test traces this to unencountered words diluting the familiarity signal that familiar-context selection relies on.
-  \end{itemize}
-
-\item \textbf{The unifying claim (to be sharpened).} Active learning's benefit is not simply a dial (how much autonomy does the learner have) but has real structure in \textit{how} that autonomy gets deployed--across situations (explore vs.\ exploit the current one) across developmental time (when does the transition to self-direction happen, not just how much self-direction accumulates), and across what the learner can choose among (whether the choice set spans the vocabulary or over-represents common items). All three studies point the same direction: naive intuitions (``more active time is better, spent however''; ``a constant blend should be about as good as a well-timed one''; ``any choice is nearly as good as full choice'') are each wrong in a specific, locatable way.
-
-\item \textbf{What's still needed before this is submittable} (not yet done; flagging honestly):
-  \begin{itemize}
-  \item[--] An actual Introduction connecting to the relevant literatures: foraging theory / patch-leaving decisions (Marginal Value Theorem) for Study 1; infant motor development and its relationship to visual/attentional experience (e.g.\ crawling-onset literature) for Study 2.
-  \item[--] A Discussion tying the three studies together under the unifying claim above, and being honest about how far that claim actually extends (right now the connection is more thematic than mechanistic--the studies don't share a common formal framework yet).
-  \item[--] Possibly: extending Studies 1--3 to the other two learning mechanisms (guess-test, ranked-frequency), currently all eliminative-only.
-  \item[--] Possibly: a data-driven estimate of Study 2's ramp timescale $T$, rather than treating it as a swept free parameter--egocentric child video (e.g.\ SAYCam) is the natural source, as discussed in the companion paper's Discussion re: AI sample efficiency.
-  \item[--] Deciding whether Studies 1--3 are better presented as three studies in one paper (current plan) or split further--they are thematically related (all about the deployment, not existence, of active selection's benefit) but methodologically fairly separate (real captions vs.\ synthetic simulations).
-  \end{itemize}
+\item \textit{Target selection.} A \textit{passive} learner's target is drawn by frequency: it hears whatever happens to be named. An \textit{active} learner instead brings into view an object it cannot yet name--choosing to play with the car rather than the already-named ball--and hears that object named. Because each word names exactly one referent, this is equivalent to choosing among the words not yet known, but the learner does not need to have heard those words: it needs only to know which objects it cannot name. By default the active learner chooses among these objects in proportion to their frequency; Study 2 also examines a \textit{uniform} policy that ignores frequency, and a \textit{word-driven} learner that can pursue only words it has already heard, so that every word's first exposure must come from passive input. For brevity, we describe target selection below in terms of the words being targeted.
+\item \textit{Context selection.} Under \textit{random} context selection, the $C-1$ distractors are drawn by frequency. Under \textit{familiar} context selection, each referent's frequency is divided by one plus the number of words whose candidate sets still contain it, so that distractors tend to be referents the learner has already ruled out for most words. This formalizes the use of known objects to disambiguate new words \citep{Grassmann:2015}, and is consistent with evidence that discourse and attention, not only visual presence, determine which referents are candidates \citep{FrankGoodmanTenenbaum:2009,FrankTenenbaumFernald:2013}. The guess-test learner has no candidate sets, so for it familiar context instead weights each referent's frequency by one plus the number of consecutive times its word's current guess has been confirmed, favoring referents of words the learner has repeatedly heard.
 \end{itemize}
+Unless stated, vocabularies have $W=1{,}000$ words, and we record the number of episodes until 50\%, 90\%, and 99\% of the vocabulary is learned, with 30 replications per condition. The reference implementations are written in R. For the eliminative learner, whose cost per episode grows with both $W$ and $C$, simulations at $C=100$, at $W \ge 10{,}000$, of the target-selection variants of Study 2, and of the ramps of Study 3 used a reimplementation in C++ with the same context construction and learning criterion but more efficient bookkeeping: weighted draws use a binary indexed tree rather than a linear scan, and each word's candidate referents are stored as a list rather than as a row of a $W \times W$ matrix. We validated it against the reference implementation on every condition both could complete: all four target $\times$ context conditions at $C=10$, familiar context at $C=100$, cross-word mutual exclusivity, each target-selection rule of Study 2, and every ramp and constant blend of Study 3. Mean episodes to 99\% agreed within sampling error ($|z| < 2$ in every comparison but one of the 29 in Study 3, a blend with $|z| = 2.5$), and adding the Study 2 options left results for the original conditions unchanged, seed for seed. Each study simulates its own reference conditions with independent random seeds, so the same condition's mean differs slightly between tables (for example, 88,220--89,857 episodes for passive learning at $C=10$ with random context); comparisons and speedups are computed within one set of runs except where noted. Code and results are available in the project repository (\texttt{corpusXSL/analysis}).
 
-\section{Study 1: Active target selection and scene-switching cost on real image captions}
-\label{app-flickr}
+\section{Study 1: Which lever? Target selection vs.\ context selection}
+\label{sec-context}
 
-Every simulation in the companion paper draws situations from synthetic Zipfian word and referent distributions. Here we test the same eliminative mechanism on real, naturalistic co-occurrence structure instead, using Flickr8k \citep{Hodosh:2013}: 8,108 photographs, each independently described by five human-written captions. Real captions let us ask a further question the synthetic simulations cannot pose at all: beyond choosing \textit{which} word to target, a learner who can request another caption of the scene already in view, rather than only ever moving on to a new one, faces a second active choice with no synthetic analogue--and it is not obvious in advance which side of that choice should win.
+Paper 1 varies one lever: which word is the target of an episode. But a learner or caregiver also influences what else is in view when a word is heard. This study crosses target selection (passive or active) with context selection (random or familiar), and shows that at larger context sizes the second lever, not the first, decides whether elimination-based learning can finish at all.
 
-\subsection{Setup}
-We treat each caption as a situation: a target word plus whichever other content words co-occur in that sentence, playing the role of distractors. After excluding function words (articles, prepositions, pronouns, and similar) via a hand-curated stoplist and words occurring only once, 4,318 content words remain, averaging 5.76 per caption--a naturally-occurring analogue of context size $C$, close to the companion paper's own $C=10$ condition. A word is eliminative-learnable if the intersection of the word-sets of every caption in which it appears narrows to the word itself; 83.3\% (3,598 words) are learnable this way, and the remainder are stuck with at most 8 residual confusable alternatives, not a pathological blowup.
+We simulated the eliminative learner at $C=10$, well within \cite{Vogt:2012}'s reported range of tractability ($C/W \le 0.1$; his $C/M$), and at $C=100$, at its boundary, for uniform and Zipfian vocabularies of $W=1{,}000$ words, and recorded episodes to learn 99\% of the vocabulary. Runs were capped at $5 \times 10^8$ episodes, and capped runs are reported as such.
 
-We compare three policies. \textit{Passive}: sample a photo uniformly at random, reveal one of its captions at random, and always move on. \textit{Active, move-on}: target the rarest not-yet-learned learnable word, sample a photo containing it, reveal one caption, and always move on. \textit{Active, linger}: as move-on, but remain on the current photo--revealing another of its remaining captions--for as long as doing so is still shrinking some unknown word's candidate set, moving on only once the current photo stops paying off. A \texttt{move\_cost} parameter charges additional episodes for switching to a new photo, formalizing the idea that eliciting another description of the scene already in view may be cheaper than obtaining a new scene built around a specific word; \texttt{move\_cost}$=0$ makes the two active policies differ only in information, not economy.
+\subsection{Results: context size decides which lever matters}
+Table~\ref{tab-incremental} and Figure~\ref{fig-incremental-sim} summarize the results at $a=1$. At $C=10$ ($C/W=0.01$), active target selection does most of the work (19.1x), and familiar-context selection adds only a modest further benefit (2.0x alone, 28.6x combined), because elimination is already fairly effective when the distractor set is small.
 
-\subsection{Results}
-Table~\ref{tab-flickr} and Figure~\ref{fig-flickr} report mean episodes to reach 50\%, 90\%, and 99\% of the learnable vocabulary (30 replications per cell). Active target selection alone is, as throughout the companion paper, the dominant effect: even at the highest scene-switching cost we tested, both active policies still finish 99\% of the vocabulary in under half the episodes passive sampling requires, and at zero switching cost the advantage reaches 23-fold.
+At $C=100$ ($C/W=0.1$), random-context learning does not merely slow down under a Zipfian distribution: it fails. No passive or active run with random distractors reached even half the vocabulary within $5 \times 10^8$ episodes. The reason is the eliminative learner's requirement that every competing referent be absent from at least one of a word's contexts. With 99 frequency-weighted distractors per context, the most frequent referent ($p \approx 0.13$ at $a=1$) is absent from any given context with probability only about $5 \times 10^{-10}$ (computed exactly\footnote{By the exponential-clock representation of weighted sampling without replacement: each referent $j$ receives an independent clock $E_j \sim \mathrm{Exp}(p_j)$, the context's distractors are the $C-1$ referents whose clocks ring first, and referent $r$ is absent iff at least $C-1$ other clocks ring before $E_r$. The resulting one-dimensional integral over a Poisson-binomial tail agrees with direct simulation wherever the probability is large enough to simulate; see \texttt{corpusXSL/analysis/c100\_absence\_probability.R}.}), so every other word would need on the order of $2 \times 10^9$ exposures merely to rule out that one competitor. Active target selection cannot help, since it changes which word is the target but not which distractors accompany it. Familiar-context selection, which does change the distractors, restores learning (446,962 episodes), and once distractors are controlled, active target selection adds a further 28-fold advantage (15,819 episodes). At $C=100$, controlling what else is in view is a precondition for learning at all.
 
 \begin{table}[h]
 \centering
-\caption{\label{tab-flickr} Mean episodes to reach 50/90/99\% of the 3,598-word learnable vocabulary, Flickr8k captions, eliminative mechanism. \texttt{move\_cost} is the number of extra episodes charged for switching to a new photo (passive sampling has no such switching decision).}
-\begin{tabular}{llrrr}
+\caption{\label{tab-incremental} Mean episodes to learn 99\% of a Zipfian ($a=1$), $W=1000$-word vocabulary, eliminative learner, 30 replications per cell. Speedup is relative to Passive/Random at the same $C$. At $C=100$, no random-context run reached even 50\% of the vocabulary within the $5 \times 10^8$-episode cap, so speedups there are lower bounds.}
+\begin{tabular}{lrrrr}
 \hline
-Condition & move\_cost & 50\% & 90\% & 99\% \\
+ & \multicolumn{2}{c}{$C=10$ ($C/W=0.01$)} & \multicolumn{2}{c}{$C=100$ ($C/W=0.1$)} \\
+Condition & Episodes & Speedup & Episodes & Speedup \\
 \hline
-Passive        & --  & 10{,}386 & 60{,}719 & 151{,}671 \\
-Active, move-on & 0  &  2{,}779 &  5{,}643 &   6{,}528 \\
-Active, linger  & 0  &  3{,}125 &  6{,}511 &   7{,}515 \\
-Active, move-on & 1  &  5{,}558 & 11{,}285 &  13{,}057 \\
-Active, linger  & 1  &  5{,}483 & 11{,}587 &  13{,}461 \\
-Active, move-on & 3  & 11{,}117 & 22{,}570 &  26{,}113 \\
-Active, linger  & 3  & 10{,}199 & 21{,}740 &  25{,}354 \\
-Active, move-on & 10 & 30{,}571 & 62{,}069 &  71{,}811 \\
-Active, linger  & 10 & 26{,}705 & 57{,}275 &  66{,}980 \\
+Passive / Random    & 89{,}454    & 1x      & $>5 \times 10^8$ & 1x \\
+Active / Random     & 4{,}695     & 19.1x   & $>5 \times 10^8$ & -- \\
+Passive / Familiar  & 44{,}607    & 2.0x    & 446{,}962        & $>$1{,}100x \\
+Active / Familiar   & 3{,}127     & 28.6x   & 15{,}819         & $>$31{,}000x \\
 \hline
 \end{tabular}
 \end{table}
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width=0.8\linewidth]{flickr_linger_crossover.pdf}
-\caption{\label{fig-flickr}
-Mean episodes to learn 99\% of the vocabulary vs.\ \texttt{move\_cost}, active eliminative learner on Flickr8k captions. Moving on to a new photo wins when switching is cheap; lingering on the current photo overtakes it once switching costs more, with the crossover between \texttt{move\_cost}=1 and 3.}
+\includegraphics[width=\linewidth]{incremental_sim_summary.pdf}
+\caption{\label{fig-incremental-sim}
+Mean episodes (log scale, $\pm$ 1 SE) for the eliminative learner to acquire 99\% of a 1000-word vocabulary, by target selection (bar fill) and context selection (x-axis), for uniform and Zipfian ($a=1$) distributions and $C=10$ and $C=100$. Faded, dashed bars mark conditions in which no run reached 99\% (or even 50\%) of the vocabulary within the $5 \times 10^8$-episode cap; they are drawn at the cap and are lower bounds.}
 \end{center}
 \end{figure}
 
-The linger-vs-move-on choice itself shows a genuine crossover rather than one policy dominating throughout. At \texttt{move\_cost} 0--1, always moving to a fresh photo wins: a new scene supplies more diverse elimination context than a second, independently-written description of the same one, so the extra information from a new scene outweighs the (zero or small) cost of obtaining it. Between \texttt{move\_cost} 1 and 3, the ranking flips, and lingering's advantage widens as switching gets more expensive--7\% faster than moving on at \texttt{move\_cost}=10. In other words, whether ``ask for more about what's already in view'' is the better strategy is not fixed; it depends on the relative cost of obtaining a new situation versus refining the current one, exactly the kind of parameter the companion paper's synthetic simulations, which never separated situation-content from situation-acquisition cost, could not have exposed.
+This failure is a matter of degree of skew, not an all-or-none property of $C=100$. Sweeping the Zipf exponent at $C=100$ (Figure~\ref{fig-exponent}, right) shows passive random-context learning slowing steeply but continuously, from 9,904 episodes at $a=0$ to 40,456 at $a=0.5$, 1.45 million at $a=0.7$, 47 million at $a=0.8$, and beyond our $10^8$-episode cap from $a=0.85$ on, tracking the exact probability that the most frequent referent is absent from a given context (0.17 at $a=0.5$, $2.6 \times 10^{-4}$ at $a=0.8$, $1.5 \times 10^{-6}$ at $a=0.9$). Active target selection helps throughout this range (e.g., 12x at $a=0.8$) but succumbs in turn (38 million episodes at $a=0.85$, beyond the cap at $a=0.9$). Only familiar-context selection keeps learning fast as skew grows (at $a=0.9$: 106,039 passive and 10,646 active episodes).
 
-This result should be read as a demonstration that the mechanism generalizes to real co-occurrence structure and that the linger-versus-move-on tradeoff is a real, locatable phenomenon, not as a claim about what value \texttt{move\_cost} actually takes for a child or caregiver in practice--we have no direct estimate of that value, and supplying one is a natural target for future work. It is also worth being explicit that Flickr8k captions are adult-crowdsourced descriptions of generic photographs, not child-directed speech or a child's own visual experience, so this study speaks to whether the mechanisms in the companion paper behave sensibly on naturalistic language statistics, not to developmental realism specifically.
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=\linewidth]{exponent_sensitivity.pdf}
+\caption{\label{fig-exponent}
+Mean episodes (log scale) to acquire 99\% of a 1000-word vocabulary as a function of the Zipf exponent $a$, for the eliminative and guess-test learners at $C=10$ and the eliminative learner at $C=100$, by target selection (color) and context selection (line type). Open triangles mark cells in which some or all runs reached the episode cap ($5 \times 10^7$ for $a \le 0.75$, $10^8$ for $0.8 \le a \le 0.9$, $5 \times 10^8$ for $a=1$); these points are lower bounds.}
+\end{center}
+\end{figure}
 
-\section{Study 2: A developmental passive-to-active trajectory}
-\label{app-ramp}
-
-Every active-learning condition in the companion paper holds the degree of autonomy fixed for the whole simulated lifetime of the learner--constantly active or constantly passive throughout; constant blends of the two are examined in Study 3 below. Real infants do not work this way: a newborn is carried from room to room with essentially no say over which scenes it experiences, and only gradually acquires the visual, postural, and locomotor control--head-turning, pointing, reaching, eventually crawling and walking--that lets it actively select what to attend to. This study asks whether that developmental trajectory itself, quite apart from its eventual endpoint, has consequences for how much of active selection's benefit a learner realizes.
-
-\subsection{Motivation and setup}
-The companion paper's completion-checkpoint analysis already implies an answer is possible: the active/passive gap widens over the course of learning (roughly 4-fold at 50\% completion, 9-fold at 90\%, 19-fold at 99\%, for the eliminative learner at $C=10$), meaning active selection's marginal value is low early--common words get learned quickly under either policy--and high late, when only rare stragglers remain. If a fixed ``active budget'' is worth more late than early, a learner who starts passive and becomes active over time should outperform a constant blend that spends the same budget evenly, and should do considerably better than a learner who front-loads the same budget into the early, low-value period.
-
-We extended the eliminative learner with an optional \texttt{active\_prob\_fn}: a function of the episode count, re-evaluated every episode, in place of a constant \texttt{active\_prob}. We compare a forward, linear ramp from passive to active, $\text{active\_prob}(t) = \min(1, t/T)$, against its mirror image, a reverse ramp from active to passive, $\text{active\_prob}(t) = \max(0, 1-t/T)$--the reverse direction serving as a directional sanity check, since it spends an identical total ``active investment'' but places it exactly where the checkpoint analysis says it is worth least. Both are indexed by episode count rather than fraction of vocabulary learned, since real motor and attentional development runs on its own maturational clock and is not contingent on how much vocabulary a particular child happens to have acquired so far; this makes the ramp's timescale $T$ a free parameter, swept here (at $M=1{,}000$, $C=10$, $a=1$, 30 replications per condition) rather than fixed at a single guessed value.
-
-\subsection{Results}
-Table~\ref{tab-ramp} gives the fixed reference points--pure passive and active sampling, and constant blends at four intermediate autonomy levels--and Figure~\ref{fig-ramp} shows both ramp directions across seven timescales, $T \in \{1{,}000, 2{,}000, 3{,}000, 5{,}000, 8{,}000, 12{,}000, 20{,}000\}$ episodes.
+\subsection{Context size, not the ratio $C/W$}
+The same failure appears at larger vocabularies (Table~\ref{tab-m10k-c100}). $C=100$ at $W=10{,}000$ has the same ratio, $C/W=0.01$, as $C=10$ at $W=1{,}000$, where learning is easy, and $C=100$ at $W=60{,}000$ has a smaller ratio still (0.0017). Yet at both sizes, with random distractors, no run, passive or active, learned even 10\% of the vocabulary within $10^8$ episodes (10 replications per condition). With 99 distractors per context, the most frequent referent ($p \approx 0.10$ at $W=10{,}000$ and 0.086 at $W=60{,}000$) is absent from a given context with probability only about $1.5 \times 10^{-6}$ and $2.7 \times 10^{-5}$ respectively, so the rarest words would need on the order of $10^{10}$ episodes or more merely to rule out that one competitor. Familiar-context selection again restores learning. Under Zipfian distractors, then, whether elimination is feasible depends on the absolute context size together with the skew of the referent distribution, rather than on the ratio $C/W$ alone.
 
 \begin{table}[h]
 \centering
-\caption{\label{tab-ramp} Mean episodes to learn 99\% of a Zipfian ($a=1$), $M=1{,}000$-word vocabulary, eliminative learner, $C=10$: fixed reference points (no developmental trajectory).}
-\begin{tabular}{lr}
+\caption{\label{tab-m10k-c100} Mean episodes to learn 99\% of a $W$-word vocabulary at $C=100$, eliminative learner. ``$>$'': no run reached even 10\% (at $W=1{,}000$, even 50\%) of the vocabulary within the stated cap.}
+\small
+\begin{tabular}{lrrr}
 \hline
-Condition & Episodes \\
+Condition & $W=1{,}000$ & $W=10{,}000$ & $W=60{,}000$ \\
 \hline
-Passive (active\_prob=0)     & 91{,}963 \\
-Constant blend, active\_prob=0.10 & 20{,}907 \\
-Constant blend, active\_prob=0.25 & 12{,}527 \\
-Constant blend, active\_prob=0.50 &  7{,}823 \\
-Constant blend, active\_prob=0.75 &  5{,}888 \\
-Active (active\_prob=1)      &  4{,}659 \\
+Zipfian ($a=1$), Passive / Random & $>5 \times 10^8$ & $>10^8$ & $>10^8$ \\
+Zipfian ($a=1$), Active / Random & $>5 \times 10^8$ & $>10^8$ & $>10^8$ \\
+Zipfian ($a=1$), Passive / Familiar & 446{,}962 & 866{,}781 & 5{,}453{,}160 \\
+Zipfian ($a=1$), Active / Familiar & 15{,}819 & 113{,}584 & 589{,}504 \\
+Uniform, Passive / Random & 9{,}904 & 80{,}048 & 424{,}968 \\
+Uniform, Active / Random & 3{,}718 & 26{,}261 & 128{,}363 \\
 \hline
 \end{tabular}
 \end{table}
 
-\begin{figure}[h]
-\begin{center}
-\includegraphics[width=0.8\linewidth]{active_ramp.pdf}
-\caption{\label{fig-ramp}
-Mean episodes to learn 99\% of the vocabulary vs.\ ramp timescale $T$, forward (passive-to-active) vs.\ reverse (active-to-passive) developmental trajectories. Dashed lines mark the pure passive and pure active reference points from Table~\ref{tab-ramp}.}
-\end{center}
-\end{figure}
+$C/W$ does, however, shape how large the active advantage is once learning is possible. With familiar context at $C=100$, the active advantage is 28-fold at $W=1{,}000$ but only 7.6-fold at 10,000 and 9.3-fold at 60,000. Recording how many exposures each word needed before it was learned (10 replications per condition) shows why. Target selection does not change how many exposures a given word needs: passive and active learners need the same number, frequency band by frequency band. What differs is how each learner pays for them. An active learner never spends an episode on a word it already knows, so its total is essentially the sum of all words' needs, and under familiar context at $C=100$ that sum is dominated by the most frequent words, whose competitors are other frequent referents: the top 1\% of words need a median of 109--229 exposures each, the bottom half only 5--7. A passive learner instead waits for its last few rare words to be sampled often enough, so each exposure a rare word needs costs it roughly the inverse of that word's sampling probability. At $W=1{,}000$ these last words are unusually hard--the last 1\% learned need a median of 34 exposures, against 5--6 at $W=10{,}000$ and 60,000--which inflates the passive learner's time, and hence the speedup. Varying $C$ at fixed $W$ indicates that this hard tail grows with the share of all referents present in each context (5 replications per condition): at $W=1{,}000$, the last 1\% of words need a median of 3, 6, and 34 exposures at $C/W=0.01$, 0.03, and 0.1, and at $W=10{,}000$, 6, 10, and 297 at the same ratios. When each context contains a tenth of all referents, a competitor that survives one exposure has a good chance of reappearing in the next.
 
-The clearest single comparison is at the shortest timescale tested. A forward ramp with $T=1{,}000$--fully passive for the first 1,000 episodes, then linearly increasing to fully active--reaches 99\% in 4,874 episodes, within 4.6\% of pure active sampling (4,659). The reverse ramp at the identical $T=1{,}000$--fully active for the first 1,000 episodes, then decaying to fully passive--reaches 99\% in 89,961 episodes, statistically indistinguishable from pure passive sampling (91,963). Same timescale, same total quantity of active exposure, opposite placement in the learning trajectory: one recovers essentially all of active selection's benefit, the other essentially none of it.
+\subsection{A learner that does not need full elimination}
+The guess-test learner of Paper 1, which keeps a single guess per word and counts a word as learned once its guess lands on the true referent, never needs every competing referent to be absent from some context. Accordingly it still learns at $C=100$, $a=1$ with random distractors (326,494 episodes passive, 176,578 active), where the eliminative learner never finishes, and active target and familiar-context selection give it only modest speedups (1.8x and 3.8x). Combining active target selection with familiar-context selection, however, often prevented this learner from finishing: in Study 2, 22 of 30 such runs did not learn 99\% of the vocabulary within $5 \times 10^6$ episodes, while every passive run finished (85,818 episodes on average). We return to this failure in Study 2, where we also show that with a learning criterion the learner can observe, no guess-test learner choosing among all unnamed objects on every episode finished at $C=100$, with either kind of context.
 
-Extending the sweep past the original three timescales reveals a further, unanticipated regularity. The forward ramp increases smoothly and monotonically with $T$, exactly as expected: more time spent passive before transitioning costs more, roughly in proportion to $T$ itself (4,874 at $T=1{,}000$ up to 10,643 at $T=20{,}000$). The reverse ramp, by contrast, does not decline smoothly--it stays close to the passive baseline through $T=8{,}000$ (57,934) and then falls sharply by $T=12{,}000$ (6,059), a roughly ten-fold drop between two adjacent timescales rather than a gradual one. We interpret this as follows: for large $T$, an active-heavy start completes the vocabulary quickly enough that the ramp never gets far into its decay before the learner is essentially done, so the process behaves like sustained high activity rather than a genuine transition to passivity. For small $T$, activity decays away well before the vocabulary is anywhere near complete, so nearly the entire (much longer) remaining run happens under passive-like conditions. The threshold falls close to pure active sampling's own completion time (4,659 episodes)--exactly where a fast, active-driven trajectory would either finish before the ramp bites (large $T$) or run headlong into a fully-decayed, passive-dominated remainder (small $T$)--which is a satisfying, if informal, confirmation that the mechanism we propose is the right one.
+\subsection{Cross-word mutual exclusivity}
+\label{sec-mutex}
+Every learner above narrows a word's candidates independently. \cite{Reisenauer:2013} show that a cross-word mutual exclusivity constraint--confirming one word's meaning immediately excludes that referent for every other still-unlearned word--can rescue an elimination-based learner from exactly the slowdown seen at large $C$. We added this rule to the eliminative learner, with cascades of further learning events allowed within an episode, and compared it against the independent model at $W=1{,}000$, $a=1$, random context (Table~\ref{tab-mutex}; 30 replications per cell at $C=10$, and 200 at $C=100$, where learning time is heavy-tailed; no replication was censored).
 
-\subsection{Scope}
-These results support a narrow but useful claim: a plausible developmental trajectory--little control early, more control later--is not merely ``a blend of the extremes'' with a worse average, and under the mechanism we model here, it need not sacrifice much of active selection's benefit relative to being fully active from birth, provided the transition happens on a fast-enough timescale relative to the vocabulary at hand. We make no claim about what timescale actually describes real infant development, nor have we tested ramp shapes other than linear, or mechanisms other than eliminative learning at a single $C$ and Zipf exponent; extending this analysis to the other learning mechanisms and to a data-driven estimate of the transition's real timescale--plausibly informed by egocentric video of infants' own visual experience as their motor repertoire develops--is a natural next step, not one we take here.
+\begin{table}[h]
+\centering
+\caption{\label{tab-mutex} Mean episodes to learn 99\% of a Zipfian ($a=1$), $W=1{,}000$-word vocabulary, eliminative learner, random context, with vs.\ without cross-word mutual exclusivity. Without mutual exclusivity, no $C=100$ run reached even 50\% of the vocabulary within $5 \times 10^8$ episodes, so those speedups are lower bounds.}
+\begin{tabular}{lrrr}
+\hline
+Condition & Independent & Mutual exclusivity & Speedup \\
+\hline
+$C=10$, Passive & 89{,}454 & 23{,}184 & 3.9x \\
+$C=10$, Active & 4{,}695 & 1{,}569 & 3.0x \\
+$C=100$, Passive & $>5 \times 10^8$ & 771{,}125 & $>$640x \\
+$C=100$, Active & $>5 \times 10^8$ & 686{,}349 & $>$720x \\
+\hline
+\end{tabular}
+\end{table}
 
-\section{Study 3: How much autonomy, and over what?}
+At $C=100$, mutual exclusivity delivers the predicted rescue: both passive and active learners now reach 99\% of the vocabulary, in well under a million episodes on average. The trajectory is unusual, however. Essentially the whole vocabulary is learned in a single cascade: in 396 of 400 replications, the 50\%, 90\%, and 99\% checkpoints were all reached within 10 episodes of one another, after a long initial period in which almost nothing was learned. And active target selection confers little benefit: 686,349 versus 771,125 episodes (medians 441,212 and 572,126; $z \approx 1.3$).
+
+Both features have the same explanation. Nothing can cascade until at least one word has been learned by ordinary elimination, which requires ruling out every competitor for that word--least severe for the most frequent word, whose own referent is the competitor otherwise hardest to rule out. Once that first word is learned, its referent is removed from every other word's candidate set, which unblocks the next, and so on. The wait for the first learning event dominates the total time, and during that wait active target selection is inert: its advantage comes from never spending an episode on an already-known word, and while no word is yet known, that restriction does nothing. Holding the random seed fixed, active and passive target selection produce identical target sequences until the first word becomes known. Mutual exclusivity and active target selection, both beneficial elsewhere, therefore do not compound at large $C$--a second case, alongside the guess-test learner's failure under combined active target and familiar-context selection, of levers that fail to compose.
+
+\section{Study 2: How much autonomy, and over what?}
 \label{sec-modes}
 
-Studies 1 and 2 ask how active selection is deployed across situations and across developmental time. A third question concerns the active learner itself. In the companion paper, an active learner is idealized in two ways: it exercises choice on every episode, and whenever it does, it can choose among the entire vocabulary, preferring any word it does not yet know. Real learners exercise control only some of the time; they choose among whatever happens to be available (the toys in the room, not every object they will ever name); and they may not simply prefer the least-known item, since infants preferentially attend to stimuli of intermediate familiarity \citep[the ``Goldilocks effect'';][]{Kidd:2012}. This study relaxes each idealization in turn.
+In Paper 1 and in Study 1, an active learner is idealized in two ways: it exercises choice on every episode, and whenever it does, it can choose among every object it cannot yet name. Real learners exercise control only some of the time; they choose among whatever happens to be available (the toys in the room, not every object they will ever name); and they may not simply prefer the least-known item, since infants preferentially attend to stimuli of intermediate familiarity \citep[the ``Goldilocks effect'';][]{Kidd:2012}. Which unnamed objects a learner pursues may also depend more or less on how common they are. And a learner may be able to pursue a word only once it has heard it--asking what a half-heard word means, say--rather than seeking the name of an object it has seen but never heard named. This study relaxes each idealization in turn.
 
 \subsection{Setup}
-We extended the eliminative learner's target selection in three ways. \textit{Partial autonomy}: each episode is active with probability $\text{active\_prob} \in \{0.25, 0.5, 0.75\}$ and passive otherwise, a constant blend of the kind used as the reference point in Study 2. \textit{Goldilocks targeting}: among not-yet-known words, the learner prefers those it has encountered about twice, weighting each by $\exp(-(n-2)^2/8)$ times its frequency, where $n$ is the number of times the word has been the target so far. \textit{Bounded choice}: on each active episode the learner may choose only among a choice set of $k \in \{100, 50, 20, 5\}$ words, drawn without replacement in proportion to frequency (so that commonly-encountered things are more likely to be at hand), preferring an unknown word within the set and making a passive draw from the set if it contains none.
+We extended the eliminative learner's target selection in three ways; later subsections also compare frequency-weighted with uniform choice among unnamed objects, and object-driven with word-driven pursuit. \textit{Partial autonomy}: each episode is active with probability $\text{active\_prob} \in \{0.25, 0.5, 0.75\}$ and passive otherwise, a constant blend of active and passive selection. \textit{Goldilocks targeting}: among not-yet-known words, the learner prefers those it has encountered about twice, weighting each by $\exp(-(n-2)^2/8)$ times its frequency, where $n$ is the number of times the word has been the target so far. \textit{Bounded choice}: on each active episode the learner may choose only among a choice set of $k \in \{100, 50, 20, 5\}$ words, drawn without replacement in proportion to frequency (so that commonly-encountered things are more likely to be at hand), preferring an unknown word within the set and making a passive draw from the set if it contains none.
 
-We ran each condition, together with pure passive and fully active selection, in four settings for a Zipfian vocabulary of $M=1{,}000$ words: $C=10$ with random and with familiar context selection ($a=1$), and two settings at $C=100$. The companion paper shows that at $C=100$, $a=1$, the eliminative learner never completes with randomly-composed contexts, even under fully active selection, so there we use the two $C=100$ settings in which learning does complete: familiar context at $a=1$, and random context at $a=0.75$, the steepest skew at which random-context learning finished in every run. All conditions were simulated with the companion paper's fast reimplementation of the eliminative learner, which we validated for each of these target-selection rules against the reference implementation (200 replications per condition at $C=10$, 30 at $C=100$).
+We ran each condition, together with pure passive and fully active selection, in four settings for a Zipfian vocabulary of $W=1{,}000$ words: $C=10$ with random and with familiar context selection ($a=1$), and two settings at $C=100$. Study 1 shows that at $C=100$, $a=1$, the eliminative learner never completes with randomly-composed contexts, even under fully active selection, so there we use the two $C=100$ settings in which learning does complete: familiar context at $a=1$, and random context at $a=0.75$, the steepest skew at which random-context learning finished in every run. All conditions were simulated with the C++ reimplementation of the eliminative learner described in the General method (200 replications per condition at $C=10$, 30 at $C=100$).
 
 \subsection{Results}
 Table~\ref{tab-modes} and Figure~\ref{fig-modes} report each condition's episodes to learn 99\% of the vocabulary relative to fully active selection in the same setting.
 
 \begin{table}[h]
 \centering
-\caption{\label{tab-modes} Episodes to learn 99\% of an $M=1{,}000$-word Zipfian vocabulary, eliminative learner, relative to fully active selection in the same setting (first row: fully active episodes). Values above 1 are slower than fully active.}
+\caption{\label{tab-modes} Episodes to learn 99\% of a $W=1{,}000$-word Zipfian vocabulary, eliminative learner, relative to fully active selection in the same setting (first row: fully active episodes). Values above 1 are slower than fully active.}
 \small
 \begin{tabular}{lrrrr}
 \hline
@@ -199,9 +201,9 @@ Episodes to learn 99\% of the vocabulary relative to fully active selection (log
 \end{center}
 \end{figure}
 
-\textit{Partial autonomy shows steeply diminishing returns.} In every setting, a learner who is active on only a quarter of episodes already captures most of active selection's benefit: measured on a log scale, between two-thirds and four-fifths of the full passive-to-active speedup (e.g., at $C=10$ with random context, 7.1x of a possible 19.0x). Each further increment of autonomy buys less. This agrees with the constant blends in Study 2 (Table~\ref{tab-ramp}), and complements it: Study 2 shows that \textit{when} autonomy arrives matters a great deal, while this study shows that, once it has arrived, even occasional exercise of it goes a long way.
+\textit{Partial autonomy shows steeply diminishing returns.} In every setting, a learner who is active on only a quarter of episodes already captures most of active selection's benefit: measured on a log scale, between two-thirds and four-fifths of the full passive-to-active speedup (e.g., at $C=10$ with random context, 7.1x of a possible 19.0x). Each further increment of autonomy buys less. Study 3 asks whether, beyond its amount, the timing of autonomy matters.
 
-\textit{Goldilocks targeting matters in only one setting.} Preferring words encountered about twice makes no difference in three of the four settings (0.996--1.04x), but nearly halves learning time at $C=100$ with familiar context (0.56x).
+\textit{Goldilocks targeting matters in only one setting, and not because of intermediate familiarity.} Preferring words encountered about twice makes no difference in three of the four settings (0.996--1.04x). At $C=100$ with familiar context it nearly halves learning time (0.56x), but the mechanism test below shows that this gain mostly disappears (0.93x) once familiarity is computed from encountered words only. Its benefit there comes from spreading early exposures across more of the vocabulary, which speeds up familiar-context selection, not from targeting words of intermediate familiarity as such.
 
 \textit{The cost of bounded choice depends on the setting.} In three settings, restricting choice costs little until the choice set is small, and costs more the smaller it is (1.03--1.09x with 100 words to choose from, rising to 2.8--4.1x with 5). At $C=100$ with familiar context, the pattern is different: even a choice set of 100 makes learning 5.5 times slower, and the cost is not monotone in the size of the set (11.3x with 20 words, 10.4x with 5).
 
@@ -216,7 +218,7 @@ Second, we tracked each policy's trajectory under the original weighting. The fr
 
 \begin{table}[h]
 \centering
-\caption{\label{tab-dilution} Episodes to learn 99\% of an $M=1{,}000$-word Zipfian ($a=1$) vocabulary at $C=100$ with familiar context, relative to unrestricted active selection under the same familiarity measure (30 replications per cell). ``All words'': the original familiarity measure, in which every unencountered word counts as still holding every referent; ``encountered words only'': that contribution removed.}
+\caption{\label{tab-dilution} Episodes to learn 99\% of a $W=1{,}000$-word Zipfian ($a=1$) vocabulary at $C=100$ with familiar context, relative to unrestricted active selection under the same familiarity measure (30 replications per cell). ``All words'': the original familiarity measure, in which every unencountered word counts as still holding every referent; ``encountered words only'': that contribution removed.}
 \small
 \begin{tabular}{lrr}
 \hline
@@ -242,15 +244,319 @@ Trajectories under the original familiarity measure, $C=100$, $a=1$, familiar co
 \end{center}
 \end{figure}
 
-Why only at large $C$? At $C=10$ elimination is fast even with random distractors, so familiar-context selection adds relatively little (the companion paper reports a 2-fold benefit at $C=10$, against a difference between learning and not learning at all at $C=100$), and a policy that delays its benefit loses correspondingly little.
+Why only at large $C$? At $C=10$ elimination is fast even with random distractors, so familiar-context selection adds relatively little (Study 1 finds a 2-fold benefit at $C=10$, against a difference between learning and not learning at all at $C=100$), and a policy that delays its benefit loses correspondingly little.
 
 These tests also suggest a modeling point. The dilution arises from treating a never-encountered word as ``still considering every referent'', which is the natural bookkeeping for an eliminative learner, but not the only plausible one: a learner that simply ignores words it has not yet heard when judging how familiar an object is learns twice as fast under unrestricted active selection, and is far less sensitive to how its choice set is composed.
 
-\subsection{Scope}
-Two conclusions seem robust across the settings we tested: partial autonomy has steeply diminishing returns, and most of active selection's benefit survives a learner who exercises it only occasionally. The results for Goldilocks targeting and bounded choice are more conditional. Their size, and at $C=100$ with familiar context their direction relative to other settings, depends on context size and on whether distractors are controlled, and at least for bounded choice, on what the available choice set contains rather than merely how large it is. If children's accessible objects are, like the objects they encounter generally, dominated by common ones, the composition of what is at hand may matter as much as the freedom to choose among it. We have tested only the eliminative mechanism, four settings, and frequency-weighted or uniform choice sets; how real choice sets are composed, and how large they are, are empirical questions we do not address.
+\subsection{Which unnamed object to pursue}
+An active learner must also decide which of the objects it cannot yet name to pursue. Our default chooses in proportion to frequency, so that common objects are pursued more often than rare ones; a uniform policy ignores frequency. Table~\ref{tab-policy} compares the two for the eliminative learner (30 replications per cell, none censored).
 
-\section{Discussion (TODO)}
-Not yet written. Should connect Studies 1--3 under the shared theme sketched in the Introduction bullets, discuss the foraging-theory and infant-motor-development literatures (and, for Study 3, the literature on curiosity and intermediate-familiarity preferences), and be explicit about what would be needed to strengthen the "unifying claim" from thematic to mechanistic.
+\begin{table}[h]
+\centering
+\caption{\label{tab-policy} Mean episodes to learn 99\% of the vocabulary, eliminative learner, under frequency-weighted and uniform active target selection, and the corresponding speedups over passive selection in the same set of runs.}
+\small
+\begin{tabular}{lrrrrr}
+\hline
+ & \multicolumn{2}{c}{Active (episodes)} & & \multicolumn{2}{c}{Speedup over passive} \\
+Setting & Freq.-weighted & Uniform & Passive & Freq.-weighted & Uniform \\
+\hline
+$W=1{,}000$, $C=10$, $a=1$, random & 4{,}657 & 4{,}670 & 88{,}220 & 18.9x & 18.9x \\
+$W=10{,}000$, $C=10$, $a=1$, random & 34{,}499 & 34{,}487 & 836{,}037 & 24.2x & 24.2x \\
+$W=1{,}000$, $C=100$, $a=0.75$, random & 632{,}415 & 631{,}345 & 6{,}843{,}752 & 10.8x & 10.8x \\
+$W=1{,}000$, $C=10$, $a=1$, familiar & 3{,}123 & 2{,}893 & 45{,}355 & 14.5x & 15.7x \\
+$W=1{,}000$, $C=100$, $a=1$, familiar & 15{,}978 & 8{,}181 & 474{,}823 & 29.7x & 58.0x \\
+\hline
+\end{tabular}
+\end{table}
+
+With random context the policy makes no difference: the number of exposures a word needs does not depend on which other words are already known, so any learner that targets only unknown words takes about the total number of exposures needed, whatever their order. With familiar context the policy matters, slightly at $C=10$ (8\%) and greatly at $C=100$, where uniform targeting halves the learning time and roughly doubles the active advantage, from 30-fold to 58-fold. The reason is the dilution of the familiarity signal by words not yet heard, analyzed above: after 5,000 episodes, frequency-weighted targeting had left 239 words unheard on average, uniform targeting about 6 (10 replications each). With that dilution removed, by computing familiarity from heard words only, frequency-weighted targeting reached 99\% in 7,698 episodes, close to uniform targeting (8,041). The active advantages reported for familiar context elsewhere in this paper use frequency-weighted targeting and are therefore conservative. For the guess-test learner, the policy matters even with random context (Table~\ref{tab-modes-gt}): uniform targeting is about twice as fast at $C=10$ and four times as fast at $C=100$, although at $C=100$ with familiar context it fails, like frequency-weighted targeting.
+
+\subsection{The guess-test learner}
+We repeated the study with the guess-test learner, at $a=1$ in all four settings, since this learner finishes at $C=100$ even with random context (Study 1). Runs were capped at $5 \times 10^6$ episodes. Table~\ref{tab-modes-gt} gives mean episodes to learn 99\% of the vocabulary. Learning times at $C=10$ are skewed, with a long tail of slow runs, so we ran 200 replications per cell there; 95\% confidence intervals below are percentile bootstrap intervals over runs (\texttt{corpusXSL/analysis/summarize\_ci.R}).
+
+\begin{table}[h]
+\centering
+\caption{\label{tab-modes-gt} Mean episodes to learn 99\% of a $W=1{,}000$-word Zipfian ($a=1$) vocabulary, guess-test learner, 200 replications per cell at $C=10$ and 30 at $C=100$. ``$>$'' marks cells in which some runs did not finish within $5 \times 10^6$ episodes (number in parentheses); these runs are counted at the cap, so the mean is a lower bound.}
+\small
+\begin{tabular}{lrrrr}
+\hline
+ & \multicolumn{2}{c}{$C=10$} & \multicolumn{2}{c}{$C=100$} \\
+Condition & Random & Familiar & Random & Familiar \\
+\hline
+Passive & 38{,}322 & 26{,}748 & 328{,}648 & 85{,}818 \\
+25\% active & 15{,}044 & 7{,}963 & 255{,}740 & 68{,}658 \\
+50\% active & 11{,}531 & 6{,}364 & 237{,}110 & 71{,}732 \\
+75\% active & 9{,}166 & 6{,}091 & 200{,}699 & 80{,}128 \\
+Fully active & 8{,}007 & 7{,}841 & 179{,}983 & $>$3{,}718{,}842 (22) \\
+Goldilocks & 3{,}589 & 3{,}562 & 63{,}772 & $>$4{,}835{,}958 (29) \\
+Uniform & 3{,}760 & 3{,}765 & 43{,}144 & $>5 \times 10^6$ (30) \\
+Choice set of 100 & 11{,}180 & 13{,}776 & 1{,}589{,}313 & $>$2{,}235{,}324 (7) \\
+Choice set of 50 & 9{,}247 & 27{,}861 & 2{,}793{,}079 & $>$3{,}582{,}840 (7) \\
+Choice set of 20 & 6{,}670 & 9{,}331 & $>$2{,}668{,}049 (4) & $>$3{,}570{,}502 (15) \\
+Choice set of 5 & 11{,}095 & 8{,}785 & 501{,}200 & 350{,}426 \\
+\hline
+\end{tabular}
+\end{table}
+
+\textit{Partial control can beat full control.} With random context, partial autonomy again shows diminishing returns, though less steeply than for the eliminative learner: being active on a quarter of episodes gains 60\% (at $C=10$; 95\% CI 57--62\%) and 42\% (at $C=100$; 22--56\%) of the full speedup on a log scale, against two-thirds to four-fifths for the eliminative learner. With familiar context, partial autonomy is as good as or better than full autonomy: at $C=10$, being active on a quarter of episodes already gains 99\% (96--102\%) of the full speedup, and learners active on half or three-quarters of episodes need 19--22\% fewer episodes than fully active ones (6,364 and 6,091, against 7,841; the confidence intervals of the means do not overlap). At $C=100$, full active selection fails: 22 of 30 runs did not finish, whereas every learner active on 25--75\% of episodes finished, in 68,658--80,128 episodes, faster than passive learning. Paper 1 found a related limitation of purely active selection: a learner that never returns to words it believes it knows cannot correct confident errors. The diagnostics below trace this failure to a feedback loop between wrong guesses and familiar-context selection, which any episodes spent on known words break.
+
+\textit{Goldilocks targeting helps the guess-test learner.} Preferring words heard about twice more than doubles the speed of guess-test learning in three of the four settings: 3,589 vs.\ 8,007 episodes at $C=10$ with random context, 3,562 vs.\ 7,841 with familiar context, and 63,772 vs.\ 179,983 at $C=100$ with random context. It fails, like full active selection, at $C=100$ with familiar context (29 of 30 runs censored). The diagnostics below show that the benefit comes from spreading targets more evenly over the unknown words, not from intermediate familiarity as such.
+
+\textit{Bounded choice is costly and erratic.} At $C=10$, frequency-weighted choice sets produce heavy-tailed learning times: median times with sets of 20--100 words are shorter than with unrestricted choice (e.g., 5,753 episodes with 20 words vs.\ 7,610 unrestricted, random context), but occasional slow runs inflate the means (with 50 words and familiar context, mean 27,861, median 6,232). At $C=100$ with random context, choice sets of 20--100 words make learning 8.8--15.5 times slower than unrestricted choice, and a set of 5 words only 2.8 times slower--the same non-monotone pattern as for the eliminative learner with familiar context. Here there is no familiar-context selection, so the dilution mechanism of the eliminative learner cannot be the explanation; the diagnostics below identify a different one.
+
+\subsection{Mechanism: blocked words and self-confirming errors}
+To find out why these policies help or fail the guess-test learner, we reimplemented it with additional bookkeeping (\texttt{corpusXSL/analysis/diagnose\_guesstest.R}) and ran a small number of instrumented replications, with and without targeted interventions.
+
+\textit{Blocked words.} For the guess-test learner, a word can be learned only when it is the target and its own referent is not held, as a wrong guess, by another word. At $C=100$ this is the norm rather than the exception: in instrumented runs with random context, 97.5--99.9\% of active episodes targeted an unknown word whose referent was held by another word. Such a word is learned only after the word holding its referent is itself targeted, in a context without that referent, and drops its guess. Learning speed therefore depends on how often the words holding others' referents are targeted.
+
+\textit{Familiar context at $C=100$: errors that confirm themselves.} For the guess-test learner, familiar-context selection weights each referent by how often its word's current guess has been confirmed, and confirmations do not distinguish right guesses from wrong ones. In four of six instrumented fully active runs that had not finished after $10^6$ episodes, every one of the 12--17 remaining unknown words held a wrong guess on another unknown word's referent, so each word's own referent was held by another unknown word. A fully active learner never targets known words (and, as noted in the General method, stops targeting a word as soon as its guess is correct), so their confirmation counts stay at zero, while each surviving wrong guess raises the weight of its word's referent. By the end, more than 99.99\% of the familiarity weight lay on referents of unknown words. Contexts were then filled with exactly the referents these wrong guesses claimed, so the guesses were confirmed rather than disconfirmed, and the set of mutually wrong guesses sustained itself. Two interventions confirm this account. Spending a quarter of episodes rehearsing a known word, chosen by frequency, let all six runs finish, in 48,706--59,042 episodes--faster than passive (85,818) or partially active learning (68,658--80,128). Computing familiarity only from confirmations of known words, an oracle the learner does not have, also let all six runs finish (148,335--224,512 episodes). Passive episodes help because they mostly rehearse known, frequent words, raising the familiarity of their referents and diluting the self-confirming set. Goldilocks targeting fails in this setting because it, too, never targets known words.
+
+\textit{Choice sets at $C=100$: frequency counted twice.} When the choice set is drawn in proportion to frequency, and the target is then chosen within it in proportion to frequency again, a word's chance of being targeted grows roughly with the square of its frequency. Estimating the effective exponent $b$ in $P(\mathrm{target}) \propto p^b$ by simulating the target-selection rule directly gives $b \approx 1$ for unrestricted choice and $b = 1.6$--1.9 for choice sets of 20--100 words while many words are unknown. Small sets rarely contain more than one unknown word once learning is under way, so for them $b$ falls back toward 1 (1.06 for a set of 5 with 100 words unknown, 1.25 for a set of 20), at the cost of episodes spent on known words when the set contains no unknown word. This explains why intermediate sets cost the most. Steep weighting is costly for the guess-test learner because of blocking: it keeps choosing frequent blocked words and seldom chooses the rarer words that block them. At the end of instrumented runs with sets of 50 or 100 words, blocked words had typically been targeted tens of thousands of times, and the words blocking them far less often, usually only tens of times. Keeping the frequency-weighted set but choosing uniformly within it removes the cost: with sets of 100 words, learning took 75,844--85,409 episodes instead of 1.6--1.7 million.
+
+\textit{Spreading targets helps.} The same account explains the benefit of Goldilocks targeting, which avoids returning to words that have been targeted many times without success: at $C=10$, only 2--5\% of its active episodes targeted a word already targeted ten or more times, against 47--61\% for unrestricted active selection. Spreading targets uniformly over the unknown words helps about as much at $C=10$ and even more at $C=100$ with random context: it learned 99\% of the vocabulary in 3,760 episodes at $C=10$ and 43,144 at $C=100$, against 8,007 and 179,983 for frequency-weighted active selection (Table~\ref{tab-modes-gt}). For this learner, then, frequency-weighted targeting--the default active policy throughout our work--is far from optimal, at least when the learner knows which of its guesses are correct: with a learning criterion the learner can observe, both policies leave many more runs stalled (see \textit{An observable learning criterion} below).
+
+\subsection{Pursuing objects or pursuing words}
+\label{sec-word-driven}
+Our active learner pursues objects it cannot name, and so can reach words it has never heard. A child could instead pursue a word: having heard an unfamiliar word, ask what it means, or watch for it to recur. Such pursuit is possible only after the first hearing. We therefore compared the object-driven learner with a \textit{word-driven} learner, which on each active episode pursues a word it has heard at least once but not yet learned, chosen in proportion to its frequency, and otherwise behaves passively: when no heard word remains unlearned, its target is drawn by frequency. Every word's first exposure must therefore come from passive input. We ran both learners in the four settings above (eliminative learner: passive, object-driven, and word-driven in one set of runs, 200 replications at $C=10$ and 30 at $C=100$; guess-test learner: word-driven, 30 replications, compared with the passive and object-driven values of Table~\ref{tab-modes-gt}). As a benchmark we computed how many passive episodes it takes merely to hear 99\% of the words once: 22,519 at $a=1$ and 10,893 at $a=0.75$ (means of 200 simulations).
+
+\begin{table}[h]
+\centering
+\caption{\label{tab-word-driven} Mean episodes to learn 99\% of a $W=1{,}000$-word Zipfian vocabulary for passive, object-driven, and word-driven target selection, and the speedups of the two active learners over passive learning. Eliminative learner: one set of runs, 200 replications at $C=10$, 30 at $C=100$, cap $5 \times 10^8$ episodes. Guess-test learner: word-driven runs (30 replications, cap $5 \times 10^6$); passive and object-driven values from Table~\ref{tab-modes-gt}. ``$>$'': some runs did not finish (number in parentheses), counted at the cap.}
+\small
+\begin{tabular}{lrrrrr}
+\hline
+ & & \multicolumn{2}{c}{Active (episodes)} & \multicolumn{2}{c}{Speedup over passive} \\
+Setting & Passive & Object-driven & Word-driven & Object & Word \\
+\hline
+\multicolumn{6}{l}{\textit{Eliminative learner}} \\
+$C=10$, $a=1$, random & 89{,}720 & 4{,}683 & 26{,}057 & 19.2x & 3.4x \\
+$C=10$, $a=1$, familiar & 44{,}641 & 3{,}130 & 26{,}177 & 14.3x & 1.7x \\
+$C=100$, $a=0.75$, random & 6{,}759{,}860 & 622{,}007 & 639{,}077 & 10.9x & 10.6x \\
+$C=100$, $a=1$, familiar & 431{,}500 & 15{,}991 & $>5 \times 10^8$ (30) & 27.0x & -- \\
+\multicolumn{6}{l}{\textit{Guess-test learner}} \\
+$C=10$, $a=1$, random & 38{,}322 & 8{,}007 & 24{,}035 & 4.8x & 1.6x \\
+$C=10$, $a=1$, familiar & 26{,}748 & 7{,}841 & 23{,}456 & 3.4x & 1.1x \\
+$C=100$, $a=1$, random & 328{,}648 & 179{,}983 & $>$4{,}109{,}440 (23) & 1.8x & -- \\
+$C=100$, $a=1$, familiar & 85{,}818 & $>$3{,}718{,}842 (22) & $>$3{,}802{,}207 (20) & -- & -- \\
+\hline
+\end{tabular}
+\end{table}
+
+\textit{At $C=10$, most of the active advantage comes from reaching words never heard} (Table~\ref{tab-word-driven}). The word-driven eliminative learner is 3.4 times faster than passive learning with random context, against 19.2 times for the object-driven learner, and only 1.7 times faster with familiar context. Its learning time is close to the passive time to hear every word once plus the object-driven learner's time without first exposures: about $22{,}500 + (4{,}700 - 1{,}000) \approx 26{,}200$ episodes with random context, against 26,057 observed. Once a word has been heard, pursuing it removes the wait for its later exposures, but the wait for its first exposure remains and dominates. With familiar context the word-driven learner gains even less, because while many words remain unheard the familiarity signal is diluted (see above), and a word-driven learner keeps many words unheard for longest. The guess-test learner shows the same pattern: word-driven pursuit finishes just after the passive time to hear every word (24,035 and 23,456 episodes), 1.6 and 1.1 times faster than passive learning against 4.8 and 3.4 times for object-driven pursuit.
+
+\textit{When the bottleneck is ruling out competitors, pursuing heard words is enough.} At $C=100$, $a=0.75$, with random context, the eliminative learner needs hundreds of exposures to rule out frequent competitors, and every word is heard long before it is learned. Word-driven pursuit there is only 3\% slower than object-driven pursuit (10.6-fold vs.\ 10.9-fold over passive).
+
+\textit{Without passive input, word-driven pursuit can fixate.} In the remaining two $C=100$ settings, fully word-driven learners usually did not finish, while passive and (for the eliminative learner with familiar context) object-driven learners did. None of the 30 eliminative runs with familiar context learned even 10\% of the vocabulary in $5 \times 10^8$ episodes. An instrumented run shows why. The first word it heard happened to be the most frequent word, the only word whose competitors do not include the most frequent referent, and it was learned after 10,144 exposures. Every other word must rule out that referent, which with frequency-weighted distractors is absent from a context with probability about $5 \times 10^{-10}$ (Study 1). The learner then pursued the second word it heard for the next two million episodes without learning it, never hearing a third. With 998 words unheard, the familiarity signal is almost entirely diluted, so distractors are effectively drawn by frequency, and every one of the target's competing referents reappeared in every context. A learner whose first word is any other word is stuck on that word from the start. The guess-test learner fixates differently: in five of six instrumented runs with random context, after $3 \times 10^5$ episodes the learner had heard a single word, whose wrong guess was the referent of the first- or second-most-frequent word--a referent almost never out of view, so the guess was almost never disconfirmed (\texttt{corpusXSL/analysis/diagnose\_word\_driven.R}). A passive learner falls into the same traps for individual words, but moves on; a word-driven learner with nothing new to hear cannot.
+
+Passive episodes remove the fixation, because they supply new words to pursue (\texttt{corpusXSL/analysis/run\_word\_driven\_partial.R}; 30 replications per cell, none censored). Eliminative learners pursuing heard words on 25\%, 50\%, and 75\% of episodes, at $C=100$ with familiar context, finished in 52,582, 73,267, and 133,950 episodes, against 431,500 passive: more pursuit was slower, the opposite of the object-driven learner (28,723, 21,191, and 18,047 episodes at the same levels). Each word-driven episode is an episode not spent hearing a new word, and so prolongs the dilution of the familiarity signal. For the guess-test learner at $C=100$, partially word-driven learners did as well as partially object-driven ones (random context: 253,365, 215,625, and 182,398 episodes, against 255,740, 237,110, and 200,699; familiar context: 70,021, 68,911, and 85,905, against 68,658, 71,732, and 80,128), so here the cost of word-driven pursuit lies entirely in its failure without passive input.
+
+The two forms of pursuit thus suggest different roles for a child's own choices. Seeking the names of unnamed objects can shorten the wait for rare words; pursuing words already heard can only shorten the wait for repeat exposures, and depends on input the child did not choose to supply new words at all.
+
+\subsection{An observable learning criterion}
+\label{sec-lock}
+As noted in the General method, the guess-test learner above stops pursuing a word as soon as its guess is correct, which it cannot observe. We therefore reran its simulations with the lock-in criterion of Paper 1: a word is treated as known once its current guess has survived two consecutive exposures, and is scored as learned when that locked guess is also correct. Active selection pursues words whose guesses have not locked in. A locked wrong guess is still discarded if its word is heard without it, but an active learner never chooses such a word, so only passive episodes can correct it. There is no forgetting. We ran every condition of Table~\ref{tab-modes-gt}, fully word-driven targeting in all four settings, and word-driven pursuit on 25--75\% of episodes at $C=100$ (200 replications per cell at $C=10$, except 30 for word-driven targeting, and 30 at $C=100$; cap $5 \times 10^6$ episodes; \texttt{corpusXSL/analysis/run\_guesstest\_lock.R} and \texttt{run\_more\_reps.R}). Because runs that stall below 99\% dominate the means of some cells, Table~\ref{tab-lock} reports medians.
+
+\begin{table}[h]
+\centering
+\caption{\label{tab-lock} Median episodes to learn 99\% of a $W=1{,}000$-word Zipfian ($a=1$) vocabulary, guess-test learner with an observable learning criterion (a word is known once its guess has been confirmed twice in a row; learned when that guess is also correct), 200 replications per cell at $C=10$ (word-driven: 30) and 30 at $C=100$. Numbers in parentheses: runs that did not finish within $5 \times 10^6$ episodes, counted at the cap; ``$>5 \times 10^6$'': more than half did not.}
+\small
+\begin{tabular}{lrrrr}
+\hline
+ & \multicolumn{2}{c}{$C=10$} & \multicolumn{2}{c}{$C=100$} \\
+Condition & Random & Familiar & Random & Familiar \\
+\hline
+Passive & 56{,}140 & 47{,}086 & 296{,}828 & 102{,}112 \\
+25\% active & 18{,}018 & 11{,}682 & 317{,}188 & 71{,}867 \\
+50\% active & 15{,}652 & 8{,}768 & 340{,}749 & 74{,}995 \\
+75\% active & 13{,}862 & 7{,}822 & 459{,}091 & 91{,}232 \\
+Fully active & 12{,}714 (15) & 9{,}992 (1) & $>5 \times 10^6$ (30) & $>5 \times 10^6$ (30) \\
+Goldilocks & 5{,}635 (71) & 4{,}838 (8) & $>5 \times 10^6$ (30) & $>5 \times 10^6$ (30) \\
+Uniform & $>5 \times 10^6$ (132) & 5{,}388 (21) & $>5 \times 10^6$ (30) & $>5 \times 10^6$ (30) \\
+Word-driven & $>5 \times 10^6$ (22) & $>5 \times 10^6$ (29) & $>5 \times 10^6$ (30) & $>5 \times 10^6$ (30) \\
+Word-driven, 25\% & -- & -- & 276{,}445 & 70{,}535 \\
+Word-driven, 50\% & -- & -- & 354{,}999 & 70{,}281 \\
+Word-driven, 75\% & -- & -- & 417{,}500 & 104{,}657 \\
+Choice set of 100 & 66{,}824 & 43{,}542 & $>5 \times 10^6$ (30) & $>5 \times 10^6$ (30) \\
+Choice set of 50 & 60{,}323 & 40{,}329 & $>5 \times 10^6$ (30) & $>5 \times 10^6$ (30) \\
+Choice set of 20 & 20{,}093 & 11{,}268 & $>5 \times 10^6$ (30) & 4{,}035{,}585 (9) \\
+Choice set of 5 & 17{,}400 & 13{,}416 & 2{,}072{,}256 & 532{,}963 \\
+\hline
+\end{tabular}
+\end{table}
+
+\textit{At $C=10$ the active advantage survives.} Requiring confirmation slows passive learning (median 56,140 episodes with random context, against 38,176 with the original criterion) as well as active learning, and fully active learning remains 4.4 times faster than passive learning with random context (95\% CI 4.2--4.7) and 4.7 times with familiar context (4.4--5.1), by medians, against 5.0 (4.7--5.3) and 3.6 times (3.4--3.7) with the original criterion. With random context, 15 of 200 fully active runs stalled short of 99\%, as in Paper 1; with familiar context, 1 of 200 did.
+
+\textit{At $C=100$, full control fails.} No learner choosing among all unnamed objects on every episode finished, with either kind of context and whether it chose by frequency, by Goldilocks preference, uniformly, or among heard words only, while every passive and partially active learner did. An instrumented reimplementation (\texttt{corpusXSL/analysis/diagnose\_lock\_stall.R}; six fully active runs per setting) found the same end state in all twelve runs. After $5 \times 10^5$ episodes the learner had learned 68--71\% of the vocabulary with random context and 78--81\% with familiar context, and every unlearned word but one held a locked wrong guess on the referent of another unlearned word. These were not only rare words: their median frequency rank was 195--222 with random context and 134--160 with familiar context. The one word not locked could not be learned, because its referent was held, and the words holding referents were never targeted again, because the learner believed it knew them. A locked wrong guess thus blocks the word whose referent it holds, and that word, unable to guess its own referent, eventually locks in a wrong guess of its own. With 100 referents in view, a wrong guess is far more often confirmed by chance, so the chain of blocked words takes in much of the vocabulary rather than a few words. In instrumented fully active runs with random context (six per context size), 0.7--0.9\% of wrong guesses survived two confirmations at $C=100$, against 0.03--0.13\% at $C=10$; by the time half the words had locked in a guess, 170--191 of these guesses were wrong at $C=100$, but only 1--4 at $C=10$. A passive episode can break the chain, by hearing a locked word in a context without its wrongly guessed referent. Bounded choice sets show the same thing: a small set often contains no unlocked word, and the learner then draws a word from the set by frequency, which may be a wrongly locked one. With sets of 5 words every run finished at $C=100$, and with sets of 20, 21 of 30 runs with familiar context did.
+
+\textit{Partial control beats full control.} Every partially active learner finished. At $C=10$, being active on a quarter of episodes gained 77\% (random context; 95\% CI 73--80\%) and 90\% (familiar context; 86--94\%) of the full speedup on a log scale, by medians, more than with the original criterion (60\% and 99\% by means, 63\% and 98\% by medians). With familiar context, learners active on half or three-quarters of episodes were again faster than fully active ones (medians 8,768 and 7,822 episodes, against 9,992; CIs 8,578--8,950, 7,587--8,138, and 9,312--10,618). At $C=100$, partial control helped less than with the original criterion. With familiar context, learners active on a quarter or half of episodes were about 1.4 times faster than passive learners, but with random context partial control did not help at all (317,188--459,091 episodes, against 296,828 passive), whereas with the original criterion every partially active learner was faster than passive learning. Episodes spent pursuing unlocked words leave the wrongly locked words to be corrected by passive episodes alone.
+
+\textit{Spreading targets speeds learning, at a price.} At $C=10$, Goldilocks targeting again roughly halved the median time of frequency-weighted active selection (5,635 vs.\ 12,714 episodes with random context, 4,838 vs.\ 9,992 with familiar context), and uniform targeting did the same with familiar context (5,388). But both left more runs stalled: Goldilocks targeting 71 and 8 of 200 (random and familiar context), uniform targeting 132 and 21, against 15 and 1 for frequency-weighted selection. With random context, every uniform run reached 90\% of the vocabulary, on average in 5,447 episodes, close to Goldilocks targeting (5,293) and half the time of frequency-weighted selection (10,894), but two-thirds of runs never reached 99\%. Spreading targets thus speeds the learning of most of the vocabulary but leaves more runs caught by errors they never revisit; we did not trace why.
+
+\textit{Bounded choice is costlier.} With frequency-weighted choice sets, median times at $C=10$ were longer than with unrestricted choice for every set size (with random context, 17,400--66,824 episodes, against 12,714; with familiar context, 11,268--43,542, against 9,992), and at $C=100$ only sets of 5 words always finished.
+
+\textit{Word-driven pursuit still depends on passive input.} Fully word-driven learners now failed even at $C=10$ (22 and 29 of 30 runs did not finish, against none with the original criterion). Pursuing heard words on 25--75\% of episodes at $C=100$, they did about as well as partially object-driven learners (random context: 276,445--417,500 episodes, against 317,188--459,091; familiar context: 70,281--104,657, against 71,867--91,232).
+
+The observable criterion therefore leaves intact the active advantage at $C=10$, the value of partial control, and the dependence of word-driven pursuit on passive input, and it strengthens the conclusion that partial control can beat full control. It removes any benefit of full control at $C=100$, and it qualifies the benefit of spreading targets over the unknown words, which now comes with many more stalled runs.
+
+\subsection{Scope}
+Two conclusions seem robust across the settings and both learners we tested: partial autonomy has diminishing returns, and much of active selection's benefit survives a learner who exercises it only occasionally--for the guess-test learner, and for a learner that pursues only words already heard, partial autonomy can even outperform full autonomy, and with a learning criterion the guess-test learner can observe, at $C=100$ only partially active learners finished. A third is that, when the bottleneck is hearing rare words at all, much of the benefit depends on the learner being able to reach words it has never heard. The results for Goldilocks targeting and bounded choice are more conditional. Their size, and at $C=100$ with familiar context their direction relative to other settings, depends on context size and on whether distractors are controlled, and at least for bounded choice, on what the available choice set contains rather than merely how large it is. If children's accessible objects are, like the objects they encounter generally, dominated by common ones, the composition of what is at hand may matter as much as the freedom to choose among it. We have tested two learning mechanisms, four settings, and frequency-weighted or uniform choice sets (the latter for the eliminative learner only); how real choice sets are composed, and how large they are, are empirical questions we do not address.
+
+\section{Study 3: A developmental passive-to-active trajectory}
+\label{sec-ramp}
+
+Studies 1 and 2 hold the degree of autonomy fixed for the whole simulated lifetime of the learner. Real infants do not work this way: a newborn is carried from room to room with essentially no say over which scenes it experiences, and only gradually acquires the visual, postural, and locomotor control--head-turning, pointing, reaching, eventually crawling and walking--that lets it actively select what to attend to. This study asks whether that developmental trajectory itself, quite apart from its eventual endpoint, has consequences for how much of active selection's benefit a learner realizes.
+
+\subsection{Motivation and setup}
+Paper 1's completion-checkpoint analysis already implies an answer is possible: the active/passive gap widens over the course of learning (roughly 4-fold at 50\% completion, 9-fold at 90\%, 19-fold at 99\%, for the eliminative learner at $C=10$), meaning active selection's marginal value is low early--common words get learned quickly under either policy--and high late, when only rare stragglers remain. If a fixed ``active budget'' is worth more late than early, a learner who starts passive and becomes active over time should outperform a constant blend that spends the same budget evenly, and should do considerably better than a learner who front-loads the same budget into the early, low-value period.
+
+We extended the eliminative learner with an optional \texttt{active\_prob\_fn}: a function of the episode count, re-evaluated every episode, in place of a constant \texttt{active\_prob}. We compare a forward, linear ramp from passive to active, $\text{active\_prob}(t) = \min(1, t/T)$, against its mirror image, a reverse ramp from active to passive, $\text{active\_prob}(t) = \max(0, 1-t/T)$. Over their first $T$ episodes the two ramps are active equally often, but the reverse ramp places that activity where the checkpoint analysis says it is worth least. Both are indexed by episode count rather than fraction of vocabulary learned, since real motor and attentional development runs on its own maturational clock and is not contingent on how much vocabulary a particular child happens to have acquired so far; this makes the ramp's timescale $T$ a free parameter, swept here (at $W=1{,}000$, $C=10$, $a=1$, 200 replications per condition) rather than fixed at a single guessed value.
+
+\subsection{Results}
+Table~\ref{tab-ramp} gives the reference points--pure passive and active selection, and constant blends at 13 intermediate levels of autonomy--and Figure~\ref{fig-ramp} shows both ramp directions across seven timescales, $T \in \{1{,}000, 2{,}000, 3{,}000, 5{,}000, 8{,}000, 12{,}000, 20{,}000\}$ episodes.
+
+\begin{table}[h]
+\centering
+\caption{\label{tab-ramp} Mean episodes to learn 99\% of a Zipfian ($a=1$), $W=1{,}000$-word vocabulary, eliminative learner, $C=10$, for constant levels of autonomy (proportion of episodes on which the target is actively selected); 200 replications each. Study 2 reports some of the same blends, relative to fully active selection, from a separate set of simulations.}
+\begin{tabular}{lrlr}
+\hline
+Proportion active & Episodes & Proportion active & Episodes \\
+\hline
+0 (passive) & 89{,}852 & 0.30 & 11{,}123 \\
+0.02  & 41{,}997 & 0.40 &  9{,}192 \\
+0.05  & 29{,}425 & 0.50 &  7{,}857 \\
+0.075 & 24{,}474 & 0.60 &  6{,}900 \\
+0.10  & 21{,}112 & 0.75 &  5{,}839 \\
+0.15  & 16{,}922 & 0.90 &  5{,}077 \\
+0.20  & 14{,}325 & 1 (active) & 4{,}689 \\
+0.25  & 12{,}489 & & \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.8\linewidth]{active_ramp.pdf}
+\caption{\label{fig-ramp}
+Mean episodes to learn 99\% of the vocabulary vs.\ ramp timescale $T$, forward (passive-to-active) vs.\ reverse (active-to-passive) developmental trajectories. Dashed lines mark pure passive and pure active selection (Table~\ref{tab-ramp}).}
+\end{center}
+\end{figure}
+
+Forward ramps are slower the longer the learner stays passive, rising smoothly from 4,869 episodes at $T=1{,}000$, within 4\% of pure active selection, to 10,612 at $T=20{,}000$. Reverse ramps behave very differently. At $T=1{,}000$ the reverse ramp takes 89,199 episodes, close to pure passive selection (89,852), and it stays near the passive level through $T=8{,}000$ (57,301) before falling sharply by $T=12{,}000$ (6,083). The threshold lies where the ramp's midpoint, $T/2$, is close to the time a fully active learner needs to finish (4,689 episodes). When $T$ is large, a learner who starts active finishes before its autonomy has decayed far. When $T$ is small, autonomy decays long before the vocabulary is complete, and the long remainder of the run is passive.
+
+The contrast between directions at a given $T$ confounds timing with the total amount of autonomy, because a learner who becomes active stays active for the rest of its run, while one who becomes passive stays passive. At $T=1{,}000$, the forward learner is active on about 90\% of its episodes and the reverse learner on fewer than 1\%. To isolate timing, we compared each ramp with a constant blend of the same autonomy. For each run we computed its realized autonomy--the mean proportion of active episodes over the episodes it actually ran, which is exact because the ramp depends only on the episode count--and compared each ramp's mean episodes with the constant-blend curve of Table~\ref{tab-ramp} at the ramp's mean realized autonomy, interpolating on a log scale. Confidence intervals for these ratios come from resampling runs within every ramp and blend condition. Forward ramps were 4--12\% faster than constant blends of matched autonomy, and the gain grew with the timescale: 4\% at $T=1{,}000$ (autonomy 0.90), 11\% at $T=8{,}000$ (0.46), and 12\% at $T=20{,}000$ (0.26). Reverse ramps that lose control before the vocabulary is learned ($T \le 8{,}000$) were 1.2 to 2.3 times slower than matched blends, the largest cost at $T=5{,}000$--8,000 (autonomy 0.03--0.07; ratios 2.23 and 2.28); those that finish while still mostly active ($T \ge 12{,}000$) were 2--4\% slower. Every one of these 95\% intervals excluded 1 and was within $\pm 2$\% of its estimate. Timing therefore matters in the direction the checkpoint analysis predicts--autonomy is worth more late in learning than early--but for a learner who becomes active, its effect is modest compared with the effect of how much of the run is spent under control.
+
+\subsection{The guess-test learner}
+The guess-test learner shows the same pattern, less precisely. With the same ramps and a matching set of constant blends (200 replications each; passive 38,096 episodes, fully active 7,994), forward ramps were 1--14\% faster than constant blends of matched autonomy, the gain again growing with the timescale: at $T \le 2{,}000$, where the ramp is active on almost every episode, the difference was not reliable (ratios 0.99 and 0.96, 95\% CIs 0.95--1.03 and 0.92--1.00), but from $T=3{,}000$ on, forward ramps were 7--14\% faster (ratios 0.93 to 0.86, every CI excluding 1). Reverse ramps were 1.2 to 1.8 times slower, most at $T=8{,}000$ (1.84, CI 1.80--1.89). The threshold for reverse ramps lies at a longer timescale than for the eliminative learner, between $T=12{,}000$ (20,868 episodes) and 20,000 (10,376), consistent with the $T/2$ rule given this learner's longer active completion time. Partial autonomy again shows diminishing returns: a constant blend with 25\% active episodes captures 62\% (59--64\%) of the full speedup on a log scale.
+
+With the observable learning criterion of Study 2 (the same ramps and blends, 200 replications each; medians: passive 55,624 episodes, fully active 12,909), losing control early was again costly, but becoming active late no longer reliably helped. We matched ramps to blends on medians, because 20 of the 200 fully active constant runs stalled below 99\% and dominate the mean at high autonomy. Reverse ramps with $T \le 12{,}000$ were 1.2 to 2.3 times slower than matched blends, the cost growing with $T$ (every 95\% CI within $\pm 0.05$ of its estimate). The threshold again lies between $T=12{,}000$ and 20,000, but closer to 20,000 than with the original criterion: at $T=12{,}000$ the reverse ramp still took 50,956 episodes, near the passive level, and at $T=20{,}000$ it took 15,098 (1.10 times its matched blend, CI 1.02--1.25), as the $T/2$ rule predicts for this learner's slower active completion. Forward ramps were neither consistently faster nor slower than matched blends (ratios 0.85--1.04, with no trend in $T$; five of the seven CIs included 1, and the other two, at $T=3{,}000$ and 20,000, favored the ramp). Forward ramps stalled in 28 of 1,400 runs, mostly at the shortest timescales (15 of 200 at $T=1{,}000$, 4 and 7 at $T=2{,}000$ and 3,000, and at most 1 at $T \ge 5{,}000$), although every ramp ends fully active, which suggests that passive episodes early in learning protect against the chains of wrongly locked words described in Study 2. A constant blend with 25\% active episodes captured 77\% (73--84\%) of the full speedup on a log scale, by medians.
+
+\subsection{Scope}
+These results support a narrow claim. A developmental trajectory from little control to more control loses little of active selection's benefit if control arrives quickly relative to the time needed to learn the vocabulary, and it is slightly more efficient than the same amount of control spread evenly (by up to 12--14\%), except for the guess-test learner with an observable learning criterion, for which it is about as efficient. Losing control early is much more costly. We make no claim about the timescale of real infant development, and we have tested only linear ramps, indexed by episodes rather than vocabulary or age, for two learning mechanisms at one context size and Zipf exponent. Estimating how quickly children's self-directed exploration increases, for example from egocentric video recorded across the transitions to crawling and walking \citep{Kretch:2014,Sullivan:2021}, is a natural next step.
+
+\section{Study 4: Staying or moving on: scene-switching cost on real image captions}
+\label{sec-flickr}
+
+Paper 1 tests target selection on real, naturalistic co-occurrence structure using Flickr8k \citep{Hodosh:2013}: 8,108 photographs, each independently described by five human-written captions, but its learner always moves on to a new photo after each caption. Real captions let us ask a further question the synthetic simulations cannot pose at all: beyond choosing \textit{which} word to target, a learner who can request another caption of the scene already in view, rather than only ever moving on to a new one, faces a second active choice with no synthetic analogue--and it is not obvious in advance which side of that choice should win.
+
+\subsection{Setup}
+We treat each caption as a situation: a target word plus whichever other content words co-occur in that sentence, playing the role of distractors. After excluding function words (articles, prepositions, pronouns, and similar) via a hand-curated stoplist and words occurring only once, 4,318 content words remain, averaging 5.76 per caption--a naturally-occurring analogue of context size $C$, close to the $C=10$ of our synthetic simulations. A word is eliminative-learnable if the intersection of the word-sets of every caption in which it appears narrows to the word itself; 83.3\% (3,598 words) are learnable this way, and the remainder are stuck with at most 8 residual confusable alternatives, not a pathological blowup.
+
+We compare three policies. \textit{Passive}: sample a photo uniformly at random, reveal one of its captions at random, and always move on. \textit{Active, move-on}: target the rarest not-yet-learned learnable word, sample a photo containing it, reveal one caption, and always move on. \textit{Active, linger}: as move-on, but remain on the current photo--revealing another of its remaining captions--for as long as doing so is still shrinking some unknown word's candidate set, moving on only once the current photo stops paying off. A \texttt{move\_cost} parameter charges additional episodes each time an active learner moves to a new photo. It is the cost of \textit{seeking} a scene that contains a particular word, formalizing the idea that eliciting another description of the scene already in view may be cheaper than finding a new scene built around that word. The passive learner does not seek scenes--it takes whichever photo comes next--so it is not charged; \texttt{move\_cost} therefore compares the two active policies with each other, and measures how much the cost of search erodes their advantage over a learner that does not search. \texttt{move\_cost}$=0$ makes the two active policies differ only in information, not economy.
+
+\subsection{Results}
+Table~\ref{tab-flickr} and Figure~\ref{fig-flickr} report mean episodes to reach 50\%, 90\%, and 99\% of the learnable vocabulary (30 replications per cell). Paper 1 reports the passive vs.\ active move-on comparison at zero switching cost as its real-data test of target selection (23-fold at 99\%); here we focus on the cost of switching. Even when each search costs ten extra episodes, the highest cost we tested, both active policies still finish 99\% of the vocabulary in under half the episodes passive sampling requires.
+
+\begin{table}[h]
+\centering
+\caption{\label{tab-flickr} Mean episodes to reach 50/90/99\% of the 3,598-word learnable vocabulary, Flickr8k captions, eliminative mechanism. \texttt{move\_cost} is the number of extra episodes charged each time an active learner seeks a new photo (the passive learner does not seek photos and is not charged).}
+\begin{tabular}{llrrr}
+\hline
+Condition & move\_cost & 50\% & 90\% & 99\% \\
+\hline
+Passive        & --  & 10{,}386 & 60{,}719 & 151{,}671 \\
+Active, move-on & 0  &  2{,}779 &  5{,}643 &   6{,}528 \\
+Active, linger  & 0  &  3{,}125 &  6{,}511 &   7{,}515 \\
+Active, move-on & 1  &  5{,}558 & 11{,}285 &  13{,}057 \\
+Active, linger  & 1  &  5{,}483 & 11{,}587 &  13{,}461 \\
+Active, move-on & 2  &  8{,}338 & 16{,}928 &  19{,}585 \\
+Active, linger  & 2  &  7{,}841 & 16{,}664 &  19{,}408 \\
+Active, move-on & 3  & 11{,}117 & 22{,}570 &  26{,}113 \\
+Active, linger  & 3  & 10{,}199 & 21{,}740 &  25{,}354 \\
+Active, move-on & 5  & 16{,}675 & 33{,}856 &  39{,}170 \\
+Active, linger  & 5  & 14{,}915 & 31{,}893 &  37{,}247 \\
+Active, move-on & 10 & 30{,}571 & 62{,}069 &  71{,}811 \\
+Active, linger  & 10 & 26{,}705 & 57{,}275 &  66{,}980 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.8\linewidth]{flickr_linger_crossover.pdf}
+\caption{\label{fig-flickr}
+Mean episodes to learn 99\% of the vocabulary vs.\ \texttt{move\_cost}, active eliminative learner on Flickr8k captions. Moving on to a new photo wins when switching is cheap; lingering on the current photo overtakes it once switching costs more, with the crossover between \texttt{move\_cost}=1 and 2.}
+\end{center}
+\end{figure}
+
+The linger-vs-move-on choice itself shows a genuine crossover rather than one policy dominating throughout. At \texttt{move\_cost} 0 and 1, always moving to a fresh photo wins (by 13\% and 3\% at 99\%): a new scene supplies more diverse elimination context than a second, independently-written description of the same one, so the extra information from a new scene outweighs the (zero or small) cost of obtaining it. Between \texttt{move\_cost} 1 and 2, the ranking flips, and lingering's advantage widens as switching gets more expensive: lingering is 1\% faster than moving on at \texttt{move\_cost}=2, 3\% at 3, 5\% at 5, and 7\% at 10. In other words, whether ``ask for more about what's already in view'' is the better strategy is not fixed; it depends on the relative cost of obtaining a new situation versus refining the current one, exactly the kind of parameter Paper 1's synthetic simulations, which never separated situation-content from situation-acquisition cost, could not have exposed.
+
+This result should be read as a demonstration that the mechanism generalizes to real co-occurrence structure and that the linger-versus-move-on tradeoff is a real, locatable phenomenon, not as a claim about what value \texttt{move\_cost} actually takes for a child or caregiver in practice--we have no direct estimate of that value, and supplying one is a natural target for future work. It is also worth being explicit that Flickr8k captions are adult-crowdsourced descriptions of generic photographs, not child-directed speech or a child's own visual experience, so this study speaks to whether the mechanisms in Paper 1 behave sensibly on naturalistic language statistics, not to developmental realism specifically.
+
+\subsection{The guess-test learner}
+We also ran the guess-test learner on the captions. Each caption updates every content word it contains, in random order: a word whose guess is absent from the caption discards it, and a word without a guess proposes a word in the caption that no other word claims. Learning was scored on the same 3,598 words. The eliminative learner's active policy, which always targets the rarest word not yet learned, deadlocks this learner: a rare word whose wrong guess appears in every caption containing it can never be corrected, and a rarest-first learner keeps returning to it. The active guess-test learner therefore draws its target among unlearned words in proportion to their frequency, as the synthetic learners do, and keeps that target while it lingers on a photo. Runs were capped at $10^6$ episodes (Table~\ref{tab-flickr-gt}).
+
+\begin{table}[h]
+\centering
+\caption{\label{tab-flickr-gt} Guess-test learner on Flickr8k captions: mean episodes to learn 50\%, 90\%, and 95\% of the 3,598-word learnable vocabulary, and the proportion learned at the end of the run (cap $10^6$ episodes), 30 replications per cell. Passive learning reached 99\% in every run (mean 165,506 episodes); no active run did.}
+\small
+\begin{tabular}{llrrrr}
+\hline
+Condition & move\_cost & 50\% & 90\% & 95\% & Final \\
+\hline
+Passive        & --  &  7{,}746 & 39{,}349 &  60{,}015 & 99.3\% \\
+Active, move-on & 0  &  6{,}291 & 17{,}165 &  21{,}937 & 97.9\% \\
+Active, linger  & 0  &  6{,}693 & 17{,}976 &  21{,}862 & 98.5\% \\
+Active, move-on & 1  & 12{,}583 & 34{,}330 &  43{,}875 & 97.9\% \\
+Active, linger  & 1  &  9{,}631 & 29{,}663 &  37{,}030 & 98.5\% \\
+Active, move-on & 2  & 18{,}874 & 51{,}496 &  65{,}812 & 97.9\% \\
+Active, linger  & 2  & 12{,}569 & 41{,}351 &  52{,}199 & 98.5\% \\
+Active, move-on & 3  & 25{,}166 & 68{,}661 &  87{,}749 & 97.9\% \\
+Active, linger  & 3  & 15{,}507 & 53{,}039 &  67{,}367 & 98.5\% \\
+Active, move-on & 5  & 37{,}749 & 102{,}991 & 131{,}623 & 97.9\% \\
+Active, linger  & 5  & 21{,}383 & 76{,}414 &  97{,}704 & 98.5\% \\
+Active, move-on & 10 & 69{,}206 & 188{,}817 & 241{,}310 & 97.9\% \\
+Active, linger  & 10 & 36{,}073 & 134{,}853 & 173{,}547 & 98.5\% \\
+\hline
+\end{tabular}
+\end{table}
+
+Three results differ from the eliminative learner. First, active selection does not complete the vocabulary: active runs level off at 97.5--98.9\% of the learnable words, while every passive run reaches 99\%. Captions are fixed, so a word that has guessed a word present in all of its captions is never corrected; passive sampling, which hears frequent words most often early on, presumably lets those words claim their own referents first and leaves rare words fewer wrong options. Second, at zero switching cost active selection helps much less than for the eliminative learner, 1.2, 2.3, and 2.7 times faster than passive learning at 50\%, 90\%, and 95\% of the vocabulary, and once switching costs two or three episodes, active learning reaches 95\% of the vocabulary later than passive learning does. Third, lingering matters much more. The policies are within 7\% of each other at zero cost, but from \texttt{move\_cost}=1 on, lingering reaches 95\% of the vocabulary in 16--28\% fewer episodes than moving on, and also ends with more words learned. The crossover thus lies between \texttt{move\_cost} 0 and 1 for this learner, rather than between 1 and 2.
+
+With the observable learning criterion of Study 2 (\texttt{corpusXSL/analysis/flickr\_guesstest.R} with \texttt{lock\_k}$=2$; 30 replications per cell), the first and third differences grow, and the second shrinks. Active runs leveled off lower, at 95.0\% of the learnable words when moving on and 96.1--96.4\% when lingering, and only 16 of 30 move-on runs reached 95\% at any cost, while every passive run again reached 99\% (mean 211,347 episodes). At 90\% of the vocabulary, lingering was faster than moving on at every cost tested, by 3\% when switching was free and by 22, 28, 31, 34, and 37\% at costs of 1, 2, 3, 5, and 10 episodes, so for this learner we found no crossover. Requiring confirmation slowed passive learning more than active learning (73,295 episodes to 90\%, against 39,349 with the original criterion), so active selection helped somewhat more than with the original criterion: at zero cost it reached 90\% of the vocabulary 2.6 (move-on) and 2.7 (linger) times faster than passive learning, against 2.3 and 2.2 times, and it stayed ahead of passive learning up to a cost of two episodes per switch when lingering and one when moving on.
+
+\section{General discussion}
+
+Paper 1 established that active control over learning situations can recover much of the cost of a Zipfian vocabulary. The four studies here ask what happens to that benefit when control is closer to what children have. The answers depend less on how much control a learner has than on which lever it acts on and where the learner's bottleneck lies.
+
+\subsection{Levers act on bottlenecks}
+An eliminative learner can be held up in two ways. It can wait for rare words to be heard often enough, or it can wait for frequent competitors to be absent from a word's contexts. Target selection removes the first bottleneck, since an active learner never spends an episode on a word it already knows. Context selection removes the second, since it fills contexts with referents already ruled out for most words. Which bottleneck dominates depends on the number of referents in view and on the skew of their distribution (Study 1). With 10 referents in view, competitors are easily ruled out, and target selection does most of the work. With 100, the most frequent referents are almost never absent from a context, and learning never finishes unless distractors are controlled--whether by familiar-context selection or by cross-word mutual exclusivity. Once distractors are controlled, target selection again adds a large benefit.
+
+This view also explains when levers fail to combine. Mutual exclusivity removes the competitor bottleneck by a cascade that begins with the first word learned; before that word is learned, target selection has nothing to act on, because no word is yet known, and it adds almost nothing (Study 1). Frequency-weighted choice sets restore the rare-word bottleneck that target selection removed, and they also delay familiar-context selection, because familiarity is computed over words, and words not yet heard dilute the signal (Study 2). For the guess-test learner, combining active target selection with familiar-context selection at $C=100$ usually prevented learning from finishing, although each helps on its own: because the learner never revisits known words, the familiarity signal comes to reflect only its own wrong guesses, which then confirm themselves (Study 2). In each case, two forms of control that help separately interfere because one changes the state that the other depends on.
+
+\subsection{Partial, constrained, and developing control}
+The most robust result is that partial control goes a long way. An eliminative learner active on a quarter of episodes gains between two-thirds and four-fifths of the full benefit, on a log scale, in every setting tested, and a guess-test learner 42--99\% (Study 2). For the guess-test learner, partial control can be better than full control: with familiar context, learners active on half or three-quarters of episodes beat fully active ones, and at $C=100$ every partially active learner finished while most fully active ones did not. With a learning criterion the learner can observe, this became the rule at $C=100$: no learner choosing among all unnamed objects on every episode finished in either setting, because guesses wrongly locked in were never revisited and blocked the words whose referents they held, while every partially active learner finished. On real captions, too, a fully active guess-test learner stopped short of the whole vocabulary while a passive one did not (Study 4). In the familiar-context case we traced the benefit of passive input to rehearsal: episodes spent on known words keep the familiarity signal anchored in what the learner has actually learned, and rehearsing known words on a quarter of episodes was enough to prevent the failure. Together with Paper 1's finding that a purely active learner cannot correct confident errors, this suggests that some input outside the learner's own choices may do more than dilute active control: it can protect a learner from errors that full control entrenches. This is encouraging for the developmental relevance of active learning, because children's control over their input is intermittent: much of what they hear is overheard, initiated by others, or about things they did not choose.
+
+Passive input matters most for a learner who can pursue only words it has already heard. Such a learner gains much less than one that seeks the names of unnamed objects when hearing each word at all is the bottleneck (Study 2: 3.4-fold rather than 19-fold at $C=10$), and nearly as much when ruling out competitors is the bottleneck. Without passive episodes it can fixate on a word it cannot resolve and never hear another (for the guess-test learner with an observable criterion, even with 10 referents in view); with them, at $C=100$ and familiar context, it did best when it pursued words least often. Whether children's active word learning is driven more by objects they cannot name or by words they have heard but do not understand is therefore not a detail: the first can bring rare words into the child's experience, while the second depends on others to do so.
+
+What a child chooses among may matter more than how often they choose. Restricting choice to small sets of words costs little when the sets are drawn uniformly from the vocabulary, but a great deal when they over-represent frequent words, as the objects within a child's reach plausibly do \citep{Clerkin:2017}. Preferring words of intermediate familiarity \citep{Kidd:2012} depends on the learner. For the eliminative learner it made no difference in most settings, and where it helped, the gain came from spreading early exposures across the vocabulary. For the guess-test learner it more than doubled the speed of learning in three of four settings, because it spreads targets over the unknown words; spreading them uniformly did about as well with 10 referents in view and better with 100 (Study 2). With an observable learning criterion, both policies still learned most of the vocabulary about twice as fast, but left many more runs stalled by errors the learner never revisited (with random context, a third of Goldilocks runs and two-thirds of uniform runs). How a learner distributes its choices among the words it does not know can matter as much as whether it chooses them: uniform targeting also doubled the eliminative learner's active advantage with familiar context at $C=100$ (Study 2), although it made no difference with random context.
+
+Timing matters, in the direction expected from the growing value of active selection over learning, but modestly (Study 3). A learner who becomes active over time does up to 12--14\% better than one with the same autonomy spread evenly, though not the guess-test learner with an observable learning criterion, and a learner who starts active and loses control before the vocabulary is learned does up to 1.8--2.3 times worse, depending on the learner and criterion. The largest effect of a developmental trajectory is through how much of the learner's run is spent under control, which depends on how quickly control arrives relative to how quickly the vocabulary is learned.
+
+\subsection{The cost of new situations}
+On real captions, whether to stay with the current scene or seek a new one depends on the relative cost of the two (Study 4): when seeking a new scene is free or cheap, a new scene is worth more than another description of the same one, and once it costs two or more episodes, staying is better. For the eliminative learner the difference was small, at most 7\% at the costs tested; for the guess-test learner, lingering was 16--28\% faster once switching cost anything, and with costs of two or three episodes per switch, active learning became slower than passive learning, which pays no cost of search. With an observable learning criterion, lingering was faster for the guess-test learner even when switching was free, and by 22--37\% once it cost anything. The value of control therefore depends on what it costs to exercise. Like foraging animals deciding when to leave a patch \citep{Charnov:1976}, a learner should stay with a scene while it still yields information at a higher rate than a new scene would, after the cost of finding one.
+
+\subsection{Limitations and future directions}
+Our two learners differ in instructive ways, but both are idealized. Study 3 uses a single vocabulary size, context size, and Zipf exponent, and Study 2 mostly a vocabulary of 1,000 words. Our mechanism tests for the guess-test learner, for word-driven fixation, and for stalls under the observable criterion rest on a few instrumented replications per condition. Our policies remain idealized: in most of our simulations the active learner knows exactly which words it has learned (for the guess-test learner, which of its guesses are correct; the analyses with an observable learning criterion in Studies 2--4 relax this, with a fixed two-confirmation criterion), the ramp in Study 3 is linear and indexed by episodes rather than by age, and the costs in Study 4 are free parameters. Flickr8k captions are adult descriptions of photographs, not child-directed speech or a child's view. Each of these idealizations could be informed by data. Egocentric recordings of infants' everyday experience \citep{Sullivan:2021,Clerkin:2017} could be used to estimate how often children's attention is self-directed, which objects are available to choose among, how quickly self-directed exploration increases with motor development \citep{Kretch:2014}, and how often a caregiver names a second object in the same scene rather than a new scene being sought. With such estimates, the present framework could predict not just whether active control helps, but how much each lever contributes over the course of a particular child's vocabulary growth.
 
 \bibliographystyle{apacite}
 \setlength{\bibleftmargin}{.125in}

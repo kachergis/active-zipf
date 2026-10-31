@@ -4,16 +4,15 @@
 # lines.
 suppressMessages({library(ggplot2); library(dplyr)})
 
-r <- as.data.frame(readRDS("active_ramp_results.rds"))
-r$condition <- rownames(r)
-
-ramps <- r %>% filter(grepl("^ramp_", condition)) %>%
-  mutate(direction = ifelse(grepl("fwd", condition), "Forward (passive -> active)", "Reverse (active -> passive)"),
-         T = as.numeric(sub(".*_T", "", condition)))
-
-refs <- r %>% filter(condition %in% c("passive", "active")) %>% select(condition, episodes)
-const <- r %>% filter(grepl("^const_", condition)) %>%
-  mutate(p = as.numeric(sub("const_", "", condition)))
+# Uses the 200-replication C++ runs from run_more_reps.R (group E3), which
+# supersede the 30 R runs in overnight_fill/G3 and active_ramp_results.rds.
+g3 <- bind_rows(lapply(list.files("elim_ramp_cpp", pattern = "rds$", full.names = TRUE), readRDS))
+ramps <- g3 %>% filter(condition != "blend") %>% group_by(condition, T) %>%
+  summarise(episodes = mean(episodes), .groups = "drop") %>%
+  mutate(direction = ifelse(condition == "ramp_fwd", "Forward (passive -> active)", "Reverse (active -> passive)"))
+refs <- g3 %>% filter(condition == "blend", active_prob %in% c(0, 1)) %>% group_by(active_prob) %>%
+  summarise(episodes = mean(episodes), .groups = "drop") %>%
+  mutate(condition = ifelse(active_prob == 0, "passive", "active"))
 
 p <- ggplot(ramps, aes(x = T, y = episodes, color = direction, group = direction)) +
   geom_hline(yintercept = refs$episodes[refs$condition == "passive"], linetype = "dashed", color = "grey50") +
@@ -30,5 +29,5 @@ p <- ggplot(ramps, aes(x = T, y = episodes, color = direction, group = direction
   labs(x = "Ramp timescale T (episodes; log scale)", y = "Mean episodes to learn 99% (log scale)",
        color = NULL) +
   theme_bw(base_size = 12) + theme(legend.position = "top")
-ggsave("../../paper/active_ramp.pdf", p, width = 7, height = 5)
-cat("Figure saved: paper/active_ramp.pdf\n")
+ggsave("../../paper2/active_ramp.pdf", p, width = 7, height = 5)
+cat("Figure saved: paper2/active_ramp.pdf\n")

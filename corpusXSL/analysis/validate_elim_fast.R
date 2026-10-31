@@ -82,3 +82,15 @@ if (RUN_SLOW) {
   famk(10, 20, "unknown", 60, 200); famk(10, 0, "goldilocks", 60, 200)
   famk(100, 100, "unknown", 72, 400); famk(100, 0, "goldilocks", 24, 60)
 }
+
+## Word-driven pursuit (policy "heard" / 3): R reference vs C++, C=10, a=1.
+heard_check <- function(fam, nR = 60, nC = 200) {
+  rR <- unlist(mclapply(1:nR, function(s) { set.seed(s)
+    learn_corpus_eliminative(C = 10, M = M, a = a, uniform = FALSE, active_prob = 1, fam_context = fam,
+                             active_policy = "heard")[10] }, mc.cores = 12))
+  rC <- unlist(mclapply(1:nC, function(s) { set.seed(70000 + s)
+    elim_fast(10, M, zipf_probs(M, a), FALSE, fam, active_prob = 1, policy = 3L)[10] }, mc.cores = 12))
+  cat(sprintf("heard C=10 %-8s R: %.0f (n=%d)  C++: %.0f (n=%d)  z=%.2f\n", ifelse(fam, "familiar", "random"),
+              mean(rR), nR, mean(rC), nC, (mean(rC) - mean(rR)) / sqrt(var(rC) / nC + var(rR) / nR)))
+}
+heard_check(FALSE); heard_check(TRUE)

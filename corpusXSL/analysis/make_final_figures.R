@@ -9,7 +9,11 @@ elim <- readRDS("/Users/gkacherg/Documents/GitHub/active-zipf/corpusXSL/analysis
 elim$model <- "Eliminative"
 guess <- readRDS("/Users/gkacherg/Documents/GitHub/active-zipf/corpusXSL/analysis/guesstest_results.rds")
 guess$model <- "Guess-test"
-d10 <- bind_rows(elim, guess) %>% filter(C == 10) %>%
+## Passive a = 1.5 cells at C=10 come from run_overnight_fill.R (group G1).
+g1 <- bind_rows(lapply(list.files("/Users/gkacherg/Documents/GitHub/active-zipf/corpusXSL/analysis/overnight_fill/G1",
+                                  pattern = "rds$", full.names = TRUE), readRDS)) %>%
+  transmute(model, C = 10, a = 1.5, active = "Passive", fam_context = context, p99)
+d10 <- bind_rows(elim, guess, g1) %>% filter(C == 10) %>%
   transmute(panel = paste0(model, ", C=10"), a, active, fam_context, p99, censored = 0)
 
 sw <- readRDS("/Users/gkacherg/Documents/GitHub/active-zipf/corpusXSL/analysis/c100_exponent_sweep_results.rds") %>%

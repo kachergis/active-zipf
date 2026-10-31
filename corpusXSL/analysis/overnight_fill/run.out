@@ -1,0 +1,67 @@
+Loading required package: foreach
+Loading required package: doParallel
+Loading required package: iterators
+
+=== G1: passive, a = 1.5, C = 10 (censored runs counted at the cap) ===
+       model  context  n n_censored mean_p99 median_p99 reached90    mean50
+ Eliminative Familiar 30          0   716410     726310        30  140627.4
+ Eliminative   Random 30          0 63961711   62884656        30 4321985.0
+  Guess-test Familiar 30          0   221210     217353        30   16190.0
+  Guess-test   Random 30          0   253259     246933        30   23575.6
+     mean90
+   342631.5
+ 25670977.4
+    88419.1
+   108415.7
+
+=== G2: forgetting, passive, cap 2e+07 (medians; NA = median run did not reach it) ===
+ lock_k halflife  active  n reached50 reached90 reached99   med50   med90
+      2      200 Passive 30        30        30        30  417074 4304048
+      3      200 Passive 30        30         0         0 5560674      NA
+      3     1000 Passive 30        30        30        30  137650 1471415
+    med99
+ 12633889
+       NA
+  4713632
+
+=== G3: constant blends ===
+ active_prob  n  mean_ep
+       0.000 30 89857.03
+       0.020 30 41852.97
+       0.050 30 29433.37
+       0.075 30 24317.43
+       0.100 30 21116.13
+       0.150 30 16871.20
+       0.200 30 14331.53
+       0.250 30 12633.40
+       0.300 30 11048.00
+       0.400 30  9190.00
+       0.500 30  7803.07
+       0.600 30  6869.43
+       0.750 30  5829.17
+       0.900 30  5072.50
+       1.000 30  4680.77
+
+=== G3: ramps vs. constant blend of matched realized autonomy (ratio < 1: ramp faster) ===
+ condition     T  n mean_ep mean_autonomy matched_blend_ep ramp_over_blend
+  ramp_fwd  1000 30    4875      0.897519             5084          0.9589
+  ramp_fwd  2000 30    5164      0.806365             5532          0.9333
+  ramp_fwd  3000 30    5466      0.725530             5987          0.9129
+  ramp_fwd  5000 30    6212      0.597568             6891          0.9015
+  ramp_fwd  8000 30    7409      0.463152             8288          0.8940
+  ramp_fwd 12000 30    8709      0.362925             9839          0.8851
+  ramp_fwd 20000 30   10573      0.264351            12156          0.8697
+  ramp_rev  1000 30   87550      0.005741            72162          1.2133
+  ramp_rev  2000 30   88293      0.011376            58186          1.5174
+  ramp_rev  3000 30   86888      0.017322            46362          1.8741
+  ramp_rev  5000 30   82307      0.030551            36979          2.2258
+  ramp_rev  8000 30   57248      0.072007            24880          2.3010
+  ramp_rev 12000 30    6049      0.747915             5842          1.0354
+  ramp_rev 20000 30    5290      0.867733             5227          1.0121
+
+=== G4: Flickr8k, move_cost 2 and 5 ===
+        policy move_cost  n   mean50  mean90  mean99 min_final
+ active_linger         2 30  7840.57 16663.5 19407.6         1
+ active_linger         5 30 14914.57 31892.9 37247.2         1
+ active_moveon         2 30  8337.50 16927.8 19584.8         1
+ active_moveon         5 30 16675.00 33855.6 39169.6         1

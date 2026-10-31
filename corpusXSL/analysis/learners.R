@@ -69,6 +69,18 @@
 #                       already cited in the paper as motivation for the active
 #                       learner, but never previously implemented as the actual
 #                       selection rule.
+#       "uniform"    -- prefer any not-yet-known word, chosen UNIFORMLY among
+#                       them (ignoring base frequency). Opt-in; see
+#                       run_uniform_active.R.
+#       "heard"      -- word-driven pursuit: prefer a not-yet-known word that
+#                       has already been HEARD at least once (times_targeted > 0;
+#                       in these models a word is heard only when it is the
+#                       target), weighted by base frequency. A word never heard
+#                       cannot be pursued, so if no heard word is unknown the
+#                       episode falls back to a passive draw. Contrast with the
+#                       default, object-driven policy, which can reach words
+#                       never heard by bringing their (unnamed) referents into
+#                       view. See run_word_driven.R.
 #
 #   choice_k (K, default: Inf, i.e. unrestricted -- the original behavior)
 #       When acting actively, first restrict the candidate pool to a random
@@ -111,7 +123,7 @@ choose_target <- function(M, probs, word_known, times_targeted, active_prob,
     pool <- 1:M
   }
 
-  unknown_pool <- pool[!word_known[pool]]
+  unknown_pool <- if (active_policy == "heard") pool[!word_known[pool] & times_targeted[pool] > 0] else pool[!word_known[pool]]
   if (length(unknown_pool) == 0) {
     # Nothing unknown is available in this window -- the learner still can't
     # reach outside it, so fall back to a passive draw within the window.
@@ -125,6 +137,11 @@ choose_target <- function(M, probs, word_known, times_targeted, active_prob,
     if (sum(w) <= 0) w <- probs[unknown_pool]  # degenerate fallback (shouldn't normally trigger)
     if (length(unknown_pool) == 1) return(unknown_pool)
     return(sample(unknown_pool, 1, prob = w))
+  }
+
+  if (active_policy == "uniform") {
+    if (length(unknown_pool) == 1) return(unknown_pool)
+    return(sample(unknown_pool, 1))
   }
 
   # default policy: "unknown" -- prefer any unknown, weighted by base frequency
@@ -229,7 +246,10 @@ learn_corpus_guesstest <- function(C, M, a = 1, uniform = TRUE, active = FALSE,
                                     max_episodes = Inf, max_seconds = Inf,
                                     active_prob = NULL, active_policy = "unknown",
                                     choice_k = Inf, goldilocks_target = 2, goldilocks_sigma = 2,
-                                    p_decay = 0, lock_k = 0) {
+                                    p_decay = 0, lock_k = 0, active_prob_fn = NULL) {
+  # active_prob_fn: as in learn_corpus_eliminative -- an optional
+  # function(episodes) -> active_prob for developmental trajectories. NULL
+  # (the default) reproduces the original constant-active_prob model exactly.
   # p_decay: per-episode forgetting hazard for an UNCONFIRMED (not-yet-learned)
   # guess. Checked lazily, only when a word holding a guess is re-exposed --
   # not swept over all M words every episode -- so this stays O(1) per episode
@@ -279,7 +299,8 @@ learn_corpus_guesstest <- function(C, M, a = 1, uniform = TRUE, active = FALSE,
       }
     }
     believed_known <- if (lock_k > 0) confirm_count >= lock_k else word_known
-    target <- choose_target(M, probs, believed_known, times_targeted, active_prob,
+    ap_t <- if (is.null(active_prob_fn)) active_prob else active_prob_fn(episodes)
+    target <- choose_target(M, probs, believed_known, times_targeted, ap_t,
                              active_policy, choice_k, goldilocks_target, goldilocks_sigma)
     times_targeted[target] <- times_targeted[target] + 1L
     nontarg <- setdiff(1:M, target)

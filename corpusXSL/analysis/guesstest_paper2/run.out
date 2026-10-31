@@ -1,0 +1,167 @@
+Loading required package: foreach
+Loading required package: doParallel
+Loading required package: iterators
+
+=== S2: guess-test, autonomy / Goldilocks / choice sets (censored runs counted at the cap) ===
+                 setting      label  n n_censored  mean99 median99  mean50
+  C=10, familiar context    passive 30          0   26382    26310    4322
+  C=10, familiar context    ap=0.25 30          0    8218     7758    3992
+  C=10, familiar context    ap=0.50 30          0    6387     6326    3604
+  C=10, familiar context    ap=0.75 30          0    5940     5676    3646
+  C=10, familiar context     active 30          0    7787     6850    4493
+  C=10, familiar context goldilocks 30          0    3594     3586    2265
+  C=10, familiar context      k=100 30          0   17322     7714    6754
+  C=10, familiar context       k=50 30          0   26275     5676    6720
+  C=10, familiar context       k=20 30          0   15897     5795    6931
+  C=10, familiar context        k=5 30          0    9102     8565    3539
+    C=10, random context    passive 30          0   39327    39389    7608
+    C=10, random context    ap=0.25 30          0   15218    14432    6599
+    C=10, random context    ap=0.50 30          0   11460    10745    5680
+    C=10, random context    ap=0.75 30          0    9270     8878    4989
+    C=10, random context     active 30          0    7814     7600    4548
+    C=10, random context goldilocks 30          0    3632     3636    2304
+    C=10, random context      k=100 30          0   10333     7150    6329
+    C=10, random context       k=50 30          0   13360     5952    7482
+    C=10, random context       k=20 30          0    6134     5848    3969
+    C=10, random context        k=5 30          0   10979    10590    4278
+ C=100, familiar context    passive 30          0   85818    85368   50892
+ C=100, familiar context    ap=0.25 30          0   68658    69094   51246
+ C=100, familiar context    ap=0.50 30          0   71732    71770   53667
+ C=100, familiar context    ap=0.75 30          0   80128    79938   59180
+ C=100, familiar context     active 30         22 3718842  5000000   77146
+ C=100, familiar context goldilocks 30         29 4835958  5000000   19674
+ C=100, familiar context      k=100 30          7 2235324  1550441  528417
+ C=100, familiar context       k=50 30          7 3582840  3506912  979524
+ C=100, familiar context       k=20 30         15 3570502  4586882 1912904
+ C=100, familiar context        k=5 30          0  350426   364942  296480
+   C=100, random context    passive 30          0  328648   295308  102644
+   C=100, random context    ap=0.25 30          0  255740   249224   98784
+   C=100, random context    ap=0.50 30          0  237110   210257   92716
+   C=100, random context    ap=0.75 30          0  200699   189175   90942
+   C=100, random context     active 30          0  179983   175282   86788
+   C=100, random context goldilocks 30          0   63772    62166   22143
+   C=100, random context      k=100 30          0 1589313  1707525  575616
+   C=100, random context       k=50 30          0 2793079  2949578 1027739
+   C=100, random context       k=20 30          4 2668049  3020625 1641374
+   C=100, random context        k=5 30          0  501200   494745  363994
+ ratio_to_active share_of_log_speedup
+         3.38777                   NA
+         1.05530              0.95589
+         0.82023              1.16241
+         0.76274              1.22196
+         1.00000                   NA
+         0.46147                   NA
+         2.22438                   NA
+         3.37413                   NA
+         2.04145                   NA
+         1.16888                   NA
+         5.03316                   NA
+         1.94766              0.58750
+         1.46666              0.76301
+         1.18635              0.89426
+         1.00000                   NA
+         0.46487                   NA
+         1.32246                   NA
+         1.70982                   NA
+         0.78502                   NA
+         1.40505                   NA
+         0.02308                   NA
+         0.01846             -0.05919
+         0.01929             -0.04757
+         0.02155             -0.01820
+         1.00000                   NA
+         1.30039                   NA
+         0.60108                   NA
+         0.96343                   NA
+         0.96011                   NA
+         0.09423                   NA
+         1.82600                   NA
+         1.42091              0.41657
+         1.31740              0.54219
+         1.11510              0.81907
+         1.00000                   NA
+         0.35432                   NA
+         8.83037                   NA
+        15.51860                   NA
+        14.82392                   NA
+         2.78471                   NA
+
+=== S3: guess-test constant blends ===
+ active_prob  n n_censored  mean_ep
+       0.000 30          0 37943.93
+       0.020 30          0 26778.23
+       0.050 30          0 23291.20
+       0.075 30          0 20219.27
+       0.100 30          0 19880.77
+       0.150 30          0 17666.97
+       0.200 30          0 16215.30
+       0.250 30          0 14845.20
+       0.300 30          0 14601.10
+       0.400 30          0 12358.33
+       0.500 30          0 10751.23
+       0.600 30          0 10276.93
+       0.750 30          0  9682.63
+       0.900 30          0  8743.00
+       1.000 30          0  8385.60
+
+=== S3: guess-test ramps vs. matched constant blend (ratio < 1: ramp faster) ===
+ condition     T  n n_censored mean_ep mean_autonomy matched_blend_ep
+  ramp_fwd  1000 30          0    8378       0.93669             8610
+  ramp_fwd  2000 30          0    7882       0.86666             8944
+  ramp_fwd  3000 30          0    8091       0.80574             9322
+  ramp_fwd  5000 30          0    9000       0.71391             9822
+  ramp_fwd  8000 30          0    9192       0.55286            10498
+  ramp_fwd 12000 30          0   10341       0.42986            11855
+  ramp_fwd 20000 30          0   12308       0.30773            14414
+  ramp_rev  1000 30          0   38218       0.01311            30195
+  ramp_rev  2000 30          0   37780       0.02657            25972
+  ramp_rev  3000 30          0   37533       0.04014            24384
+  ramp_rev  5000 30          0   37142       0.06761            21083
+  ramp_rev  8000 30          0   34671       0.11775            19065
+  ramp_rev 12000 30          0   19636       0.41321            12133
+  ramp_rev 20000 30          0   11514       0.71239             9828
+ ramp_over_blend
+          0.9731
+          0.8813
+          0.8679
+          0.9162
+          0.8756
+          0.8723
+          0.8539
+          1.2657
+          1.4546
+          1.5392
+          1.7618
+          1.8186
+          1.6184
+          1.1715
+
+=== S4: guess-test on Flickr8k captions ===
+        policy move_cost  n   mean50   mean90   mean95 n_reached99 mean99
+ active_linger         0 30  6693.47  17975.7  21861.8           0     NA
+ active_moveon         0 30  6291.47  17165.2  21937.2           0     NA
+       passive         0 30  7746.13  39349.3  60015.1          30 165506
+ active_linger         1 30  9631.40  29663.4  37030.3           0     NA
+ active_moveon         1 30 12582.93  34330.4  43874.5           0     NA
+ active_linger         2 30 12569.33  41351.1  52198.8           0     NA
+ active_moveon         2 30 18874.40  51495.6  65811.7           0     NA
+ active_linger         3 30 15507.27  53038.9  67367.3           0     NA
+ active_moveon         3 30 25165.87  68660.8  87748.9           0     NA
+ active_linger         5 30 21383.13  76414.3  97704.3           0     NA
+ active_moveon         5 30 37748.80 102991.2 131623.4           0     NA
+ active_linger        10 30 36072.80 134853.0 173546.8           0     NA
+ active_moveon        10 30 69206.13 188817.2 241309.6           0     NA
+ mean_final min_final
+   0.985473  0.980823
+   0.979498  0.974986
+   0.993024  0.990828
+   0.985381  0.980823
+   0.979498  0.974986
+   0.985288  0.980823
+   0.979498  0.974986
+   0.985242  0.980823
+   0.979498  0.974986
+   0.985066  0.980267
+   0.979498  0.974986
+   0.984797  0.979433
+   0.979424  0.974986

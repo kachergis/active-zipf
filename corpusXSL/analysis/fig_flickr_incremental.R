@@ -9,6 +9,13 @@ summ$condition <- rownames(summ)
 summ <- summ[grepl("^active_", summ$condition), ]
 summ$policy <- ifelse(grepl("moveon", summ$condition), "Move on", "Linger")
 summ$move_cost <- as.numeric(sub(".*_mc", "", summ$condition))
+summ <- summ[, c("policy", "move_cost", "0.99")]
+
+# move_cost 2 and 5 come from run_overnight_fill.R (group G4).
+g4 <- do.call(rbind, lapply(list.files("overnight_fill/G4", pattern = "rds$", full.names = TRUE), readRDS))
+g4s <- aggregate(c99 ~ policy + move_cost, data = g4, FUN = mean)
+summ <- rbind(summ, data.frame(policy = ifelse(g4s$policy == "active_moveon", "Move on", "Linger"),
+                               move_cost = g4s$move_cost, `0.99` = g4s$c99, check.names = FALSE))
 
 passive_99 <- raw["passive", "0.99"]
 
@@ -22,5 +29,5 @@ p <- ggplot(summ, aes(x = move_cost, y = .data[["0.99"]], color = policy, group 
   labs(x = "move_cost (extra episodes charged per photo switch)",
        y = "Mean episodes to learn 99% (log scale)", color = NULL) +
   theme_bw(base_size = 12)
-ggsave("../../paper/flickr_linger_crossover.pdf", p, width = 7, height = 4.5)
-cat("Figure saved: paper/flickr_linger_crossover.pdf\n")
+ggsave("../../paper2/flickr_linger_crossover.pdf", p, width = 7, height = 4.5)
+cat("Figure saved: paper2/flickr_linger_crossover.pdf\n")
