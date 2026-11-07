@@ -1,0 +1,97 @@
+"learner","statistic","active_prob","n","n_censored","episodes","share25","share25_lo","share25_hi"
+"eliminative","mean",0,200,0,89852.07,NA,NA,NA
+"eliminative","mean",0.02,200,0,41996.685,NA,NA,NA
+"eliminative","mean",0.05,200,0,29425.305,NA,NA,NA
+"eliminative","mean",0.075,200,0,24474.025,NA,NA,NA
+"eliminative","mean",0.1,200,0,21112.07,NA,NA,NA
+"eliminative","mean",0.15,200,0,16922.175,NA,NA,NA
+"eliminative","mean",0.2,200,0,14324.72,NA,NA,NA
+"eliminative","mean",0.25,200,0,12489.015,NA,NA,NA
+"eliminative","mean",0.3,200,0,11123.425,NA,NA,NA
+"eliminative","mean",0.4,200,0,9192.08,NA,NA,NA
+"eliminative","mean",0.5,200,0,7857.09,NA,NA,NA
+"eliminative","mean",0.6,200,0,6899.515,NA,NA,NA
+"eliminative","mean",0.75,200,0,5838.86,NA,NA,NA
+"eliminative","mean",0.9,200,0,5077.125,NA,NA,NA
+"eliminative","mean",1,200,0,4689.4,NA,NA,NA
+"eliminative","mean",NA,NA,NA,NA,0.668272518001347,0.666453481977811,0.670083088056779
+"eliminative","median",0,200,0,89438.5,NA,NA,NA
+"eliminative","median",0.02,200,0,41958,NA,NA,NA
+"eliminative","median",0.05,200,0,29485,NA,NA,NA
+"eliminative","median",0.075,200,0,24472.5,NA,NA,NA
+"eliminative","median",0.1,200,0,21115.5,NA,NA,NA
+"eliminative","median",0.15,200,0,16875.5,NA,NA,NA
+"eliminative","median",0.2,200,0,14315.5,NA,NA,NA
+"eliminative","median",0.25,200,0,12453.5,NA,NA,NA
+"eliminative","median",0.3,200,0,11127,NA,NA,NA
+"eliminative","median",0.4,200,0,9186.5,NA,NA,NA
+"eliminative","median",0.5,200,0,7868,NA,NA,NA
+"eliminative","median",0.6,200,0,6882,NA,NA,NA
+"eliminative","median",0.75,200,0,5834.5,NA,NA,NA
+"eliminative","median",0.9,200,0,5078,NA,NA,NA
+"eliminative","median",1,200,0,4694.5,NA,NA,NA
+"eliminative","median",NA,NA,NA,NA,0.668965980644283,0.665548699735085,0.671457172800272
+"guess-test, original","mean",0,200,0,38096.08,NA,NA,NA
+"guess-test, original","mean",0.02,200,0,27619.435,NA,NA,NA
+"guess-test, original","mean",0.05,200,0,23459.835,NA,NA,NA
+"guess-test, original","mean",0.075,200,0,20991.66,NA,NA,NA
+"guess-test, original","mean",0.1,200,0,19526.26,NA,NA,NA
+"guess-test, original","mean",0.15,200,0,17662.2,NA,NA,NA
+"guess-test, original","mean",0.2,200,0,16421.355,NA,NA,NA
+"guess-test, original","mean",0.25,200,0,14560.19,NA,NA,NA
+"guess-test, original","mean",0.3,200,0,14016.855,NA,NA,NA
+"guess-test, original","mean",0.4,200,0,12350.645,NA,NA,NA
+"guess-test, original","mean",0.5,200,0,10948.62,NA,NA,NA
+"guess-test, original","mean",0.6,200,0,10198.985,NA,NA,NA
+"guess-test, original","mean",0.75,200,0,9151.41,NA,NA,NA
+"guess-test, original","mean",0.9,200,0,8366.09,NA,NA,NA
+"guess-test, original","mean",1,200,0,7993.535,NA,NA,NA
+"guess-test, original","mean",NA,NA,NA,NA,0.615967764478684,0.593485397706221,0.638924368442034
+"guess-test, original","median",0,200,0,38062.5,NA,NA,NA
+"guess-test, original","median",0.02,200,0,26639.5,NA,NA,NA
+"guess-test, original","median",0.05,200,0,21760,NA,NA,NA
+"guess-test, original","median",0.075,200,0,19888,NA,NA,NA
+"guess-test, original","median",0.1,200,0,18133.5,NA,NA,NA
+"guess-test, original","median",0.15,200,0,16785.5,NA,NA,NA
+"guess-test, original","median",0.2,200,0,14997.5,NA,NA,NA
+"guess-test, original","median",0.25,200,0,13689,NA,NA,NA
+"guess-test, original","median",0.3,200,0,13127,NA,NA,NA
+"guess-test, original","median",0.4,200,0,11708,NA,NA,NA
+"guess-test, original","median",0.5,200,0,10127.5,NA,NA,NA
+"guess-test, original","median",0.6,200,0,9672.5,NA,NA,NA
+"guess-test, original","median",0.75,200,0,8805.5,NA,NA,NA
+"guess-test, original","median",0.9,200,0,7761.5,NA,NA,NA
+"guess-test, original","median",1,200,0,7429,NA,NA,NA
+"guess-test, original","median",NA,NA,NA,NA,0.625910755095746,0.594623825558491,0.650982900184044
+"guess-test, lock2","mean",0,200,0,55742.93,NA,NA,NA
+"guess-test, lock2","mean",0.02,200,0,36563.26,NA,NA,NA
+"guess-test, lock2","mean",0.05,200,0,30103.145,NA,NA,NA
+"guess-test, lock2","mean",0.075,200,0,28075.08,NA,NA,NA
+"guess-test, lock2","mean",0.1,200,0,25427.345,NA,NA,NA
+"guess-test, lock2","mean",0.15,200,0,23593.33,NA,NA,NA
+"guess-test, lock2","mean",0.2,200,0,21620.04,NA,NA,NA
+"guess-test, lock2","mean",0.25,200,0,20202.68,NA,NA,NA
+"guess-test, lock2","mean",0.3,200,0,18644.645,NA,NA,NA
+"guess-test, lock2","mean",0.4,200,0,17799.08,NA,NA,NA
+"guess-test, lock2","mean",0.5,200,0,15934.3,NA,NA,NA
+"guess-test, lock2","mean",0.6,200,0,15094.965,NA,NA,NA
+"guess-test, lock2","mean",0.75,200,0,14980.445,NA,NA,NA
+"guess-test, lock2","mean",0.9,200,0,14694.63,NA,NA,NA
+"guess-test, lock2","mean",1,200,20,512085.535,NA,NA,NA
+"guess-test, lock2","mean",NA,NA,NA,NA,-0.457643736650062,-0.589453953875484,-0.392805790591133
+"guess-test, lock2","median",0,200,0,55623.5,NA,NA,NA
+"guess-test, lock2","median",0.02,200,0,35072.5,NA,NA,NA
+"guess-test, lock2","median",0.05,200,0,28213.5,NA,NA,NA
+"guess-test, lock2","median",0.075,200,0,25458.5,NA,NA,NA
+"guess-test, lock2","median",0.1,200,0,23398.5,NA,NA,NA
+"guess-test, lock2","median",0.15,200,0,21138.5,NA,NA,NA
+"guess-test, lock2","median",0.2,200,0,19186,NA,NA,NA
+"guess-test, lock2","median",0.25,200,0,18130,NA,NA,NA
+"guess-test, lock2","median",0.3,200,0,16876.5,NA,NA,NA
+"guess-test, lock2","median",0.4,200,0,16054,NA,NA,NA
+"guess-test, lock2","median",0.5,200,0,14095.5,NA,NA,NA
+"guess-test, lock2","median",0.6,200,0,13674.5,NA,NA,NA
+"guess-test, lock2","median",0.75,200,0,14008,NA,NA,NA
+"guess-test, lock2","median",0.9,200,0,14692.5,NA,NA,NA
+"guess-test, lock2","median",1,200,20,12909,NA,NA,NA
+"guess-test, lock2","median",NA,NA,NA,NA,0.767476077964477,0.728515893821496,0.839681317876877

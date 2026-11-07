@@ -1,0 +1,30 @@
+Loading required package: foreach
+Loading required package: doParallel
+Loading required package: iterators
+Loading required package: parallel
+   C   fam seed wrong_proposals wrong_locks p_wrong_locks right_proposals
+  10 FALSE 9301            4573           2  0.0004373497             766
+  10 FALSE 9302            3326           4  0.0012026458             783
+  10 FALSE 9303            4639           4  0.0008622548             763
+  10 FALSE 9304            3155           4  0.0012678288             756
+  10 FALSE 9305            2996           1  0.0003337784             774
+  10 FALSE 9306            3092           1  0.0003234153             763
+ 100 FALSE 9401           20265         179  0.0088329632             351
+ 100 FALSE 9402           22960         170  0.0074041812             368
+ 100 FALSE 9403           22297         191  0.0085661748             356
+ 100 FALSE 9404           21753         175  0.0080448674             361
+ 100 FALSE 9405           21007         170  0.0080925406             366
+ 100 FALSE 9406           19864         182  0.0091623037             356
+ p_right_locks
+     0.6501305
+     0.6334610
+     0.6500655
+     0.6560847
+     0.6447028
+     0.6539974
+     0.9145299
+     0.8967391
+     0.8679775
+     0.9002770
+     0.9016393
+     0.8932584

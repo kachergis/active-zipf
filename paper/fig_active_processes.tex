@@ -13,11 +13,11 @@
 \definecolor{known}{HTML}{2B7A3D}
 
 \tikzset{
-  stage/.style={draw=black!55, rounded corners=3pt, fill=white, minimum width=3.7cm,
+  stage/.style={draw=black!55, rounded corners=3pt, fill=white, minimum width=4.9cm,
                 minimum height=4.0cm, inner sep=0pt},
   head/.style={font=\bfseries\small, align=center},
-  body/.style={font=\scriptsize, align=left, text width=3.35cm},
-  res/.style={font=\scriptsize\itshape, align=left, text width=3.35cm, text=black!80},
+  body/.style={font=\scriptsize, align=left, text width=4.5cm},
+  res/.style={font=\scriptsize\itshape, align=left, text width=4.5cm, text=black!80},
   flow/.style={-{Stealth[length=2.6mm]}, line width=0.9pt, black!60},
   scene/.style={draw=black!45, rounded corners=2pt, minimum width=1.25cm, minimum height=0.75cm,
                 font=\scriptsize, align=center, fill=white},
@@ -35,7 +35,7 @@
 % Panel A: choosing scenes (fast-mapping analysis)
 % =====================================================================
 \node[font=\bfseries, anchor=west] (Atitle) at (0, 9.0)
-  {A\quad Choosing scenes \normalfont\small(active learning in the fast-mapping analysis)};
+  {A\quad Static control: choosing scenes \normalfont\small(fast-mapping analysis)};
 
 % left labels
 \node[font=\scriptsize, anchor=east, align=right] at (1.65, 7.75) {scenes\\(columns of \textit{P})};
@@ -83,15 +83,14 @@
 % Panel B: composing an episode (incremental learners)
 % =====================================================================
 \node[font=\bfseries, anchor=west] (Btitle) at (0, 4.75)
-  {B\quad Composing an episode \normalfont\small(incremental active learning)};
+  {B\quad Adaptive control: choosing the target \normalfont\small(incremental learners)};
 
-\node[stage] (state)   at (2.05, 2.15) {};
-\node[stage] (target)  at (6.45, 2.15) {};
-\node[stage] (context) at (10.85, 2.15) {};
-\node[stage] (update)  at (15.25, 2.15) {};
+\node[stage] (state)   at (2.6, 2.15) {};
+\node[stage] (target)  at (8.65, 2.15) {};
+\node[stage] (update)  at (14.7, 2.15) {};
 
 % rule separating each box's result line
-\foreach \b in {state, target, context, update} {
+\foreach \b in {state, target, update} {
   \draw[black!25] ($(\b.south west)+(0.15,0.95)$) -- ($(\b.south east)+(-0.15,0.95)$);
 }
 
@@ -105,25 +104,16 @@
   {\upshape A word is learned once one candidate remains};
 
 % --- target selection
-\node[head, anchor=north] at ([yshift=-0.12cm]target.north) {1. Which word?};
+\node[head, anchor=north] at ([yshift=-0.12cm]target.north) {1. What is named?};
 \node[body, text=passive, anchor=north] at ([yshift=-0.62cm]target.north)
-  {\textbf{Passive:} drawn by frequency, e.g.\ ``ball'' again, although already known};
+  {\textbf{Passive:} whatever is named, by frequency, e.g.\ ``ball'' again, although already known; \Cv$\,-\,$1 distractors drawn by frequency};
 \node[body, text=active, anchor=north] at ([yshift=-1.55cm]target.north)
-  {\textbf{Active:} a word not yet known, e.g.\ ``car''};
+  {\textbf{Active:} an object the learner cannot yet name, e.g.\ the car; same random distractors};
 \node[res, anchor=south] at ([yshift=0.12cm]target.south)
-  {19--28$\times$ faster at \Cv\,=\,10, from 1,000 to 60,000 words};
-
-% --- context selection
-\node[head, anchor=north] at ([yshift=-0.12cm]context.north) {2. What else is in view?};
-\node[body, text=passive, anchor=north] at ([yshift=-0.62cm]context.north)
-  {\textbf{Random:} \Cv$\,-\,$1 distractors drawn by frequency, e.g.\ ``car'' with \{dog, hat\}};
-\node[body, text=active, anchor=north] at ([yshift=-1.55cm]context.north)
-  {\textbf{Familiar:} distractors already ruled out for other words, e.g.\ ``car'' with \{ball, cup\}};
-\node[res, anchor=south] at ([yshift=0.12cm]context.south)
-  {At \Cv\,=\,100, only familiar contexts let learning finish};
+  {2--10$\times$ faster at 50--90\% of the vocabulary; 19--28$\times$ at 99\% (1,000--60,000 words)};
 
 % --- update
-\node[head, anchor=north] at ([yshift=-0.12cm]update.north) {3. Update};
+\node[head, anchor=north] at ([yshift=-0.12cm]update.north) {2. Update};
 \node[body, anchor=north] at ([yshift=-0.62cm]update.north)
   {\textbf{Eliminative:} drop candidates absent from this scene};
 \node[body, anchor=north] at ([yshift=-1.55cm]update.north)
@@ -133,13 +123,12 @@
 
 % flow arrows and loop
 \draw[flow] (state.east) -- (target.west);
-\draw[flow] (target.east) -- (context.west);
-\draw[flow] (context.east) -- (update.west);
+\draw[flow] (target.east) -- (update.west);
 \draw[flow, rounded corners=6pt] (update.south) -- ++(0,-0.42) -| (state.south);
 \node[font=\scriptsize\itshape, align=center, text width=10cm, text=black!80, anchor=north]
   at ($(state.south)!0.5!(update.south) + (0,-0.5)$)
   {Under forgetting, returning to not-yet-learned words doubles as rehearsal:\\
-   the active/passive gap widens from 4.4$\times$ to 56$\times$ as memory gets less durable};
+   the active/passive gap at 99\% widens from 4.4$\times$ to 467$\times$ as memory gets less durable};
 
 \begin{scope}[on background layer]
   \node[fill=panel, rounded corners=5pt, fit={(Btitle) (-0.25,-0.9) (17.25,0)}, inner sep=6pt] {};

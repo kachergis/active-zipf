@@ -1,0 +1,43 @@
+Loading required package: foreach
+Loading required package: doParallel
+Loading required package: iterators
+Loading required package: parallel
+   C   fam seed episodes learned locked_wrong unlocked referent_held_by_other
+ 100 FALSE 9101    5e+05     680          319        1                    319
+ 100 FALSE 9102    5e+05     698          301        1                    301
+ 100 FALSE 9103    5e+05     709          290        1                    290
+ 100 FALSE 9104    5e+05     700          299        1                    299
+ 100 FALSE 9105    5e+05     689          310        1                    310
+ 100 FALSE 9106    5e+05     677          322        1                    322
+ 100  TRUE 9201    5e+05     782          217        1                    217
+ 100  TRUE 9202    5e+05     808          191        1                    191
+ 100  TRUE 9203    5e+05     798          201        1                    201
+ 100  TRUE 9204    5e+05     801          198        1                    198
+ 100  TRUE 9205    5e+05     798          201        1                    201
+ 100  TRUE 9206    5e+05     805          194        1                    194
+ blocked_by_locked_wrong median_rank_locked_wrong_word
+                     319                         221.0
+                     301                         195.0
+                     290                         221.5
+                     299                         208.0
+                     310                         194.5
+                     322                         201.0
+                     217                         160.0
+                     191                         136.0
+                     201                         134.0
+                     198                         151.5
+                     201                         145.0
+                     194                         136.5
+ median_rank_held_referent
+                     219.0
+                     194.0
+                     220.5
+                     202.0
+                     192.5
+                     199.0
+                     155.0
+                     136.0
+                     133.0
+                     148.5
+                     143.0
+                     131.5

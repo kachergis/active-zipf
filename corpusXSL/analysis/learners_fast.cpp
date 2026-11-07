@@ -46,7 +46,8 @@ static NumericVector elim_core(int C, int M, NumericVector probs, bool active,
                         double active_prob, int policy, int choice_k,
                         double gold_target, double gold_sigma, bool pool_uniform,
                         bool fam_seen_only, int trace_every, std::vector<double> *trace,
-                        std::vector<double> *learn_rec = nullptr) {
+                        std::vector<double> *learn_rec = nullptr,
+                        double ramp_T = 0, int ramp_dir = 1) {
   // Target selection mirrors choose_target() in learners.R:
   //   active_prob < 0 -> use `active` (0 or 1), as in the original model;
   //     otherwise each episode is active with probability active_prob (a
@@ -55,10 +56,20 @@ static NumericVector elim_core(int C, int M, NumericVector probs, bool active,
   //   active episode: pool = all words (choice_k = 0) or choice_k words drawn
   //     without replacement ~ probs; among the pool's unknown words choose
   //     ~ probs (policy 0, "unknown") or ~ probs * exp(-(times_targeted -
-  //     gold_target)^2 / (2 gold_sigma^2)) (policy 1, "goldilocks"); if the
-  //     pool has no unknown word, a passive draw within the pool.
+  //     gold_target)^2 / (2 gold_sigma^2)) (policy 1, "goldilocks") or
+  //     uniformly (policy 2, "uniform"); if the pool has no unknown word, a
+  //     passive draw within the pool.
+  //   policy 3, "heard" (word-driven pursuit): among unknown words that have
+  //     already been heard at least once (been the target before), ~ probs.
+  //     A word never heard cannot be pursued; if no heard word is unknown,
+  //     the episode is a passive draw over all words. (Within a bounded
+  //     choice set, the same restriction applies inside the set.)
   //   pool_uniform (diagnostic only; not in learners.R): draw the choice_k
   //     pool uniformly without replacement instead of ~ probs.
+  // ramp_T > 0 (as active_prob_fn in learners.R, Study 3): the probability
+  //   that an episode is active is min(1, t/ramp_T) (ramp_dir = 1, forward)
+  //   or max(0, 1 - t/ramp_T) (ramp_dir = -1, reverse) at episode t, in place
+  //   of a constant active_prob.
   // fam_seen_only (diagnostic only; not in learners.R): familiar-context
   //   weights use the number of SEEN words still holding referent r as a
   //   candidate, 1/(colcount[r] - n_unseen + 1), instead of colSums(hyp).
@@ -78,7 +89,9 @@ static NumericVector elim_core(int C, int M, NumericVector probs, bool active,
   std::vector<std::vector<int>> cand(M);
   std::vector<int> colcount(M, M);  // colSums(hyp): hyp starts all ones
   const double AP = active_prob < 0 ? (active ? 1.0 : 0.0) : active_prob;
-  Fenwick targ_all(M), targ_unk(M), dist(M);  // targ_unk: known words zeroed
+  Fenwick targ_all(M), targ_unk(M), targ_unk_unif(M), dist(M);  // targ_unk*: known words zeroed
+  Fenwick targ_heard(M);  // policy 3: heard-but-unknown words only (others zero)
+  int n_heard_unk = 0;
   std::vector<int> times_targeted(M, 0);
   int n_unseen = M;
   auto fam_weight = [&](int r) {
@@ -87,6 +100,7 @@ static NumericVector elim_core(int C, int M, NumericVector probs, bool active,
   for (int i = 0; i < M; i++) {
     targ_all.set(i, probs[i]);
     targ_unk.set(i, probs[i]);
+    targ_unk_unif.set(i, 1.0);
     dist.set(i, fam_context ? fam_weight(i) : probs[i]);
   }
   auto refresh_dist = [&](int r) {
@@ -105,6 +119,8 @@ static NumericVector elim_core(int C, int M, NumericVector probs, bool active,
     known[w] = 1; n_learned++;
     if (learn_rec) { learn_rec->push_back(w + 1); learn_rec->push_back(episodes); learn_rec->push_back(times_targeted[w]); }
     targ_unk.set(w, 0.0);
+    targ_unk_unif.set(w, 0.0);
+    if (targ_heard.w[w] > 0) { targ_heard.set(w, 0.0); n_heard_unk--; }
     for (int d = 0; d < 9; d++)
       if (n_learned >= M * 0.1 * (d + 1) && dec[d] == 0) dec[d] = episodes;
   };
@@ -119,10 +135,14 @@ static NumericVector elim_core(int C, int M, NumericVector probs, bool active,
   };
   std::vector<int> pool, unk; std::vector<double> pw, pool_saved;
   auto choose_target = [&]() -> int {
-    bool do_active = AP >= 1 ? true : (AP <= 0 ? false : unif_rand() < AP);
+    double ap = AP;
+    if (ramp_T > 0) ap = ramp_dir > 0 ? std::min(1.0, episodes / ramp_T) : std::max(0.0, 1.0 - episodes / ramp_T);
+    bool do_active = ap >= 1 ? true : (ap <= 0 ? false : unif_rand() < ap);
     if (!do_active) return targ_all.sample();
     if (choice_k <= 0 || choice_k >= M) {
       if (policy == 0) return targ_unk.sample();
+      if (policy == 2) return targ_unk_unif.sample();
+      if (policy == 3) return n_heard_unk > 0 ? targ_heard.sample() : targ_all.sample();
       unk.clear(); pw.clear();
       for (int i = 0; i < M; i++) if (!known[i]) {
         double dd = times_targeted[i] - gold_target;
@@ -148,10 +168,11 @@ static NumericVector elim_core(int C, int M, NumericVector probs, bool active,
       for (int k = choice_k - 1; k >= 0; k--) targ_all.set(pool[k], pool_saved[k]);
     }
     unk.clear(); pw.clear();
-    for (int r : pool) if (!known[r]) {
+    for (int r : pool) if (!known[r] && (policy != 3 || seen[r])) {
       unk.push_back(r);
       if (policy == 1) { double dd = times_targeted[r] - gold_target;
         pw.push_back(exp(-(dd * dd) / (2 * gold_sigma * gold_sigma)) * probs[r]); }
+      else if (policy == 2) pw.push_back(1.0);
       else pw.push_back(probs[r]);
     }
     if (unk.empty()) {
@@ -183,6 +204,7 @@ static NumericVector elim_core(int C, int M, NumericVector probs, bool active,
     // eliminate target's candidates absent from this context
     if (!seen[target]) {
       seen[target] = 1; n_unseen--;
+      if (!known[target]) { targ_heard.set(target, probs[target]); n_heard_unk++; }
       if (!mutual_exclusivity) {
         for (int r = 0; r < M; r++) if (!inctx[r]) { colcount[r]--; refresh_dist(r); }
         cand[target].assign(ctx.begin(), ctx.end());
@@ -251,10 +273,10 @@ NumericVector elim_fast(int C, int M, NumericVector probs, bool active,
                         double max_episodes = 1e18, bool mutual_exclusivity = false,
                         double active_prob = -1, int policy = 0, int choice_k = 0,
                         double gold_target = 2, double gold_sigma = 2, bool pool_uniform = false,
-                        bool fam_seen_only = false) {
+                        bool fam_seen_only = false, double ramp_T = 0, int ramp_dir = 1) {
   return elim_core(C, M, probs, active, fam_context, epsilon, max_episodes, mutual_exclusivity,
                    active_prob, policy, choice_k, gold_target, gold_sigma, pool_uniform,
-                   fam_seen_only, 0, nullptr);
+                   fam_seen_only, 0, nullptr, nullptr, ramp_T, ramp_dir);
 }
 
 // Same simulation, additionally returning a trajectory sampled every
