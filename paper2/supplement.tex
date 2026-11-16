@@ -90,7 +90,7 @@ With random context the policy makes no difference: the number of exposures a wo
 
 \section{Guess-test learner: blocked words and self-confirming errors}
 \label{sec-gt-mech}
-To find out why the policies of Study 2 help or fail the guess-test learner, we reimplemented it with additional bookkeeping (\texttt{corpusXSL/analysis/diagnose\_guesstest.R}) and ran a small number of instrumented replications, with and without targeted interventions.
+The analyses in this section use the original learning criterion of Section~\ref{sec-oracle}, under which the learner is credited with knowing which of its guesses are correct. To find out why the policies of Study 2 help or fail the guess-test learner, we reimplemented it with additional bookkeeping (\texttt{corpusXSL/analysis/diagnose\_guesstest.R}) and ran a small number of instrumented replications, with and without targeted interventions.
 
 \textit{Blocked words.} For the guess-test learner, a word can be learned only when it is the target and its own referent is not held, as a wrong guess, by another word. At $C=100$ this is the norm rather than the exception: in instrumented runs with random context, 97.5--99.9\% of active episodes targeted an unknown word whose referent was held by another word. Such a word is learned only after the word holding its referent is itself targeted, in a context without that referent, and drops its guess. Learning speed therefore depends on how often the words holding others' referents are targeted.
 
@@ -98,7 +98,7 @@ To find out why the policies of Study 2 help or fail the guess-test learner, we 
 
 \textit{Choice sets at $C=100$: frequency counted twice.} When the choice set is drawn in proportion to frequency, and the target is then chosen within it in proportion to frequency again, a word's chance of being targeted grows roughly with the square of its frequency. Estimating the effective exponent $b$ in $P(\mathrm{target}) \propto p^b$ by simulating the target-selection rule directly gives $b \approx 1$ for unrestricted choice and $b = 1.6$--1.9 for choice sets of 20--100 words while many words are unknown. Small sets rarely contain more than one unknown word once learning is under way, so for them $b$ falls back toward 1 (1.06 for a set of 5 with 100 words unknown, 1.25 for a set of 20), at the cost of episodes spent on known words when the set contains no unknown word. This explains why intermediate sets cost the most. Steep weighting is costly for the guess-test learner because of blocking: it keeps choosing frequent blocked words and seldom chooses the rarer words that block them. At the end of instrumented runs with sets of 50 or 100 words, blocked words had typically been targeted tens of thousands of times, and the words blocking them far less often, usually only tens of times. Keeping the frequency-weighted set but choosing uniformly within it removes the cost: with sets of 100 words, learning took 75,844--85,409 episodes instead of 1.6--1.7 million.
 
-\textit{Spreading targets helps.} The same account explains the benefit of Goldilocks targeting, which avoids returning to words that have been targeted many times without success: at $C=10$, only 2--5\% of its active episodes targeted a word already targeted ten or more times, against 47--61\% for unrestricted active selection. Spreading targets uniformly over the unknown words helps about as much at $C=10$ and even more at $C=100$ with random context: it learned 99\% of the vocabulary in 3,760 episodes at $C=10$ and 43,144 at $C=100$, against 8,007 and 179,983 for frequency-weighted active selection (main text, Table~\ref{M-tab-modes-gt}). For this learner, then, frequency-weighted targeting--the default active policy throughout our work--is far from optimal, at least when the learner knows which of its guesses are correct: with a learning criterion the learner can observe, both policies leave many more runs stalled (Section~\ref{sec-lock}).
+\textit{Spreading targets helps.} The same account explains the benefit of Goldilocks targeting, which avoids returning to words that have been targeted many times without success: at $C=10$, only 2--5\% of its active episodes targeted a word already targeted ten or more times, against 47--61\% for unrestricted active selection. Spreading targets uniformly over the unknown words helps about as much at $C=10$ and even more at $C=100$ with random context: it learned 99\% of the vocabulary in 3,760 episodes at $C=10$ and 43,144 at $C=100$, against 8,007 and 179,983 for frequency-weighted active selection (Table~\ref{tab-oracle}). For this learner, then, frequency-weighted targeting--the default active policy throughout our work--is far from optimal, at least when the learner knows which of its guesses are correct: with a learning criterion the learner can observe, both policies leave many more runs stalled (main text, Study 2).
 
 \section{Word-driven pursuit: fixation and the role of passive input}
 \label{sec-wd}
@@ -106,37 +106,9 @@ To find out why the policies of Study 2 help or fail the guess-test learner, we 
 
 Passive episodes remove the fixation, because they supply new words to pursue (script \texttt{run\_word\_driven\_partial.R}; 30 replications per cell, none censored). Eliminative learners pursuing heard words on 25\%, 50\%, and 75\% of episodes, at $C=100$ with familiar context, finished in 52,582, 73,267, and 133,950 episodes, against 431,500 passive: more pursuit was slower, the opposite of the object-driven learner (28,723, 21,191, and 18,047 episodes at the same levels). Each word-driven episode is an episode not spent hearing a new word, and so prolongs the dilution of the familiarity signal. For the guess-test learner at $C=100$, partially word-driven learners did as well as partially object-driven ones (random context: 253,365, 215,625, and 182,398 episodes, against 255,740, 237,110, and 200,699; familiar context: 70,021, 68,911, and 85,905, against 68,658, 71,732, and 80,128), so here the cost of word-driven pursuit lies entirely in its failure without passive input.
 
-\section{Guess-test learner with an observable learning criterion: Study 2}
+\section{Guess-test learner: details and diagnostics for Study 2}
 \label{sec-lock}
-As noted in the General method of the main text, the guess-test learner of Study 2 stops pursuing a word as soon as its guess is correct, which it cannot observe. We therefore reran its simulations with the lock-in criterion of Paper 1: a word is treated as known once its current guess has survived two consecutive exposures, and is scored as learned when that locked guess is also correct. Active selection pursues words whose guesses have not locked in. A locked wrong guess is still discarded if its word is heard without it, but an active learner never chooses such a word, so only passive episodes can correct it. There is no forgetting. We ran every condition of the main text's Table~\ref{M-tab-modes-gt}, fully word-driven targeting in all four settings, and word-driven pursuit on 25--75\% of episodes at $C=100$ (200 replications per cell at $C=10$, except 30 for word-driven targeting, and 30 at $C=100$; cap $5 \times 10^6$ episodes; \texttt{corpusXSL/analysis/run\_guesstest\_lock.R} and \texttt{run\_more\_reps.R}). Because runs that stall below 99\% dominate the means of some cells, Table~\ref{tab-lock} reports medians.
-
-\begin{table}[h]
-\centering
-\caption{\label{tab-lock} Median episodes to learn 99\% of a $W=1{,}000$-word Zipfian ($a=1$) vocabulary, guess-test learner with an observable learning criterion (a word is known once its guess has been confirmed twice in a row; learned when that guess is also correct), 200 replications per cell at $C=10$ (word-driven: 30) and 30 at $C=100$. Numbers in parentheses: runs that did not finish within $5 \times 10^6$ episodes, counted at the cap; ``$>5 \times 10^6$'': more than half did not.}
-\small
-\begin{tabular}{lrrrr}
-\hline
- & \multicolumn{2}{c}{$C=10$} & \multicolumn{2}{c}{$C=100$} \\
-Condition & Random & Familiar & Random & Familiar \\
-\hline
-Passive & 56{,}140 & 47{,}086 & 296{,}828 & 102{,}112 \\
-25\% active & 18{,}018 & 11{,}682 & 317{,}188 & 71{,}867 \\
-50\% active & 15{,}652 & 8{,}768 & 340{,}749 & 74{,}995 \\
-75\% active & 13{,}862 & 7{,}822 & 459{,}091 & 91{,}232 \\
-Fully active & 12{,}714 (15) & 9{,}992 (1) & $>5 \times 10^6$ (30) & $>5 \times 10^6$ (30) \\
-Goldilocks & 5{,}635 (71) & 4{,}838 (8) & $>5 \times 10^6$ (30) & $>5 \times 10^6$ (30) \\
-Uniform & $>5 \times 10^6$ (132) & 5{,}388 (21) & $>5 \times 10^6$ (30) & $>5 \times 10^6$ (30) \\
-Word-driven & $>5 \times 10^6$ (22) & $>5 \times 10^6$ (29) & $>5 \times 10^6$ (30) & $>5 \times 10^6$ (30) \\
-Word-driven, 25\% & -- & -- & 276{,}445 & 70{,}535 \\
-Word-driven, 50\% & -- & -- & 354{,}999 & 70{,}281 \\
-Word-driven, 75\% & -- & -- & 417{,}500 & 104{,}657 \\
-Choice set of 100 & 66{,}824 & 43{,}542 & $>5 \times 10^6$ (30) & $>5 \times 10^6$ (30) \\
-Choice set of 50 & 60{,}323 & 40{,}329 & $>5 \times 10^6$ (30) & $>5 \times 10^6$ (30) \\
-Choice set of 20 & 20{,}093 & 11{,}268 & $>5 \times 10^6$ (30) & 4{,}035{,}585 (9) \\
-Choice set of 5 & 17{,}400 & 13{,}416 & 2{,}072{,}256 & 532{,}963 \\
-\hline
-\end{tabular}
-\end{table}
+This section gives details of the guess-test results of Study 2 in the main text, which use the lock-in criterion: a word is treated as known once its current guess has survived two consecutive exposures, and is scored as learned when that locked guess is also correct. ``The original criterion'' below is that of Section~\ref{sec-oracle}, under which the learner is credited with knowing which guesses are correct. Active selection pursues words whose guesses have not locked in. A locked wrong guess is still discarded if its word is heard without it, but an active learner never chooses such a word, so only passive episodes can correct it. There is no forgetting. We ran every condition of that table, fully word-driven targeting in all four settings, and word-driven pursuit on 25--75\% of episodes at $C=100$ (200 replications per cell at $C=10$, except 30 for word-driven targeting, and 30 at $C=100$; cap $5 \times 10^6$ episodes; \texttt{corpusXSL/analysis/run\_guesstest\_lock.R} and \texttt{run\_more\_reps.R}). Because runs that stall below 99\% dominate the means of some cells, the main text's Table~\ref{M-tab-modes-gt} reports medians.
 
 \textit{At $C=10$ the active advantage survives.} Requiring confirmation slows passive learning (median 56,140 episodes with random context, against 38,176 with the original criterion) as well as active learning, and fully active learning remains 4.4 times faster than passive learning with random context (95\% CI 4.2--4.7) and 4.7 times with familiar context (4.4--5.1), by medians, against 5.0 (4.7--5.3) and 3.6 times (3.4--3.7) with the original criterion. With random context, 15 of 200 fully active runs stalled short of 99\%, as in Paper 1; with familiar context, 1 of 200 did.
 
@@ -150,14 +122,80 @@ Choice set of 5 & 17{,}400 & 13{,}416 & 2{,}072{,}256 & 532{,}963 \\
 
 \textit{Word-driven pursuit still depends on passive input.} Fully word-driven learners now failed even at $C=10$ (22 and 29 of 30 runs did not finish, against none with the original criterion). Pursuing heard words on 25--75\% of episodes at $C=100$, they did about as well as partially object-driven learners (random context: 276,445--417,500 episodes, against 317,188--459,091; familiar context: 70,281--104,657, against 71,867--91,232).
 
-The observable criterion therefore leaves intact the active advantage at $C=10$, the value of partial control, and the dependence of word-driven pursuit on passive input, and it strengthens the conclusion that partial control can beat full control. It removes any benefit of full control at $C=100$, and it qualifies the benefit of spreading targets over the unknown words, which now comes with many more stalled runs.
-
-\section{Observable learning criterion: Study 3}
+\section{Guess-test learner: details for Study 3}
 \label{sec-lock-ramp}
-With the observable learning criterion of Section~\ref{sec-lock} (the same ramps and blends as in Study 3 of the main text, 200 replications each; medians: passive 55,624 episodes, fully active 12,909), losing control early was again costly, but becoming active late no longer reliably helped. We matched ramps to blends on medians, because 20 of the 200 fully active constant runs stalled below 99\% and dominate the mean at high autonomy. Reverse ramps with $T \le 12{,}000$ were 1.2 to 2.3 times slower than matched blends, the cost growing with $T$ (every 95\% CI within $\pm 0.05$ of its estimate). The threshold again lies between $T=12{,}000$ and 20,000, but closer to 20,000 than with the original criterion: at $T=12{,}000$ the reverse ramp still took 50,956 episodes, near the passive level, and at $T=20{,}000$ it took 15,098 (1.10 times its matched blend, CI 1.02--1.25), as the $T/2$ rule predicts for this learner's slower active completion. Forward ramps were neither consistently faster nor slower than matched blends (ratios 0.85--1.04, with no trend in $T$; five of the seven CIs included 1, and the other two, at $T=3{,}000$ and 20,000, favored the ramp). Forward ramps stalled in 28 of 1,400 runs, mostly at the shortest timescales (15 of 200 at $T=1{,}000$, 4 and 7 at $T=2{,}000$ and 3,000, and at most 1 at $T \ge 5{,}000$), although every ramp ends fully active, which suggests that passive episodes early in learning protect against the chains of wrongly locked words described in Section~\ref{sec-lock}. A constant blend with 25\% active episodes captured 77\% (73--84\%) of the full speedup on a log scale, by medians.
+For the guess-test learner of Study 3 (the same ramps and blends as for the eliminative learner, 200 replications each; medians: passive 55,624 episodes, fully active 12,909), losing control early was again costly, but becoming active late no longer reliably helped. We matched ramps to blends on medians, because 20 of the 200 fully active constant runs stalled below 99\% and dominate the mean at high autonomy. Reverse ramps with $T \le 12{,}000$ were 1.2 to 2.3 times slower than matched blends, the cost growing with $T$ (every 95\% CI within $\pm 0.05$ of its estimate). The threshold again lies between $T=12{,}000$ and 20,000, but closer to 20,000 than with the original criterion: at $T=12{,}000$ the reverse ramp still took 50,956 episodes, near the passive level, and at $T=20{,}000$ it took 15,098 (1.10 times its matched blend, CI 1.02--1.25), as the $T/2$ rule predicts for this learner's slower active completion. Forward ramps were neither consistently faster nor slower than matched blends (ratios 0.85--1.04, with no trend in $T$; five of the seven CIs included 1, and the other two, at $T=3{,}000$ and 20,000, favored the ramp). Forward ramps stalled in 28 of 1,400 runs, mostly at the shortest timescales (15 of 200 at $T=1{,}000$, 4 and 7 at $T=2{,}000$ and 3,000, and at most 1 at $T \ge 5{,}000$), although every ramp ends fully active, which suggests that passive episodes early in learning protect against the chains of wrongly locked words described in Section~\ref{sec-lock}. A constant blend with 25\% active episodes captured 77\% (73--84\%) of the full speedup on a log scale, by medians.
 
-\section{Observable learning criterion: Study 4}
-\label{sec-lock-flickr}
-With the observable learning criterion of Section~\ref{sec-lock} (\texttt{corpusXSL/analysis/flickr\_guesstest.R} with \texttt{lock\_k}$=2$; 30 replications per cell), the three differences from the eliminative learner reported in Study 4 of the main text change as follows: the first and third grow, and the second shrinks. Active runs leveled off lower, at 95.0\% of the learnable words when moving on and 96.1--96.4\% when lingering, and only 16 of 30 move-on runs reached 95\% at any cost, while every passive run again reached 99\% (mean 211,347 episodes). At 90\% of the vocabulary, lingering was faster than moving on at every cost tested, by 3\% when switching was free and by 22, 28, 31, 34, and 37\% at costs of 1, 2, 3, 5, and 10 episodes, so for this learner we found no crossover. Requiring confirmation slowed passive learning more than active learning (73,295 episodes to 90\%, against 39,349 with the original criterion), so active selection helped somewhat more than with the original criterion: at zero cost it reached 90\% of the vocabulary 2.6 (move-on) and 2.7 (linger) times faster than passive learning, against 2.3 and 2.2 times, and it stayed ahead of passive learning up to a cost of two episodes per switch when lingering and one when moving on.
+\section{Guess-test learner with the original learning criterion}
+\label{sec-oracle}
+In Paper 1's main analyses, and in an earlier version of this work, the guess-test learner counted a word as learned, and an active learner stopped pursuing it, as soon as its guess was correct. The learner cannot observe this, which is why the main text uses the lock-in criterion instead. This section reports Studies 2--4 under the original criterion, for comparison with Paper 1. In brief, the original criterion leaves intact the active advantage at $C=10$, the value of partial control, and the dependence of word-driven pursuit on passive input; it is more favorable to full control at $C=100$ with random context, and to spreading targets over the unknown words, because a learner that knows which guesses are correct never locks in an error.
+
+\textit{Study 2.} We ran Study 2 with this learner at $a=1$ in all four settings, since this learner finishes at $C=100$ even with random context (main text, Study 1). Runs were capped at $5 \times 10^6$ episodes. Table~\ref{tab-oracle} gives mean episodes to learn 99\% of the vocabulary. Learning times at $C=10$ are skewed, with a long tail of slow runs, so we ran 200 replications per cell there.
+
+\begin{table}[h]
+\centering
+\caption{\label{tab-oracle} Mean episodes to learn 99\% of a $W=1{,}000$-word Zipfian ($a=1$) vocabulary, guess-test learner, 200 replications per cell at $C=10$ and 30 at $C=100$. ``$>$'' marks cells in which some runs did not finish within $5 \times 10^6$ episodes (number in parentheses); these runs are counted at the cap, so the mean is a lower bound.}
+\small
+\begin{tabular}{lrrrr}
+\hline
+ & \multicolumn{2}{c}{$C=10$} & \multicolumn{2}{c}{$C=100$} \\
+Condition & Random & Familiar & Random & Familiar \\
+\hline
+Passive & 38{,}322 & 26{,}748 & 328{,}648 & 85{,}818 \\
+25\% active & 15{,}044 & 7{,}963 & 255{,}740 & 68{,}658 \\
+50\% active & 11{,}531 & 6{,}364 & 237{,}110 & 71{,}732 \\
+75\% active & 9{,}166 & 6{,}091 & 200{,}699 & 80{,}128 \\
+Fully active & 8{,}007 & 7{,}841 & 179{,}983 & $>$3{,}718{,}842 (22) \\
+Goldilocks & 3{,}589 & 3{,}562 & 63{,}772 & $>$4{,}835{,}958 (29) \\
+Uniform & 3{,}760 & 3{,}765 & 43{,}144 & $>5 \times 10^6$ (30) \\
+Choice set of 100 & 11{,}180 & 13{,}776 & 1{,}589{,}313 & $>$2{,}235{,}324 (7) \\
+Choice set of 50 & 9{,}247 & 27{,}861 & 2{,}793{,}079 & $>$3{,}582{,}840 (7) \\
+Choice set of 20 & 6{,}670 & 9{,}331 & $>$2{,}668{,}049 (4) & $>$3{,}570{,}502 (15) \\
+Choice set of 5 & 11{,}095 & 8{,}785 & 501{,}200 & 350{,}426 \\
+\hline
+\end{tabular}
+\end{table}
+
+\textit{Partial control can beat full control.} With random context, partial autonomy again shows diminishing returns, though less steeply than for the eliminative learner: being active on a quarter of episodes gains 60\% (at $C=10$; 95\% CI 57--62\%) and 42\% (at $C=100$; 22--56\%) of the full speedup on a log scale, against two-thirds to four-fifths for the eliminative learner. With familiar context, partial autonomy is as good as or better than full autonomy. At $C=10$, being active on a quarter of episodes gains 99\% (96--102\%) of the full speedup, and learners active on half or three-quarters of episodes need 19--22\% fewer episodes than fully active ones (6,364 and 6,091, against 7,841; the confidence intervals of the means do not overlap). At $C=100$, full active selection fails: 22 of 30 runs did not finish, whereas every learner active on 25--75\% of episodes finished, faster than passive learning (68,658--80,128 episodes, against 85,818).
+
+Instrumented runs (Section~\ref{sec-gt-mech}) trace this failure to sampling bias compounded by a feedback loop. For this learner, a word can be learned only when its own referent is not held, as a wrong guess, by another word, and at $C=100$ such blocking is the norm. A fully active learner never targets known words, so familiar-context selection, which weights each referent by how often its word's guess has been confirmed, comes to reflect only the surviving wrong guesses. Contexts then contain exactly the referents those guesses claim, and the guesses confirm themselves. Spending a quarter of episodes rehearsing known words let every instrumented run finish, faster than passive or partially active learning.
+
+\textit{Spreading targets helps.} Goldilocks targeting more than doubles the speed of guess-test learning in three of the four settings (3,589 vs.\ 8,007 episodes at $C=10$ with random context, 3,562 vs.\ 7,841 with familiar context, and 63,772 vs.\ 179,983 at $C=100$ with random context), and uniform targeting does about as well at $C=10$ and better at $C=100$ with random context (43,144 episodes). Both fail, like frequency-weighted selection, at $C=100$ with familiar context. The benefit comes from spreading targets over the unknown words, not from intermediate familiarity as such: frequency-weighted selection keeps returning to frequent words that are blocked and seldom targets the rarer words blocking them (at $C=10$, 47--61\% of its active episodes targeted a word already targeted ten or more times, against 2--5\% for Goldilocks targeting). For this learner, frequency-weighted targeting--our default--is far from optimal, at least when the learner knows which of its guesses are correct.
+
+\textit{Bounded choice is costly and erratic.} At $C=10$, frequency-weighted choice sets of 20--100 words give shorter median times than unrestricted choice (e.g., 5,753 vs.\ 7,610 episodes with 20 words, random context) but occasional very slow runs (with 50 words and familiar context, mean 27,861, median 6,232). At $C=100$ with random context, sets of 20--100 words make learning 8.8--15.5 times slower than unrestricted choice, and a set of 5 only 2.8 times slower. This is the non-monotone pattern of the eliminative learner with familiar context, but with a different cause: drawing the set by frequency and then the target within it by frequency again makes targeting steeply favor frequent words, which for this learner are mostly blocked. Choosing uniformly within the same sets removes the cost (Section~\ref{sec-gt-mech}).
+
+
+\textit{Word-driven pursuit.} With the original criterion, fully word-driven guess-test learners finished at $C=10$, just after the passive time to hear every word once (24,035 and 23,456 episodes with random and familiar context, 1.6 and 1.1 times faster than passive learning, against 4.8 and 3.4 times for object-driven pursuit). At $C=100$ they usually did not finish (23 of 30 runs with random context and 20 of 30 with familiar context reached the cap), and partially word-driven learners did as well as partially object-driven ones (Section~\ref{sec-wd}).
+
+\textit{Study 3.} With the original criterion the guess-test learner shows the same pattern as the eliminative learner, less precisely. With the same ramps and a matching set of constant blends (200 replications each; passive 38,096 episodes, fully active 7,994), forward ramps were 1--14\% faster than constant blends of matched autonomy, the gain again growing with the timescale: at $T \le 2{,}000$, where the ramp is active on almost every episode, the difference was not reliable (ratios 0.99 and 0.96, 95\% CIs 0.95--1.03 and 0.92--1.00), but from $T=3{,}000$ on, forward ramps were 7--14\% faster (ratios 0.93 to 0.86, every CI excluding 1). Reverse ramps were 1.2 to 1.8 times slower, most at $T=8{,}000$ (1.84, CI 1.80--1.89). The threshold for reverse ramps lies at a longer timescale than for the eliminative learner, between $T=12{,}000$ (20,868 episodes) and 20,000 (10,376), consistent with the $T/2$ rule given this learner's longer active completion time. Partial autonomy again shows diminishing returns: a constant blend with 25\% active episodes captures 62\% (59--64\%) of the full speedup on a log scale.
+
+\textit{Study 4.} We also ran the guess-test learner on the captions with the original criterion. Each caption updates every content word it contains, in random order: a word whose guess is absent from the caption discards it, and a word without a guess proposes a word in the caption that no other word claims. Learning was scored on the same 3,598 words. The active learner draws its target among unlearned words in proportion to their frequency and keeps that target while it lingers on a photo. (A policy that always targets the rarest word not yet learned deadlocks this learner: a rare word whose wrong guess appears in every caption containing it can never be corrected, and a rarest-first learner keeps returning to it.) Runs were capped at $10^6$ episodes (Table~\ref{tab-flickr-oracle}).
+
+\begin{table}[h]
+\centering
+\caption{\label{tab-flickr-oracle} Guess-test learner on Flickr8k captions: mean episodes to learn 50\%, 90\%, and 95\% of the 3,598-word learnable vocabulary, and the proportion learned at the end of the run (cap $10^6$ episodes), 30 replications per cell. Passive learning reached 99\% in every run (mean 165,506 episodes); no active run did.}
+\small
+\begin{tabular}{llrrrr}
+\hline
+Condition & move\_cost & 50\% & 90\% & 95\% & Final \\
+\hline
+Passive        & --  &  7{,}746 & 39{,}349 &  60{,}015 & 99.3\% \\
+Active, move-on & 0  &  6{,}291 & 17{,}165 &  21{,}937 & 97.9\% \\
+Active, linger  & 0  &  6{,}693 & 17{,}976 &  21{,}862 & 98.5\% \\
+Active, move-on & 1  & 12{,}583 & 34{,}330 &  43{,}875 & 97.9\% \\
+Active, linger  & 1  &  9{,}631 & 29{,}663 &  37{,}030 & 98.5\% \\
+Active, move-on & 2  & 18{,}874 & 51{,}496 &  65{,}812 & 97.9\% \\
+Active, linger  & 2  & 12{,}569 & 41{,}351 &  52{,}199 & 98.5\% \\
+Active, move-on & 3  & 25{,}166 & 68{,}661 &  87{,}749 & 97.9\% \\
+Active, linger  & 3  & 15{,}507 & 53{,}039 &  67{,}367 & 98.5\% \\
+Active, move-on & 5  & 37{,}749 & 102{,}991 & 131{,}623 & 97.9\% \\
+Active, linger  & 5  & 21{,}383 & 76{,}414 &  97{,}704 & 98.5\% \\
+Active, move-on & 10 & 69{,}206 & 188{,}817 & 241{,}310 & 97.9\% \\
+Active, linger  & 10 & 36{,}073 & 134{,}853 & 173{,}547 & 98.5\% \\
+\hline
+\end{tabular}
+\end{table}
+
+As with the lock-in criterion, three results differ from the eliminative learner. First, active selection does not complete the vocabulary: active runs level off at 97.5--98.9\% of the learnable words, while every passive run reaches 99\%. Captions are fixed, so a word that has guessed a word present in all of its captions is never corrected; passive sampling, which hears frequent words most often early on, presumably lets those words claim their own referents first and leaves rare words fewer wrong options. Second, at zero switching cost active selection helps much less than for the eliminative learner, 1.2, 2.3, and 2.7 times faster than passive learning at 50\%, 90\%, and 95\% of the vocabulary, and once switching costs two or three episodes, active learning reaches 95\% of the vocabulary later than passive learning does. Third, lingering matters much more. The policies are within 7\% of each other at zero cost, but from \texttt{move\_cost}=1 on, lingering reaches 95\% of the vocabulary in 16--28\% fewer episodes than moving on, and also ends with more words learned. The crossover thus lies between \texttt{move\_cost} 0 and 1 for this learner, rather than between 1 and 2.
 
 \end{document}

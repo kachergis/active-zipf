@@ -77,7 +77,7 @@
 \node[font=\scriptsize, anchor=west] at (8.95, 7.38) {drawn uniformly:};
 \node[font=\scriptsize, anchor=west] at (11.55, 7.38) {\{kite, cup, owl, yak, dog, \dots\}\;\textcolor{black!55}{rare words too}};
 \node[res, text width=7.7cm] at (8.9, 7.05)
-  {Over-representing frequent words: up to 11$\times$ slower; uniform sets cost almost nothing. Goldilocks preference helps by spreading targets.};
+  {Over-representing frequent words: up to 11$\times$ slower; uniform sets cost almost nothing. Spreading targets speeds learning but can leave more runs stalled.};
 
 % object-driven vs word-driven pursuit
 \node[note] at (8.9, 6.38) {\textbf{Objects or words:} seek unnamed objects, or only words already heard};
@@ -111,7 +111,7 @@
 \end{scope}
 
 \node[res, text width=2.95cm] at (5.15, 4.35)
-  {Becoming active late is up to 14\% faster than the same share of control spread evenly.\\[4pt]
+  {Becoming active late is at most 12\% faster than the same share of control spread evenly, but makes stalls rarer.\\[4pt]
    Losing control before the vocabulary is learned is up to 2.3$\times$ slower.};
 
 \begin{scope}[on background layer]
@@ -137,7 +137,7 @@
 \draw[flow, passive] (photo.east) -- node[above, font=\scriptsize, text=passive] {move on} node[below, font=\scriptsize, text=passive] {(+ search cost)} (newp.west);
 
 \node[res, text width=7.7cm] at (8.9, 1.88)
-  {Moving on wins when seeking a new photo is cheap; staying wins once it costs about one or two extra episodes (up to 7\% faster for the eliminative learner, 28\% for the guess-test learner).};
+  {Moving on wins when seeking a new photo is cheap; staying wins once it costs about one or two extra episodes (up to 8\% faster for the eliminative learner, 37\% for the guess-test learner).};
 
 \begin{scope}[on background layer]
   \node[fill=panel, rounded corners=5pt, fit={(Dt) (8.75,0.95) (17.05,5.0)}, inner sep=5pt] {};

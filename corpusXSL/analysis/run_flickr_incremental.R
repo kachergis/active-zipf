@@ -46,7 +46,11 @@ for (p in seq_len(M)) {
 caps_with_word <- function(p, w) which(vapply(caps_by_photo[[p]], function(c) w %in% c, logical(1)))
 
 run_learner <- function(policy, move_cost = 0, max_cost = 5e6, seed = 1,
-                         checkpoints = c(.5, .9, .99)) {
+                         checkpoints = c(.5, .9, .99), target_policy = "rarest") {
+  # target_policy: "rarest" (the original: always the rarest unlearned learnable
+  # word) or "freq" (an unlearned learnable word drawn in proportion to its
+  # frequency, kept while lingering on its photo -- the policy of the synthetic
+  # learners and of flickr_guesstest.R).
   set.seed(seed)
   cand <- vector("list", N)
   known <- logical(N)
@@ -73,7 +77,15 @@ run_learner <- function(policy, move_cost = 0, max_cost = 5e6, seed = 1,
     shrank
   }
 
+  cur_tgt <- NA_integer_
   advance_target <- function() {
+    if (target_policy == "freq") {
+      if (!is.na(cur_tgt) && !known[cur_tgt] && !is.na(cur_photo)) return(cur_tgt)
+      pool <- learnable[!known[learnable]]
+      if (length(pool) == 0) return(NA_integer_)
+      cur_tgt <<- if (length(pool) == 1) pool else sample(pool, 1, prob = appears_in_caps[pool])
+      return(cur_tgt)
+    }
     while (ti <= length(targets) && known[targets[ti]]) ti <<- ti + 1L
     if (ti > length(targets)) NA_integer_ else targets[ti]
   }
