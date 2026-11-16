@@ -2,7 +2,7 @@
 
 Status of the critical review of `main_revised.tex` (paper 1) and `paper2/draft.tex` (paper 2), on branch `shorten-and-reframe`. The original review, with its full reasoning and line references to the old version, is in git history (commit `ad1617b`).
 
-Paper 1 is now about 4,800 words of text (33 pages, down from about 15,800 words and 76 pages). Paper 2 has a full draft (35 pages).
+Paper 1 is now about 4,900 words of text (35 pages, down from about 15,800 words and 76 pages). Paper 2 has a full draft of about 10,400 words (51 pages) plus an 8-page Supplementary Material. Last reviewed 2026-11-16; the new suggestions from that review are in the final section.
 
 Legend: `[x]` done · `[ ]` open · `[~]` partly done, or decided against
 
@@ -31,7 +31,7 @@ Legend: `[x]` done · `[ ]` open · `[~]` partly done, or decided against
 - [x] Baselines: the ramp study uses its own consistent set of runs, and the table caption points out the separate set used in Study 2.
 - [x] Paper 2 literature added: Charnov; Hills et al.; Gureckis & Markant; Kretch et al.; Iverson; Walle & Campos; Tauber et al.; Sullivan et al.
 - [ ] Paper 2: cite the curiosity literature (Oudeyer:2016 is already in the bib).
-- [x] Paper 1 no longer cites unpublished paper 2 results.
+- [~] Paper 1 no longer cites unpublished paper 2 results. Regressed: it now points to the companion paper three times (C=100 footnote, guess-test blocking, word-driven learner). See N3 and N5 below.
 
 ## Paper 1, section by section (§4)
 
@@ -91,4 +91,38 @@ Legend: `[x]` done · `[ ]` open · `[~]` partly done, or decided against
 - [ ] Paper 2: curiosity citation (Oudeyer).
 - [ ] Optional: merge the CHILDES frequency figure into Fig. 3.
 - [ ] Optional: a data-driven estimate of the ramp timescale from egocentric video (future work, out of scope).
-- [ ] Push the branch and open a PR when ready.
+- [~] Push the branch and open a PR when ready. The branch is pushed and up to date with `origin/shorten-and-reframe`; no PR yet.
+
+
+---
+
+## Second review (2026-11-16): new suggestions
+
+Both papers compile with no unresolved references. Since the checklist above was written, paper 2 gained the machine-learning framing, the word-driven learner, the observable (lock-in) criterion analyses, 200-replication reruns with bootstrap intervals, an overview figure, and the Supplementary Material. Everything marked done above is still done, with the one regression noted. The items below are new.
+
+### Across both papers
+
+- [ ] **N1. Make the observable learning criterion the primary guess-test model.** The default guess-test learner counts a word as learned, and stops pursuing it, the moment its guess is correct, which the learner cannot know. Paper 2 says so, yet reports this version "for comparability with Paper 1" and treats lock-in as robustness. Several headline results change under lock-in: no fully active learner finishes at C=100; uniform and Goldilocks targeting stall far more often (132 and 71 of 200 runs, against 15); the benefit of becoming active late disappears. A reviewer will say the oracle version is not a possible learner. Swap them: lock-in in the main text, the oracle version in the supplement. Paper 1 already has the lock-in numbers (4.4x; Table 5, first row).
+- [ ] **N2. Paper 1's uniform-targeting sentence is out of date and too strong** (`main_revised.tex` L252). It cites 3,833 episodes from six replications; paper 2 now has 200 (3,760, against 8,007 for frequency-weighted). More important, paper 2 shows the gain does not survive the observable criterion cleanly: uniform targeting halves median time but leaves two-thirds of runs stalled. "The 4.9-fold figure understates what active targeting can achieve" needs that qualification, or the sentence should go.
+- [ ] **N3. Paper 1 should state the word-driven result, since it bounds the central claim.** The 19-fold advantage assumes the learner can get any object it cannot name named on demand. A learner that can pursue only words it has already heard gains 3.4-fold (paper 2, Table 6). Paper 1 mentions this in the last sentence of a Discussion paragraph, with no number. Put the number in the Results or the "Why the estimates range" paragraph, and name the assumption in the Framework.
+- [ ] **N4. Use one active policy on Flickr8k.** The eliminative learner targets the rarest unlearned learnable word, which presumes it knows word rarity and which words are learnable; the guess-test learner targets by frequency because rarest-first deadlocks it. The two are then compared in one study (paper 2, Study 4), and the eliminative row sits beside frequency-weighted synthetic rows in paper 1's Table 4. Rerun the eliminative Flickr8k conditions with frequency-weighted targeting, or report both.
+- [ ] **N5. Reconcile the two taxonomies.** Paper 1 organizes by static vs. adaptive control; paper 2 by allocation among problems vs. choice of query. Paper 1's own result, that the active advantage grows like H_W, is exactly paper 2's "allocation" bound. One sentence in each paper relating the two would also let paper 1 cite the idea without leaning on unpublished results.
+- [ ] **N6. Decide how the papers cite each other.** Each is "in preparation" in the other. If they will be submitted together, say so in both; if not, paper 1 must stand alone (see the regression above).
+
+### Paper 1
+
+- [ ] **N7. Title.** "Active learning expedites cross-situational word learning--even under Zipfian distributions" understates the finding. Active selection helps 3.2-fold under uniform input and 19- to 28-fold under Zipfian input: it helps *especially* under Zipfian distributions.
+- [ ] **N8. Say in the Learners section that guess-test "learned" is not observable** (see N1). It is currently explained only in the Forgetting section.
+- [ ] **N9. Explain the 3.2-fold active speedup under uniform input** (Table 3) in one sentence: even with equal frequencies a passive learner wastes episodes on known words, the coupon-collector tail.
+- [ ] **N10. Fig. 2's note on forgetting** gives the gap at 99% (4.4x to 467x), the most extreme figure in the paper. To stay consistent with leading on 50--90%, add or substitute the 90% values (3.3x to 164x).
+
+### Paper 2
+
+- [ ] **N11. Length.** At about 10,400 words plus supplement it is twice paper 1 and approaching the length of the old manuscript. Study 2 has six subsections and carries five manipulations. Options: promote object- vs. word-driven pursuit to its own study (it is one of the two or three most consequential results and is easy to miss); move the long paragraph on why the familiar-context advantage shrinks with W (Study 1, about 300 words) and the 15-row blend table (Study 3) to the supplement.
+- [ ] **N12. Abstract** is about 250 words with four numbered findings and several sub-findings. Cut to about 180: the two levers, the sampling-bias result, object- vs. word-driven pursuit, and one sentence for timing and cost together.
+- [ ] **N13. Study 3 is now a small effect.** Becoming active late gains at most 12--14%, and nothing under the observable criterion. Consider shortening it to the two robust results (losing control early is costly; a passive start protects against stalling) and folding it into Study 2 as a subsection.
+- [ ] **N14. Study 4 needs uncertainty estimates.** The eliminative linger vs. move-on differences are 1--7% from 30 replications with no intervals, and the crossover claim rests on 1% and 3% differences. Add bootstrap intervals as in Studies 2 and 3, or more replications.
+- [ ] **N15. Report medians and proportion finished in Table 5** (guess-test). The text says C=10 times are skewed and gives medians that tell a different story from the tabled means (e.g. choice set of 50, familiar: mean 27,861, median 6,232).
+- [ ] **N16. Check the machine-learning mapping with someone from that field.** Calling object-driven target selection a membership query is loose: a membership query constructs an arbitrary instance, whereas this learner chooses only the target, not the context. "Has no comparable bound" for context selection is also a strong claim resting on one learner at two context sizes.
+- [ ] **N17. Mechanism tests rest on a few instrumented runs** (acknowledged in Limitations). The self-confirming-error account is the paper's most novel claim; six runs per intervention is thin. Rerun the two interventions at 30 replications.
+- [ ] **N18. Small things.** Table 1: the Passive/Random cell at C=100 shows "1x" beside ">5e8". `W=1000` vs. `1{,}000` formatting. Fig. 3 includes a guess-test panel that Study 1 does not discuss. Two stray blank lines before Study 4. Curiosity literature (Oudeyer) and acknowledgments still missing.
