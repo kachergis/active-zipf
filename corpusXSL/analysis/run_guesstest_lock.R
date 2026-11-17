@@ -36,6 +36,7 @@ for (g in c("S2", "WDP", "S3", "S4")) dir.create(file.path(OUT, g), showWarnings
 REPS       <- if (SMOKE) 2 else 30
 CAP        <- if (SMOKE) 2e4 else 5e6
 CAP_FLICKR <- if (SMOKE) 2e4 else 1e6
+REPS_FLICKR <- if (SMOKE) 2 else 100   # Study 4 was first run with 30; raised to 100 for bootstrap intervals
 
 logmsg <- function(...) cat(sprintf("[%s] ", format(Sys.time(), "%H:%M:%S")), sprintf(...), "\n",
                             sep = "", file = LOG, append = TRUE)
@@ -117,7 +118,7 @@ flickr_pols <- c(list(list(policy = "passive", move_cost = 0)),
                  unlist(lapply(c(0, 1, 2, 3, 5, 10), function(mc)
                    list(list(policy = "active_moveon", move_cost = mc),
                         list(policy = "active_linger", move_cost = mc))), recursive = FALSE))
-for (pc in flickr_pols) for (r in seq_len(REPS)) local({
+for (pc in flickr_pols) for (r in seq_len(REPS_FLICKR)) local({
   pol <- pc$policy; mc <- pc$move_cost; r <- r
   add_job("S4", sprintf("%s_mc%d", pol, mc), r, 780000 + r, if (pol == "passive") 30 else 10,
           function() {

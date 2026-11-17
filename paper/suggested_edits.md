@@ -31,7 +31,7 @@ Legend: `[x]` done · `[ ]` open · `[~]` partly done, or decided against
 - [x] Baselines: the ramp study uses its own consistent set of runs, and the table caption points out the separate set used in Study 2.
 - [x] Paper 2 literature added: Charnov; Hills et al.; Gureckis & Markant; Kretch et al.; Iverson; Walle & Campos; Tauber et al.; Sullivan et al.
 - [ ] Paper 2: cite the curiosity literature (Oudeyer:2016 is already in the bib).
-- [~] Paper 1 no longer cites unpublished paper 2 results. Regressed: it now points to the companion paper three times (C=100 footnote, guess-test blocking, word-driven learner). See N3 and N5 below.
+- [x] Paper 1 no longer depends on unpublished paper 2 results: it points to the companion twice, and states its own numbers in both places (see N6).
 
 ## Paper 1, section by section (§4)
 
@@ -106,23 +106,25 @@ Both papers compile with no unresolved references. Since the checklist above was
 - [x] **N2. Paper 1's uniform-targeting sentence** now cites the 200-replication figures (3,760 vs. 8,007) and says the gain is fragile: two-thirds of uniform runs stall under the observable criterion.
 - [x] **N3. Paper 1 states the word-driven result** (3.4x rather than 19x) in the abstract, Framework, Results, and Discussion.
 - [x] **N4. One active policy on Flickr8k.** The eliminative learner was rerun with frequency-weighted targeting (`run_flickr_freq.R`, 100 replications): 3.2x, 8.9x, and 20x at 50/90/99%, and the same crossover between move_cost 1 and 2. Both papers updated; rarest-first is mentioned as a variant. Paper 1's headline range is now 2--9x.
-- [ ] **N5. Reconcile the two taxonomies.** Paper 1 organizes by static vs. adaptive control; paper 2 by allocation among problems vs. choice of query. Paper 1's own result, that the active advantage grows like H_W, is exactly paper 2's "allocation" bound. One sentence in each paper relating the two would also let paper 1 cite the idea without leaning on unpublished results.
-- [ ] **N6. Decide how the papers cite each other.** Each is "in preparation" in the other. If they will be submitted together, say so in both; if not, paper 1 must stand alone (see the regression above).
+- [x] **N5. The two taxonomies are related in both papers.** Paper 1's Discussion has a new paragraph ("What kind of active learning this is"): static and adaptive control both allocate episodes among words, which is why the advantage tracks H_W. Paper 2's Introduction says static vs. adaptive is a distinction within the target-selection lever.
+- [x] **N6. How the papers cite each other.** Paper 1 now stands alone: it names the companion (Kachergis, in preparation) twice, as a pointer for the C=100 case and for the stall analysis, and gives its own numbers and replication counts for every result it states. Paper 2 cites Paper 1 as Kachergis, Torii, & Hidaka (in preparation) and says it can be read without it. Revisit if the two are submitted together.
 
 ### Paper 1
 
-- [ ] **N7. Title.** "Active learning expedites cross-situational word learning--even under Zipfian distributions" understates the finding. Active selection helps 3.2-fold under uniform input and 19- to 28-fold under Zipfian input: it helps *especially* under Zipfian distributions.
-- [ ] **N8. Say in the Learners section that guess-test "learned" is not observable** (see N1). It is currently explained only in the Forgetting section.
-- [ ] **N9. Explain the 3.2-fold active speedup under uniform input** (Table 3) in one sentence: even with equal frequencies a passive learner wastes episodes on known words, the coupon-collector tail.
-- [ ] **N10. Fig. 2's note on forgetting** gives the gap at 99% (4.4x to 467x), the most extreme figure in the paper. To stay consistent with leading on 50--90%, add or substitute the 90% values (3.3x to 164x).
+- [x] **N7. Title** changed to "Active learning expedites cross-situational word learning, especially under Zipfian distributions". Check with co-authors.
+- [x] **N8. The Learners section now says** that the guess-test learner cannot observe when a guess is correct, and that the observable criterion is used from the Forgetting section on.
+- [x] **N9. The 3.2-fold speedup under uniform input** is explained in one sentence after the exponent results (the coupon-collector tail).
+- [x] **N10. Fig. 2's forgetting note** now gives the 90% values (3.3x to 164x), and the Forgetting text gives 90% before 99%.
 
 ### Paper 2
 
 - [ ] **N11. Length.** At about 10,400 words plus supplement it is twice paper 1 and approaching the length of the old manuscript. Study 2 has six subsections and carries five manipulations. Options: promote object- vs. word-driven pursuit to its own study (it is one of the two or three most consequential results and is easy to miss); move the long paragraph on why the familiar-context advantage shrinks with W (Study 1, about 300 words) and the 15-row blend table (Study 3) to the supplement.
-- [ ] **N12. Abstract** is about 250 words with four numbered findings and several sub-findings. Cut to about 180: the two levers, the sampling-bias result, object- vs. word-driven pursuit, and one sentence for timing and cost together.
-- [ ] **N13. Study 3 is now a small effect.** Becoming active late gains at most 12--14%, and nothing under the observable criterion. Consider shortening it to the two robust results (losing control early is costly; a passive start protects against stalling) and folding it into Study 2 as a subsection.
-- [~] **N14. Study 4 uncertainty estimates.** Done for the eliminative learner (bootstrap intervals, 100 replications; every interval excludes 1). The guess-test rows still have 30 replications and no intervals.
+- [x] **N12. Abstract** cut from about 250 to about 200 words, without the numbered findings: the two levers, the sampling-bias result, word-driven pursuit, the passive start, and the cost of switching scenes.
+- [x] **N13. Study 3 is now "Starting passive".** The main text reports forward ramps only, in one table, with three positive results (a passive start costs little; late control is used at least as well as early control; it protects the guess-test learner against stalls) and one paragraph on losing control. The blend table, the ramp figure, reverse ramps, and the matched-autonomy method moved to a new supplement section.
+- [x] **N14. Study 4 uncertainty estimates.** Both learners now have 100 replications per cell and bootstrap intervals. Guess-test learner: lingering is 5% faster than moving on at 90% when switching is free (CI 0.2--9%) and 23--38% faster at costs of 1--10; active runs still level off at 95.0% (move-on) and 96.2--96.4% (linger). One of 100 passive runs ended just short of 99%.
 - [x] **N15. Medians and stalled-run counts** are now in the main guess-test table (done with N1).
 - [ ] **N16. Check the machine-learning mapping with someone from that field.** Calling object-driven target selection a membership query is loose: a membership query constructs an arbitrary instance, whereas this learner chooses only the target, not the context. "Has no comparable bound" for context selection is also a strong claim resting on one learner at two context sizes.
-- [ ] **N17. Mechanism tests rest on a few instrumented runs** (acknowledged in Limitations). The self-confirming-error account is the paper's most novel claim; six runs per intervention is thin. Rerun the two interventions at 30 replications.
+- [x] **N17. Mechanism tests at 30 replications** (`diag_gt/run_N17.R`, `summarize_n14_n17.R`). The self-confirming-error account holds: 23 of 30 fully active runs did not finish, each with all 11--22 remaining words holding wrong guesses on one another's referents; both interventions let all 30 runs finish. Uniform choice within a frequency-weighted set of 100 is 18 times faster (CI 17--20). Still at 3--6 runs: the blocked-word shares, word-driven fixation, and the lock-in stall diagnostics.
 - [ ] **N18. Small things.** Table 1: the Passive/Random cell at C=100 shows "1x" beside ">5e8". `W=1000` vs. `1{,}000` formatting. Fig. 3 includes a guess-test panel that Study 1 does not discuss. Two stray blank lines before Study 4. Curiosity literature (Oudeyer) and acknowledgments still missing.
+
+- [x] **Authorship (2026-11-16).** Paper 1: Kachergis, Torii, Hidaka. Paper 2 and its supplement: Kachergis alone, for now. Affiliations kept as they were; check that they are current.
