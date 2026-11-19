@@ -81,20 +81,21 @@ We simulated the eliminative learner at $C=10$, well within \cite{Vogt:2012}'s r
 \subsection{Results: context size decides which lever matters}
 Table~\ref{tab-incremental} and Figure~\ref{fig-incremental-sim} summarize the results at $a=1$. At $C=10$ ($C/W=0.01$), active target selection does most of the work (19.1x), and familiar-context selection adds only a modest further benefit (2.0x alone, 28.6x combined), because elimination is already fairly effective when the distractor set is small.
 
-At $C=100$ ($C/W=0.1$), random-context learning does not merely slow down under a Zipfian distribution: it fails. No passive or active run with random distractors reached even half the vocabulary within $5 \times 10^8$ episodes. The reason is the eliminative learner's requirement that every competing referent be absent from at least one of a word's contexts. With 99 frequency-weighted distractors per context, the most frequent referent ($p \approx 0.13$ at $a=1$) is absent from any given context with probability only about $5 \times 10^{-10}$ (computed exactly\footnote{By the exponential-clock representation of weighted sampling without replacement: each referent $j$ receives an independent clock $E_j \sim \mathrm{Exp}(p_j)$, the context's distractors are the $C-1$ referents whose clocks ring first, and referent $r$ is absent iff at least $C-1$ other clocks ring before $E_r$. The resulting one-dimensional integral over a Poisson-binomial tail agrees with direct simulation wherever the probability is large enough to simulate; see \texttt{corpusXSL/analysis/c100\_absence\_probability.R}.}), so every other word would need on the order of $2 \times 10^9$ exposures merely to rule out that one competitor. Active target selection cannot help, since it changes which word is the target but not which distractors accompany it. Familiar-context selection, which does change the distractors, restores learning (446,962 episodes), and once distractors are controlled, active target selection adds a further 28-fold advantage (15,819 episodes). At $C=100$, controlling what else is in view is a precondition for learning at all. This is the situation in which active learning theory predicts its largest gains: the informative queries, here contexts without the most frequent competitor, are too rare for passive sampling to supply, and only the lever that chooses queries can supply them.
+At $C=100$ ($C/W=0.1$), random-context learning does not merely slow down under a Zipfian distribution: it fails. No passive or active run with random distractors reached even half the vocabulary within $5 \times 10^8$ episodes. The reason is the eliminative learner's requirement that every competing referent be absent from at least one of a word's contexts. With 99 frequency-weighted distractors per context, the most frequent referent ($p \approx 0.13$ at $a=1$) is absent from any given context with probability only about $5 \times 10^{-10}$ (computed exactly\footnote{By the exponential-clock representation of weighted sampling without replacement: each referent $j$ receives an independent clock $E_j \sim \mathrm{Exp}(p_j)$, the context's distractors are the $C-1$ referents whose clocks ring first, and referent $r$ is absent iff at least $C-1$ other clocks ring before $E_r$. The resulting one-dimensional integral over a Poisson-binomial tail agrees with direct simulation wherever the probability is large enough to simulate; see \texttt{corpusXSL/analysis/c100\_absence\_probability.R}.}), so every other word would need on the order of $2 \times 10^9$ exposures merely to rule out that one competitor. Active target selection cannot help, since it changes which word is the target but not which distractors accompany it. Familiar-context selection, which does change the distractors, restores learning (446,962 episodes), and once distractors are controlled, active target selection adds a further 28-fold advantage (15,819 episodes) under the default frequency-weighted targeting. Choosing targets uniformly among unknown words doubles this to a 55-fold advantage (8,181 episodes; Study 2 examines this policy in detail). At $C=100$, controlling what else is in view is a precondition for learning at all. This is the situation in which active learning theory predicts its largest gains: the informative queries, here contexts without the most frequent competitor, are too rare for passive sampling to supply, and only the lever that chooses queries can supply them.
 
 \begin{table}[h]
 \centering
-\caption{\label{tab-incremental} Mean episodes to learn 99\% of a Zipfian ($a=1$), $W=1{,}000$-word vocabulary, eliminative learner, 30 replications per cell. Speedup is relative to Passive/Random at the same $C$. At $C=100$, no random-context run reached even 50\% of the vocabulary within the $5 \times 10^8$-episode cap, so speedups there are relative to the cap and are lower bounds.}
+\caption{\label{tab-incremental} Mean episodes to learn 99\% of a Zipfian ($a=1$), $W=1{,}000$-word vocabulary, eliminative learner, 30 replications per cell. Speedup is relative to Passive/Random at the same $C$. At $C=100$, no random-context run reached even 50\% of the vocabulary within the $5 \times 10^8$-episode cap, so speedups there are relative to the cap and are lower bounds. ``Freq.-wt.'': target chosen among unknown words in proportion to frequency (the default; Paper 1). ``Uniform'': target chosen uniformly among unknown words (Study 2).}
 \begin{tabular}{lrrrr}
 \hline
  & \multicolumn{2}{c}{$C=10$ ($C/W=0.01$)} & \multicolumn{2}{c}{$C=100$ ($C/W=0.1$)} \\
 Condition & Episodes & Speedup & Episodes & Speedup \\
 \hline
-Passive / Random    & 89{,}454    & 1x      & $>5 \times 10^8$ & -- \\
-Active / Random     & 4{,}695     & 19.1x   & $>5 \times 10^8$ & -- \\
-Passive / Familiar  & 44{,}607    & 2.0x    & 446{,}962        & $>$1{,}100x \\
-Active / Familiar   & 3{,}127     & 28.6x   & 15{,}819         & $>$31{,}000x \\
+Passive / Random                       & 89{,}454    & 1x      & $>5 \times 10^8$ & -- \\
+Active (freq.-wt.) / Random            & 4{,}695     & 19.1x   & $>5 \times 10^8$ & -- \\
+Passive / Familiar                     & 44{,}607    & 2.0x    & 446{,}962        & $>$1{,}100x \\
+Active (freq.-wt.) / Familiar          & 3{,}127     & 28.6x   & 15{,}819         & $>$31{,}000x \\
+Active (uniform) / Familiar            & 2{,}893     & 30.9x   & 8{,}181          & $>$61{,}000x \\
 \hline
 \end{tabular}
 \end{table}
@@ -122,23 +123,24 @@ The same failure appears at larger vocabularies (Table~\ref{tab-m10k-c100}). $C=
 
 \begin{table}[h]
 \centering
-\caption{\label{tab-m10k-c100} Mean episodes to learn 99\% of a $W$-word vocabulary at $C=100$, eliminative learner. ``$>$'': no run reached even 10\% (at $W=1{,}000$, even 50\%) of the vocabulary within the stated cap.}
+\caption{\label{tab-m10k-c100} Mean episodes to learn 99\% of a $W$-word vocabulary at $C=100$, eliminative learner. ``$>$'': no run reached even 10\% (at $W=1{,}000$, even 50\%) of the vocabulary within the stated cap. Active (freq.-wt.): frequency-weighted targeting; Active (uniform): uniform targeting among unknown words (Study 2).}
 \footnotesize
 \begin{tabular}{lrrr}
 \hline
 Condition & $W=1{,}000$ & $W=10{,}000$ & $W=60{,}000$ \\
 \hline
 Zipfian ($a=1$), Passive / Random & $>5 \times 10^8$ & $>10^8$ & $>10^8$ \\
-Zipfian ($a=1$), Active / Random & $>5 \times 10^8$ & $>10^8$ & $>10^8$ \\
+Zipfian ($a=1$), Active (freq.-wt.) / Random & $>5 \times 10^8$ & $>10^8$ & $>10^8$ \\
 Zipfian ($a=1$), Passive / Familiar & 446{,}962 & 866{,}781 & 5{,}453{,}160 \\
-Zipfian ($a=1$), Active / Familiar & 15{,}819 & 113{,}584 & 589{,}504 \\
+Zipfian ($a=1$), Active (freq.-wt.) / Familiar & 15{,}819 & 113{,}584 & 589{,}504 \\
+Zipfian ($a=1$), Active (uniform) / Familiar & 8{,}181 & 55{,}364 & 305{,}209 \\
 Uniform, Passive / Random & 9{,}904 & 80{,}048 & 424{,}968 \\
 Uniform, Active / Random & 3{,}718 & 26{,}261 & 128{,}363 \\
 \hline
 \end{tabular}
 \end{table}
 
-$C/W$ does, however, shape how large the active advantage is once learning is possible. With familiar context at $C=100$, the active advantage is 28-fold at $W=1{,}000$ but only 7.6-fold at 10,000 and 9.3-fold at 60,000. Target selection does not change how many exposures a word needs, only how the learner pays for them: an active learner's time is the sum of all words' needs, which is dominated by frequent words, while a passive learner's time is set by its last few rare words, and these are unusually hard at $W=1{,}000$, where each context holds a tenth of all referents (Supplementary Section~\ref{S-sec-cw}).
+$C/W$ does, however, shape how large the active advantage is once learning is possible. With familiar context at $C=100$, the active advantage under frequency-weighted targeting is 28-fold at $W=1{,}000$ but only 7.6-fold at 10,000 and 9.3-fold at 60,000; uniform targeting yields larger gains (55-fold, 16-fold, and 18-fold), driven by the same mechanism at all sizes (Study 2). Target selection does not change how many exposures a word needs, only how the learner pays for them: an active learner's time is the sum of all words' needs, which is dominated by frequent words, while a passive learner's time is set by its last few rare words, and these are unusually hard at $W=1{,}000$, where each context holds a tenth of all referents (Supplementary Section~\ref{S-sec-cw}).
 
 \subsection{A learner that does not need full elimination}
 The guess-test learner, which keeps a single guess per word, never needs every competing referent to be absent from some context. Accordingly a passive guess-test learner still learns at $C=100$, $a=1$ with random distractors (median 296,828 episodes; Study 2, Table~\ref{tab-modes-gt}), where the eliminative learner never finishes, and familiar-context selection gives it only a modest speedup (2.9-fold, to 102,112 episodes). At $C=10$ it is also far less sensitive to skew than the eliminative learner (Figure~\ref{fig-exponent}, whose guess-test panel uses Paper 1's original learning criterion): at $a=1.5$ a passive guess-test learner needs about 250,000 episodes, against $6.4 \times 10^7$ for the eliminative learner. Rare informative contexts do not hold this learner up, so context selection has little to act on. What holds it up instead are its wrong guesses, which block the words whose referents they hold and, under full control, are not revisited: no fully active guess-test learner finished at $C=100$, with either kind of context. Study 2 examines this failure.
