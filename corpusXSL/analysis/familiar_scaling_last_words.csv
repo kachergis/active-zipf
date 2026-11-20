@@ -1,0 +1,13 @@
+"setting","M","policy","median_rank_pct","median_exposures","share_top10pct"
+"C=10, random",1000,"Active",0.784,8,0
+"C=10, random",1000,"Passive",0.795,8,0
+"C=10, random",10000,"Active",0.8078,5,0
+"C=10, random",10000,"Passive",0.8066,5,0
+"C=10, random",60000,"Active",0.809083333333333,4,0
+"C=10, random",60000,"Passive",0.807525,4,0
+"C=100, familiar",1000,"Active",0.835,10,0
+"C=100, familiar",1000,"Passive",0.8405,10,0
+"C=100, familiar",10000,"Active",0.8292,5,0
+"C=100, familiar",10000,"Passive",0.8289,5,0
+"C=100, familiar",60000,"Active",0.8267,5,0
+"C=100, familiar",60000,"Passive",0.826366666666667,5,0

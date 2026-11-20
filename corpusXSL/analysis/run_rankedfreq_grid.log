@@ -1,0 +1,33 @@
+Loading required package: foreach
+Loading required package: doParallel
+Loading required package: iterators
+Loading required package: parallel
+[14:15:36]  start: rankedfreq M=1000   C=10   a=0    uniform=TRUE  active=FALSE   fam=FALSE   reps=30 
+[14:15:37]    done in 1.0s, mean p99=4573 
+[14:15:37]  start: rankedfreq M=1000   C=10   a=0    uniform=TRUE  active=FALSE   fam=TRUE    reps=30 
+[14:15:49]    done in 11.6s, mean p99=4593 
+[14:15:49]  start: rankedfreq M=1000   C=10   a=0    uniform=TRUE  active=TRUE    fam=FALSE   reps=30 
+[14:15:49]    done in 0.2s, mean p99=990 
+[14:15:49]  start: rankedfreq M=1000   C=10   a=0    uniform=TRUE  active=TRUE    fam=TRUE    reps=30 
+[14:15:51]    done in 2.4s, mean p99=990 
+[14:15:52]  start: rankedfreq M=1000   C=10   a=0.5  uniform=FALSE active=FALSE   fam=FALSE   reps=30 
+[14:15:54]    done in 2.2s, mean p99=6754 
+[14:15:54]  start: rankedfreq M=1000   C=10   a=0.5  uniform=FALSE active=FALSE   fam=TRUE    reps=30 
+[14:16:10]    done in 16.6s, mean p99=6690 
+[14:16:10]  start: rankedfreq M=1000   C=10   a=0.5  uniform=FALSE active=TRUE    fam=FALSE   reps=30 
+[14:16:11]    done in 0.4s, mean p99=990 
+[14:16:11]  start: rankedfreq M=1000   C=10   a=0.5  uniform=FALSE active=TRUE    fam=TRUE    reps=30 
+[14:16:13]    done in 2.6s, mean p99=990 
+[14:16:13]  start: rankedfreq M=1000   C=10   a=1    uniform=FALSE active=FALSE   fam=FALSE   reps=30 
+[14:16:20]    done in 6.7s, mean p99=22777 
+[14:16:20]  start: rankedfreq M=1000   C=10   a=1    uniform=FALSE active=FALSE   fam=TRUE    reps=30 
+[14:17:17]    done in 56.6s, mean p99=22574 
+[14:17:17]  start: rankedfreq M=1000   C=10   a=1    uniform=FALSE active=TRUE    fam=FALSE   reps=30 
+[14:17:17]    done in 0.4s, mean p99=990 
+[14:17:17]  start: rankedfreq M=1000   C=10   a=1    uniform=FALSE active=TRUE    fam=TRUE    reps=30 
+[14:17:19]    done in 2.5s, mean p99=990 
+[14:17:19]  start: rankedfreq M=1000   C=10   a=1.5  uniform=FALSE active=TRUE    fam=FALSE   reps=30 
+[14:17:20]    done in 0.4s, mean p99=990 
+[14:17:20]  start: rankedfreq M=1000   C=10   a=1.5  uniform=FALSE active=TRUE    fam=TRUE    reps=30 
+[14:17:22]    done in 2.5s, mean p99=990 
+[14:17:22]  Saved 420 rows. 

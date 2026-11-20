@@ -1,0 +1,5 @@
+"active","context","n","n_censored","mean50","mean90","mean99","median99","se99","speedup99"
+"Active","Familiar",30,0,13333.2666666667,14582.5,15819.4333333333,15691.5,89.8746340562413,NA
+"Active","Random",30,30,0,0,NA,NA,NA,NA
+"Passive","Familiar",30,0,27866.1333333333,54798.1,446961.7,426567.5,24198.9044376859,NA
+"Passive","Random",30,30,0,0,NA,NA,NA,NA

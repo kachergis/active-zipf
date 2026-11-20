@@ -1,0 +1,70 @@
+Loading required package: foreach
+Loading required package: doParallel
+Loading required package: iterators
+
+=== Episodes to 50/90/99% (means; censored runs give NA) ===
+ impl                 setting     W   C    a  context      condition  n
+  C++    W10000_C10_a1_random 10000  10 1.00   Random    active_freq 30
+  C++    W10000_C10_a1_random 10000  10 1.00   Random active_uniform 30
+  C++    W10000_C10_a1_random 10000  10 1.00   Random        passive 30
+  C++ W1000_C100_a0.75_random  1000 100 0.75   Random    active_freq 30
+  C++ W1000_C100_a0.75_random  1000 100 0.75   Random active_uniform 30
+  C++ W1000_C100_a0.75_random  1000 100 0.75   Random        passive 30
+  C++  W1000_C100_a1_familiar  1000 100 1.00 Familiar    active_freq 30
+  C++  W1000_C100_a1_familiar  1000 100 1.00 Familiar active_uniform 30
+  C++  W1000_C100_a1_familiar  1000 100 1.00 Familiar        passive 30
+  C++   W1000_C10_a1_familiar  1000  10 1.00 Familiar    active_freq 30
+  C++   W1000_C10_a1_familiar  1000  10 1.00 Familiar active_uniform 30
+  C++   W1000_C10_a1_familiar  1000  10 1.00 Familiar        passive 30
+  C++     W1000_C10_a1_random  1000  10 1.00   Random    active_freq 30
+  C++     W1000_C10_a1_random  1000  10 1.00   Random active_uniform 30
+  C++     W1000_C10_a1_random  1000  10 1.00   Random        passive 30
+    R   W1000_C10_a1_familiar  1000  10 1.00 Familiar    active_freq 30
+    R   W1000_C10_a1_familiar  1000  10 1.00 Familiar active_uniform 30
+    R     W1000_C10_a1_random  1000  10 1.00   Random    active_freq 30
+    R     W1000_C10_a1_random  1000  10 1.00   Random active_uniform 30
+ n_censored    mean50     mean90     mean99        se99  median99
+          0  21465.63   32255.00   34498.73    46.02096   34543.5
+          0  22103.17   32216.97   34486.70    41.95091   34485.0
+          0 114262.93  390723.50  836037.47  4047.60229  834687.5
+          0 320930.10  575146.83  632414.67  3768.74565  634933.0
+          0 318695.13  572566.03  631344.90  3749.66503  637854.5
+          0 711016.03 2988012.73 6843751.60 90109.41948 6823655.5
+          0  13465.40   14775.90   15977.80    81.23098   15974.5
+          0   5813.43    6855.03    8181.20    57.78196    8118.5
+          0  27512.83   54791.50  474822.90 27026.51694  447014.5
+          0   2181.03    2982.73    3122.93     7.12434    3126.5
+          0   2081.30    2762.73    2892.63     6.32828    2888.0
+          0   8480.43   24033.17   45354.73   530.67331   45675.0
+          0   2870.83    4341.77    4656.57    14.03278    4664.0
+          0   2931.93    4337.77    4670.07    16.61553    4673.0
+          0  11703.50   40397.93   88220.47  1339.12204   88366.5
+          0   2177.07    2978.10    3113.33     7.42864    3110.5
+          0   2089.80    2776.33    2906.10     6.17137    2898.5
+          0   2893.47    4372.60    4692.47    19.80780    4701.5
+          0   2935.43    4319.87    4654.53    16.18746    4635.5
+
+=== Frequency-weighted / uniform (> 1: uniform faster); speedups over passive at 99% ===
+ impl                 setting freq_over_unif50 freq_over_unif90
+  C++    W10000_C10_a1_random           0.9712            1.001
+  C++ W1000_C100_a0.75_random           1.0070            1.005
+  C++  W1000_C100_a1_familiar           2.3163            2.155
+  C++   W1000_C10_a1_familiar           1.0479            1.080
+  C++     W1000_C10_a1_random           0.9792            1.001
+    R   W1000_C10_a1_familiar           1.0418            1.073
+    R     W1000_C10_a1_random           0.9857            1.012
+ freq_over_unif99 speedup99_freq speedup99_unif
+           1.0003          24.23          24.24
+           1.0017          10.82          10.84
+           1.9530          29.72          58.04
+           1.0796          14.52          15.68
+           0.9971          18.95          18.89
+           1.0713          14.57          15.61
+           1.0081          18.80          18.95
+
+=== Validation: C++ vs. R, episodes to 99% ===
+               setting      condition       R     Cpp         z
+ W1000_C10_a1_familiar    active_freq 3113.33 3122.93  0.932695
+ W1000_C10_a1_familiar active_uniform 2906.10 2892.63 -1.523502
+   W1000_C10_a1_random    active_freq 4692.47 4656.57 -1.478898
+   W1000_C10_a1_random active_uniform 4654.53 4670.07  0.669621
