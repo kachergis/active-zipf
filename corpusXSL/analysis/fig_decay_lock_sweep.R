@@ -5,8 +5,17 @@
 # open triangle at the cap.
 suppressMessages({library(dplyr); library(ggplot2); library(tidyr)})
 
-CAP <- 2e6
+# The lock 2, t1/2 = 200 passive cell hit the 2M cap in run_decay_lock_sweep.R
+# and was rerun with a 2e7 cap by run_overnight_fill.R (group G2); those runs
+# replace the capped ones here.
+CAP <- 2e7
 d <- readRDS("decay_lock2_results.rds")
+g2 <- bind_rows(lapply(list.files("overnight_fill/G2", pattern = "^lock2_t200_passive.*rds$",
+                                  full.names = TRUE), readRDS)) %>%
+  transmute(lock_k, active, halflife, rep, dec5, dec9, episodes, censored,
+            halflife_label = "t1/2=200")
+d <- d %>% filter(!(active == "Passive" & halflife == 200)) %>%
+  mutate(halflife_label = as.character(halflife_label)) %>% bind_rows(g2)
 d$halflife_label <- factor(d$halflife_label, levels = c("No decay", "t1/2=20000", "t1/2=5000", "t1/2=1000", "t1/2=200"))
 
 long <- d %>% pivot_longer(c(dec5, dec9, episodes), names_to = "checkpoint", values_to = "n_episodes") %>%
@@ -24,7 +33,7 @@ p <- ggplot(summ, aes(x = checkpoint, y = med, color = active, group = active)) 
   geom_line() +
   geom_linerange(aes(ymin = lo, ymax = hi), data = filter(summ, !censored)) +
   geom_point(aes(shape = censored), size = 2.2) +
-  scale_shape_manual(values = c(`FALSE` = 16, `TRUE` = 2), labels = c("Median", "Median > 2M-episode cap")) +
+  scale_shape_manual(values = c(`FALSE` = 16, `TRUE` = 2), labels = c("Median", "Median > 20M-episode cap")) +
   facet_wrap(~halflife_label, nrow = 1) +
   scale_y_log10(labels = scales::comma) +
   scale_color_manual(values = c(Active = "#377eb8", Passive = "#D55E00")) +
