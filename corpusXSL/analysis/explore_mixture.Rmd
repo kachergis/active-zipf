@@ -16,9 +16,9 @@ output:
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
                       cache = TRUE, cache.lazy = FALSE)
 SMOKE <- FALSE  # set TRUE for fast smoke-test runs
-M_SMALL <- if (SMOKE) 100L  else 1000L
-REPS    <- if (SMOKE)  20L  else   30L   # 30 matches existing paper's heavy conditions
-MAX_EP  <- if (SMOKE) 5e5   else  1e5   # passive at M=1000 finishes ~30k; 1e5 flags stalls fast
+M_SMALL <- if (SMOKE)  100L else 10000L
+REPS    <- if (SMOKE)   20L else    30L
+MAX_EP  <- if (SMOKE)  5e5  else   1e6   # passive at M=10k reaches 90% ~400k eps; 1e6 covers it
 library(dplyr)
 library(tidyr)
 library(ggplot2)
@@ -184,10 +184,19 @@ run_condition <- function(label, pi_p_fn, pi_jt_fn,
   seeds <- sample.int(1e6, reps)
   res <- mclapply(seq_len(reps), function(i) {
     set.seed(seeds[i])
-    r <- learn_corpus_mixture(C = C, M = M_SMALL, a = 1, epsilon = 0.01,
-                              pi_p_fn = pi_p_fn, pi_jt_fn = pi_jt_fn,
-                              jt_policy = jt_policy, ci_policy = "unknown",
-                              lock_k = lock_k, max_episodes = MAX_EP)
+    # Use the C++ fast path (mixture_fast via learn_corpus_mixture_fast) for
+    # large M; fall back to pure R for tiny smoke-test runs (M <= 200).
+    r <- if (M_SMALL > 200) {
+      learn_corpus_mixture_fast(C = C, M = M_SMALL, a = 1, epsilon = 0.01,
+                                pi_p_fn = pi_p_fn, pi_jt_fn = pi_jt_fn,
+                                jt_policy = jt_policy, lock_k = lock_k,
+                                T_ramp = T_ramp, max_episodes = MAX_EP)
+    } else {
+      learn_corpus_mixture(C = C, M = M_SMALL, a = 1, epsilon = 0.01,
+                           pi_p_fn = pi_p_fn, pi_jt_fn = pi_jt_fn,
+                           jt_policy = jt_policy, ci_policy = "unknown",
+                           lock_k = lock_k, max_episodes = MAX_EP)
+    }
     data.frame(label = label, jt_policy = jt_policy, rep = i,
                dec5 = r[5], dec9 = r[9], episodes = r[10], censored = r[11])
   }, mc.cores = NC, mc.preschedule = FALSE)
@@ -292,10 +301,16 @@ sweep_res <- bind_rows(mclapply(ja_fracs, function(pja) {
   pi_jt_sw <- function(t) pja
   bind_rows(lapply(seq_len(REPS), function(i) {
     set.seed(i + round(pja * 1000))
-    r <- learn_corpus_mixture(C = C, M = M_SMALL, a = 1,
-                              pi_p_fn = pi_p_sw, pi_jt_fn = pi_jt_sw,
-                              jt_policy = "gap", ci_policy = "unknown",
-                              lock_k = lock_k, max_episodes = MAX_EP)
+    r <- if (M_SMALL > 200) {
+      learn_corpus_mixture_fast(C = C, M = M_SMALL, a = 1,
+                                pi_p_fn = pi_p_sw, pi_jt_fn = pi_jt_sw,
+                                jt_policy = "gap", lock_k = lock_k,
+                                T_ramp = T_ramp, max_episodes = MAX_EP)
+    } else {
+      learn_corpus_mixture(C = C, M = M_SMALL, a = 1,
+                           pi_p_fn = pi_p_sw, pi_jt_fn = pi_jt_sw,
+                           jt_policy = "gap", lock_k = lock_k, max_episodes = MAX_EP)
+    }
     data.frame(pi_jt = pja, rep = i, dec9 = r[9], censored = r[11])
   }))
 }, mc.cores = NC, mc.preschedule = FALSE))

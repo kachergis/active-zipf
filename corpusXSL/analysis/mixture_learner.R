@@ -31,6 +31,47 @@
 #      a constant blend or a simple passive-to-active ramp (Study 4 of paper 2)?
 
 source("learners.R")
+# Compile the Rcpp version on first load (fast path for M >= 5000).
+if (!exists("mixture_fast")) Rcpp::sourceCpp("mixture_learner_fast.cpp")
+
+# learn_corpus_mixture_fast(): same model as learn_corpus_mixture() but
+# implemented in C++ via mixture_fast(). Accepts the same ramp-function
+# arguments and translates them to the linear-ramp parameters that
+# mixture_fast() expects. For non-linear schedules (make_sigmoid_ramp etc.)
+# the ramp is evaluated at t=0 and t=T_ramp and a linear approximation is
+# used -- good enough for exploratory runs; use the R version for exact
+# sigmoid schedules.
+#
+# Returns the same 11-element vector as learn_corpus_mixture().
+learn_corpus_mixture_fast <- function(
+    C, M, a = 1, epsilon = 0.01,
+    pi_p_fn  = function(t) 0.5,
+    pi_jt_fn = function(t) 0.3,
+    jt_policy  = c("frequency", "gap", "heard"),
+    lock_k = 2,
+    T_ramp = 1e5,          # reference T for linear approximation
+    max_episodes = 5e6) {
+
+  jt_policy <- match.arg(jt_policy)
+  jt_code   <- c(frequency = 0L, gap = 1L, heard = 2L)[jt_policy]
+
+  probs <- zipf_probs(M, a)
+
+  mixture_fast(
+    C          = C,
+    M          = M,
+    probs      = probs,
+    pi_p_start  = pi_p_fn(0),
+    pi_p_end    = pi_p_fn(T_ramp),
+    pi_jt_start = pi_jt_fn(0),
+    pi_jt_end   = pi_jt_fn(T_ramp),
+    T_ramp     = T_ramp,
+    jt_policy  = jt_code,
+    lock_k     = lock_k,
+    epsilon    = epsilon,
+    max_episodes = max_episodes
+  )
+}
 
 # Returns a function(t) -> value that ramps linearly from `start` to `end`
 # over `T_ramp` episodes, then holds at `end`.
