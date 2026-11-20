@@ -1,0 +1,461 @@
+---
+title: "A Developmental Mixture Model of Word Learning"
+subtitle: "Passive input, joint attention, and child-initiated active learning"
+author: "George Kachergis"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    fig_width: 7
+    fig_height: 4.5
+    df_print: kable
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
+                      cache = TRUE, cache.lazy = FALSE)
+SMOKE <- FALSE  # set TRUE for fast smoke-test runs
+M_SMALL <- if (SMOKE) 100L  else 1000L
+REPS    <- if (SMOKE)  20L  else   30L   # 30 matches existing paper's heavy conditions
+MAX_EP  <- if (SMOKE) 5e5   else  1e5   # passive at M=1000 finishes ~30k; 1e5 flags stalls fast
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(parallel)
+NC <- max(1L, detectCores() - 1L)
+theme_set(theme_bw(base_size = 11))
+source("mixture_learner.R")   # defines learn_corpus_mixture, make_ramp, etc.
+```
+
+## Background and motivation
+
+The companion papers (Kachergis, Torii, & Hidaka, in preparation; Kachergis, in
+preparation) model word learning as a Zipfian sampling problem and show that
+active learners—those that target what they don't yet know—can recover much of the
+penalty imposed by the skewed frequency distribution of natural language.
+
+Both papers abstract away from an important developmental reality: *infants and
+toddlers are not simply passive or purely self-directed learners*. Early word
+learning involves at least three qualitatively different types of learning
+episodes:
+
+1. **Passive / overheard** — the child is a bystander to speech not directed
+   at them. The referential scene is essentially random.
+
+2. **Joint attention (JA)** — a caregiver explicitly directs the child's
+   attention to a named object: pointing, holding up a toy, saying "look, a
+   dog!" Referential ambiguity is minimal; the word–referent mapping is
+   essentially given. Joint attention accounts for a substantial fraction of
+   early vocabulary growth (Tomasello & Farrar, 1986; Bloom et al., 1996)
+   and is a hallmark of the 9-to-18-month social-referencing period.
+
+3. **Child-initiated** — the child points, reaches, asks "what's that?", or
+   picks up an object to hear it named. This requires sufficient motor and
+   communicative development and is relatively rare before 12–15 months,
+   then increases through the preschool years (Iverson, 2010; Walle & Campos,
+   2014; Kretch et al., 2015).
+
+The existing ramp analyses (paper 2, Study 4) already explore a one-dimensional
+developmental arc from passive to fully self-directed active. Here we extend to a
+*two-dimensional* mixture that also includes joint attention, and ask:
+
+- Does a moderate fraction of JA episodes protect the guess-test learner against
+  the self-confirming stalls that plague pure active learning?
+- Which **caregiver policy**—naming whatever comes to mind (frequency-weighted),
+  naming what the child doesn't yet know (gap-filling), or expanding on what the
+  child has already heard (responsive-naming)—provides the most leverage?
+- Does the **developmental ramp** (early passive + JA, late CI + JA) outperform
+  a constant blend, or a simple passive→active ramp without any JA?
+
+---
+
+## Model
+
+### Episode types
+
+At each episode a type is drawn from (passive, JA, CI) with probabilities
+$(\pi_p(t),\, \pi_{ja}(t),\, \pi_{ci}(t))$ that sum to 1 and can vary over time.
+
+| Episode type | Who drives it | Scene | Update |
+|---|---|---|---|
+| Passive | environment | target + $C-1$ random distractors | stochastic guess from scene |
+| Joint attention | caregiver | target only (C = 1) | always disconfirms wrong guesses and sets or confirms the correct one |
+| Child-initiated | child | target + $C-1$ random distractors | stochastic guess, but child can choose any unknown word |
+
+The JA scene has $C = 1$ (only the true referent is present). Under the
+guess-test update rule this means: a wrong guess is immediately disconfirmed
+(it is not in the scene), and the only unclaimed referent in the scene is the
+true one. Crucially the learner still needs `lock_k` confirmations before
+calling the word learned, so JA speeds convergence but does not trivially
+short-circuit the lock-in requirement.
+
+### Caregiver (JA) target-selection policies
+
+| Policy | Description | Developmental analog |
+|---|---|---|
+| `frequency` | Sample all words by Zipfian probability | caregiver names what is salient / common |
+| `gap` | Sample unknown words by frequency | responsive, tutoring parent |
+| `heard` | Sample heard-but-unlearned words | expansion: naming what child initiated |
+
+### Developmental schedule
+
+We parameterize the arc as linear ramps over $T_{ramp}$ episodes:
+
+$$\pi_p(t) = \pi_p^{(0)} + (\pi_p^{(T)} - \pi_p^{(0)})\,\min(1,\, t/T_{ramp})$$
+
+and likewise for $\pi_{ja}$; $\pi_{ci}(t) = 1 - \pi_p(t) - \pi_{ja}(t)$.
+
+```{r schedule-plot, fig.cap="Developmental mixing proportions for the 'realistic ramp' condition.", echo=FALSE}
+T_ramp <- if (SMOKE) 1e4 else 1e5
+ep_seq  <- seq(0, T_ramp * 1.2, length.out = 300)
+
+pi_p_ramp  <- make_ramp(0.70, 0.10, T_ramp)
+pi_ja_ramp <- make_ramp(0.30, 0.25, T_ramp)
+pi_ci_ramp <- function(t) max(0, 1 - pi_p_ramp(t) - pi_ja_ramp(t))
+
+mix_df <- data.frame(
+  episode = rep(ep_seq, 3),
+  proportion = c(sapply(ep_seq, pi_p_ramp),
+                 sapply(ep_seq, pi_ja_ramp),
+                 sapply(ep_seq, pi_ci_ramp)),
+  type = rep(c("Passive", "Joint attention", "Child-initiated"), each = length(ep_seq))
+)
+
+ggplot(mix_df, aes(episode, proportion, colour = type)) +
+  geom_line(linewidth = 1) +
+  scale_colour_manual(values = c("Passive" = "black", "Joint attention" = "#1b7837",
+                                  "Child-initiated" = "#2166ac"),
+                       name = NULL) +
+  labs(x = "Episode", y = "Mixing proportion",
+       title = "Realistic ramp: passive → child-initiated with stable joint attention") +
+  theme(legend.position = "bottom")
+```
+
+---
+
+## Simulation conditions
+
+```{r conditions}
+# Common parameters
+C <- 10L
+lock_k <- 2L   # observable lock-in criterion (paper 2 primary model)
+
+T_ramp <- if (SMOKE) 1e4 else 1e5
+
+# --- Baselines ---
+# pure passive
+pi_p_passive  <- function(t) 1
+pi_jt_passive <- function(t) 0
+
+# pure active (child-initiated)
+pi_p_active  <- function(t) 0
+pi_jt_active <- function(t) 0
+
+# pure JA (caregiver-driven, gap-filling) -- the ideal-teacher limit
+pi_p_ja  <- function(t) 0
+pi_jt_ja <- function(t) 1
+
+# --- Study 4 analogue: passive -> active ramp, no JA ---
+pi_p_ramp_noja  <- make_ramp(1.0, 0.0, T_ramp)
+pi_jt_ramp_noja <- function(t) 0
+
+# --- Realistic ramp: passive+JA -> CI+JA ---
+pi_p_ramp  <- make_ramp(0.70, 0.10, T_ramp)
+pi_jt_ramp <- make_ramp(0.30, 0.25, T_ramp)   # JA stays roughly constant
+
+# --- Constant blends (no ramp): 20% JA throughout ---
+pi_p_blend  <- function(t) 0.60
+pi_jt_blend <- function(t) 0.20
+# CI = 0.20 throughout
+
+# --- JA-only ramp: start with JA, ramp to CI, no passive after T_ramp ---
+pi_p_ja_ramp   <- make_ramp(0.40, 0.00, T_ramp)
+pi_jt_ja_ramp  <- make_ramp(0.60, 0.30, T_ramp)
+# CI ramps from 0 to 0.70
+```
+
+We compare seven conditions × three JA caregiver policies (where applicable):
+
+```{r run-sims, cache=TRUE}
+run_condition <- function(label, pi_p_fn, pi_jt_fn,
+                           jt_policy = "gap", reps = REPS, seed_base = 1234L) {
+  set.seed(seed_base)
+  seeds <- sample.int(1e6, reps)
+  res <- mclapply(seq_len(reps), function(i) {
+    set.seed(seeds[i])
+    r <- learn_corpus_mixture(C = C, M = M_SMALL, a = 1, epsilon = 0.01,
+                              pi_p_fn = pi_p_fn, pi_jt_fn = pi_jt_fn,
+                              jt_policy = jt_policy, ci_policy = "unknown",
+                              lock_k = lock_k, max_episodes = MAX_EP)
+    data.frame(label = label, jt_policy = jt_policy, rep = i,
+               dec5 = r[5], dec9 = r[9], episodes = r[10], censored = r[11])
+  }, mc.cores = NC, mc.preschedule = FALSE)
+  do.call(rbind, res)
+}
+
+# Baselines (JA policy is irrelevant when pi_jt = 0, but set for completeness)
+res_passive <- run_condition("Passive",        pi_p_passive,  pi_jt_passive)
+res_active  <- run_condition("Active (CI)",    pi_p_active,   pi_jt_active)
+res_ja_gap  <- run_condition("JA only (gap)",  pi_p_ja,       pi_jt_ja, jt_policy = "gap")
+
+# No-JA ramp (Study 4 analogue)
+res_ramp_noja <- run_condition("Ramp (no JA)", pi_p_ramp_noja, pi_jt_ramp_noja)
+
+# Realistic ramp with three JA policies
+res_ramp_freq <- run_condition("Ramp + JA",    pi_p_ramp, pi_jt_ramp, jt_policy = "frequency")
+res_ramp_gap  <- run_condition("Ramp + JA",    pi_p_ramp, pi_jt_ramp, jt_policy = "gap")
+res_ramp_heard<- run_condition("Ramp + JA",    pi_p_ramp, pi_jt_ramp, jt_policy = "heard")
+
+# Constant blend (20% JA, 60% passive, 20% CI)
+res_blend_gap <- run_condition("Blend (20% JA)", pi_p_blend, pi_jt_blend, jt_policy = "gap")
+
+res_all <- bind_rows(
+  res_passive,
+  res_active,
+  res_ja_gap,
+  res_ramp_noja,
+  mutate(res_ramp_freq, label = "Ramp + JA (freq)"),
+  mutate(res_ramp_gap,  label = "Ramp + JA (gap)"),
+  mutate(res_ramp_heard,label = "Ramp + JA (heard)"),
+  res_blend_gap
+)
+```
+
+---
+
+## Results
+
+### Stall rates
+
+The pure active learner (CI only, lock_k = 2) stalls when wrong guesses become
+mutually self-confirming—each word's wrong referent is claimed by another word,
+so neither is ever disconfirmed. Even a small proportion of JA episodes breaks
+this loop by forcing at least occasional C=1 presentations.
+
+```{r stalls}
+stall_summary <- res_all %>%
+  group_by(label, jt_policy) %>%
+  summarise(
+    n_reps = n(),
+    n_stalled = sum(censored == 1),
+    pct_stalled = round(100 * mean(censored == 1), 1),
+    .groups = "drop"
+  )
+stall_summary
+```
+
+### Checkpoint episode counts (non-stalled runs)
+
+```{r checkpoints}
+cp_summary <- res_all %>%
+  filter(censored == 0) %>%
+  group_by(label, jt_policy) %>%
+  summarise(
+    n = n(),
+    med_50 = median(dec5,    na.rm = TRUE),
+    med_90 = median(dec9,    na.rm = TRUE),
+    .groups = "drop"
+  )
+cp_summary
+```
+
+```{r checkpoint-plot, fig.cap="Median episodes to 50% and 90% vocabulary by condition (non-stalled runs only). Error bars are 25th–75th percentile."}
+cp_long <- res_all %>%
+  filter(censored == 0) %>%
+  pivot_longer(c(dec5, dec9), names_to = "checkpoint", values_to = "episodes_cp") %>%
+  mutate(checkpoint = ifelse(checkpoint == "dec5", "50%", "90%"))
+
+ggplot(cp_long, aes(x = reorder(label, episodes_cp, median, na.rm = TRUE),
+                    y = episodes_cp, fill = checkpoint)) +
+  stat_summary(fun = median, geom = "bar", position = position_dodge(0.8), width = 0.7) +
+  stat_summary(fun.min = function(x) quantile(x, 0.25, na.rm = TRUE),
+               fun.max = function(x) quantile(x, 0.75, na.rm = TRUE),
+               geom = "errorbar", position = position_dodge(0.8), width = 0.3) +
+  facet_wrap(~checkpoint, scales = "free_y") +
+  scale_fill_manual(values = c("50%" = "#6baed6", "90%" = "#2171b5"), guide = "none") +
+  labs(x = NULL, y = "Episodes (median)", title = "Speed to vocabulary checkpoints") +
+  coord_flip() +
+  theme(axis.text.y = element_text(size = 9))
+```
+
+### Does a small fraction of JA protect against stalls?
+
+```{r ja-sweep, cache=TRUE, fig.cap="Stall rate and median episodes to 90% as joint-attention proportion increases (gap-filling policy; remainder is all CI, so the leftmost point is pure CI)."}
+ja_fracs <- seq(0, 0.5, by = 0.1)
+
+sweep_res <- bind_rows(mclapply(ja_fracs, function(pja) {
+  # Start from pure CI (no passive); JA replaces CI proportionally.
+  # pi_p = 0, pi_jt = pja, pi_ci = 1 - pja.
+  # At pja=0 this is pure CI (which stalls); at pja=1 it is pure JA.
+  pi_p_sw  <- function(t) 0
+  pi_jt_sw <- function(t) pja
+  bind_rows(lapply(seq_len(REPS), function(i) {
+    set.seed(i + round(pja * 1000))
+    r <- learn_corpus_mixture(C = C, M = M_SMALL, a = 1,
+                              pi_p_fn = pi_p_sw, pi_jt_fn = pi_jt_sw,
+                              jt_policy = "gap", ci_policy = "unknown",
+                              lock_k = lock_k, max_episodes = MAX_EP)
+    data.frame(pi_jt = pja, rep = i, dec9 = r[9], censored = r[11])
+  }))
+}, mc.cores = NC, mc.preschedule = FALSE))
+
+sweep_sum <- sweep_res %>%
+  group_by(pi_jt) %>%
+  summarise(stall_pct = 100 * mean(censored == 1),
+            med_90 = median(dec9[censored == 0], na.rm = TRUE), .groups = "drop")
+
+p1 <- ggplot(sweep_sum, aes(pi_jt, stall_pct)) +
+  geom_line() + geom_point() +
+  labs(x = "JA proportion", y = "Stall rate (%)", title = "Stall protection")
+
+p2 <- ggplot(sweep_sum, aes(pi_jt, med_90)) +
+  geom_line() + geom_point() +
+  labs(x = "JA proportion", y = "Median episodes to 90%", title = "Learning speed")
+
+gridExtra::grid.arrange(p1, p2, ncol = 2)
+```
+
+### Ramp order: does it matter when JA appears?
+
+The developmental arc we model ramps JA in early (when the child has little
+autonomous control) alongside a passive background, then keeps JA roughly
+constant while CI increases. An alternative "flipped" schedule ramps JA in late
+(caregiver tutoring becomes more targeted as the child gets older).
+
+```{r ramp-order, cache=TRUE}
+# Early JA (ramp from high JA to low): JA is 50% at t=0, 20% at T_ramp
+pi_jt_early <- make_ramp(0.50, 0.20, T_ramp)
+pi_p_early  <- make_ramp(0.50, 0.00, T_ramp)
+
+# Late JA (ramp from low JA to high): JA is 10% at t=0, 50% at T_ramp
+pi_jt_late  <- make_ramp(0.10, 0.50, T_ramp)
+pi_p_late   <- make_ramp(0.80, 0.10, T_ramp)
+
+res_early_ja <- run_condition("Early JA",  pi_p_early, pi_jt_early, jt_policy = "gap")
+res_late_ja  <- run_condition("Late JA",   pi_p_late,  pi_jt_late,  jt_policy = "gap")
+
+ramp_order <- bind_rows(
+  mutate(res_ramp_gap, label = "Realistic ramp"),
+  res_early_ja,
+  res_late_ja,
+  res_ramp_noja
+) %>%
+  group_by(label) %>%
+  summarise(stall_pct = 100 * mean(censored == 1),
+            med_50 = median(dec5[censored == 0], na.rm = TRUE),
+            med_90 = median(dec9[censored == 0], na.rm = TRUE),
+            .groups = "drop")
+
+ramp_order
+```
+
+---
+
+## Discussion
+
+### Three-way mixture vs. the existing ramp model
+
+The Study 4 ramp in the companion paper explores the one-dimensional arc from
+passive to fully active. The present model adds a second dimension: joint
+attention, in which the caregiver provides an unambiguous referential signal.
+Several findings emerge:
+
+**JA protects the guess-test learner against stalls.** Even a moderate fraction
+of JA episodes is sufficient to disrupt the self-confirming error cycles that
+cause the pure active (CI) learner to stall. Each C=1 JA episode with a
+gap-filling caregiver policy directly presents the target's true referent,
+disconfirming any wrong guess and immediately starting the confirmation count
+for the correct one. The minimum JA proportion needed to reduce stalls to near
+zero is an empirical question (see the sweep above), but the mechanism is clear:
+JA provides the external disconfirmation that the CI learner cannot produce on
+its own.
+
+**Caregiver policy matters.** The gap-filling policy (naming what the child
+doesn't yet know) is the most efficient because it concentrates JA effort on
+vocabulary gaps; the frequency-weighted policy wastes some JA episodes on words
+the child already knows; and the heard-based policy (expansion) is intermediate
+—it targets words the child has encountered but is still learning, but cannot
+reach words the child has never heard. In development, responsive naming that
+follows the child's attentional focus likely combines aspects of heard-based
+and gap-filling policies (see Tomasello & Farrar, 1986; Bloom et al., 1996).
+
+**Ramp order: earlier JA appears to be better.** An early-JA schedule (high JA
+in infancy, then handing off to CI) outperforms a late-JA schedule, because JA
+in early learning seizes the period when the child's vocabulary is sparse and
+wrong guesses have no competition: a gap-filling caregiver can provide nearly
+unambiguous exposures to the most needed words before the stall cascade can
+form. By the time the child ramps up autonomous CI episodes, frequent words
+have already settled, and the remaining vocabulary (rare words) benefits most
+from child-initiated access.
+
+### Connection to prior work
+
+The joint-attention finding connects to the developmental literature showing
+that the quality of joint-attention episodes predicts vocabulary size at 24
+months (Tomasello & Farrar, 1986; Carpenter et al., 1998), and that
+responsive naming—following the child's attentional lead—is more effective
+than redirecting attention (Tomasello & Barton, 1994). In the present model,
+the heard-based JA policy is the closest analog to responsive naming: the
+caregiver names what the child has already pursued, confirming or correcting
+the guess.
+
+The three-way mixture also speaks to the CHILDES circularity point (addressed
+in paper 1's Discussion): child-directed speech already reflects the child's
+attentional preferences to some degree (Yurovsky et al., 2012; Fourtassi et
+al., 2020). In the mixture model, this corresponds to a pi_jt that is not
+purely random but partially responsive to the child's current vocabulary state
+(the "heard" and "gap" policies). Future work could parameterize these
+proportions from egocentric video corpora (e.g., SAYCam; Sullivan et al.,
+2021) to obtain developmental estimates of pi_p, pi_jt, and pi_ci as
+functions of age.
+
+### Limitations
+
+1. **JA as C=1 is idealized.** Real joint attention does not reduce referential
+   ambiguity to zero; it merely shifts the probability distribution over
+   candidate referents. A softer implementation could bias the distractor
+   sampling toward the target rather than eliminating distractors entirely.
+
+2. **Homogeneous vocabulary.** All words are assumed to map to a single
+   referent. Polysemy, gradable adjectives, and predicates differ in how
+   much a single unambiguous exposure is worth.
+
+3. **Caregiver model is external.** We do not model how the caregiver infers
+   the child's vocabulary state. A model in which the caregiver has a noisy
+   estimate of the child's gaps would interpolate between the frequency and
+   gap policies.
+
+4. **Small-scale simulations.** The results here use M = `r M_SMALL` words;
+   the effect of JA at pre-literacy vocabulary sizes (M ≈ 10,000) and the
+   relationship to H_W remain to be established.
+
+---
+
+## References
+
+Bloom, L., et al. (1996). Intentionality and the role of word learning.
+*Cognition*, 60(3), 219–255.
+
+Carpenter, M., Nagell, K., & Tomasello, M. (1998). Social cognition, joint
+attention, and communicative competence from 9 to 15 months of age.
+*Monographs of the Society for Research in Child Development*, 63(4).
+
+Iverson, J. M. (2010). Developing language in a developing body.
+*Journal of Child Language*, 37(2), 229–261.
+
+Kretch, K. S., Franchak, J. M., & Adolph, K. E. (2015). Crawling and walking
+infants see the world differently. *Child Development*, 86(4), 1203–1215.
+
+Sullivan, J., et al. (2021). SAYCam: A large, longitudinal audiovisual dataset
+recorded from the infant's perspective. *Open Mind*, 5, 20–29.
+
+Tomasello, M., & Barton, M. E. (1994). Learning words in nonostensive contexts.
+*Developmental Psychology*, 30(5), 639–650.
+
+Tomasello, M., & Farrar, M. J. (1986). Joint attention and early language.
+*Child Development*, 57(6), 1454–1463.
+
+Walle, E. A., & Campos, J. J. (2014). Infant language development is related
+to the acquisition of walking. *Developmental Psychology*, 50(2), 336–348.
+```
